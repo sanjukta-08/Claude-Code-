@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>NBL · The Business Model · v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F7F8FC;
+  --white:#FFFFFF;
+  --card:#FFFFFF;
+  --soft:#F2F4FA;
+  --border:#E3E7F0;
+  --border2:#CDD4E8;
+  --ink:#0C1220;
+  --ink2:#3A4260;
+  --muted:#8591B0;
+  --gold:#B8860B;
+  --gold-bg:#FFFBEB;
+  --gold-bd:#F0D060;
+  --blue:#1D4ED8;
+  --blue-bg:#EFF4FF;
+  --blue-bd:#BFCFFF;
+  --green:#0A7C55;
+  --green-bg:#EDFAF5;
+  --green-bd:#86EFCB;
+  --purple:#6D28D9;
+  --purple-bg:#F5F0FF;
+  --purple-bd:#C4B5FD;
+  --red:#C0392B;
+  --red-bg:#FEF0EE;
+  --red-bd:#FCA5A5;
+  --orange:#C45208;
+  --orange-bg:#FFF4EB;
+  --orange-bd:#FDBA74;
+  --head:'Outfit',sans-serif;
+  --body:'Plus Jakarta Sans',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65}
+
+nav{
+  position:sticky;top:0;z-index:100;height:52px;padding:0 36px;
+  display:flex;align-items:center;gap:14px;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+.logo{font-family:var(--head);font-weight:900;font-size:14px;letter-spacing:.08em;color:var(--ink)}
+.logo em{font-style:normal;color:var(--gold)}
+.npill{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border-radius:20px;background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-bd)}
+.ngap{flex:1}
+.nmeta{font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:.05em}
+
+.page{max-width:1060px;margin:0 auto;padding:0 36px 100px}
+
+/* HERO */
+.hero{padding:72px 0 52px;max-width:820px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:20px;
+}
+.eyebrow::before{content:'';width:24px;height:1.5px;background:var(--gold)}
+h1{
+  font-family:var(--head);font-weight:900;
+  font-size:clamp(34px,5.5vw,58px);
+  line-height:1.05;letter-spacing:-.03em;
+  color:var(--ink);margin-bottom:6px;
+}
+h1 .accent{color:var(--gold)}
+.hero-sub{font-size:17px;color:var(--ink2);line-height:1.65;margin-top:18px;margin-bottom:30px;max-width:680px}
+.thesis-bar{background:var(--ink);border-radius:10px;padding:18px 22px;max-width:760px}
+.thesis-bar p{font-size:14px;color:rgba(255,255,255,.75);line-height:1.7}
+.thesis-bar strong{color:#fff;font-weight:600}
+
+.section{margin-top:64px}
+.sec-label{
+  font-family:var(--mono);font-size:9.5px;font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+h2{font-family:var(--head);font-weight:700;font-size:22px;letter-spacing:-.015em;color:var(--ink);margin-bottom:6px}
+h3{font-family:var(--head);font-weight:600;font-size:15px;letter-spacing:-.01em;color:var(--ink);margin-bottom:4px}
+.section-desc{font-size:14px;color:var(--ink2);line-height:1.65;margin-bottom:20px;max-width:720px}
+
+/* OPTIONS */
+.opt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.opt-card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:22px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.opt-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.opt-card.o1::before{background:var(--blue)}
+.opt-card.o2::before{background:var(--green)}
+.opt-card.o3::before{background:var(--purple)}
+.opt-num{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.14em;color:var(--muted);margin-bottom:8px}
+.opt-name{font-family:var(--head);font-weight:800;font-size:17px;color:var(--ink);margin-bottom:6px;line-height:1.2}
+.opt-tag{font-family:var(--mono);font-size:10px;color:var(--ink2);margin-bottom:12px}
+.opt-body{font-size:12.5px;color:var(--ink2);line-height:1.6;margin-bottom:12px;flex:1}
+.opt-stat{font-family:var(--mono);font-size:11px;color:var(--ink);padding:8px 10px;background:var(--soft);border-radius:6px;margin-top:auto}
+.opt-stat .lbl{color:var(--muted);font-size:9px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px;display:block}
+
+.verdict{
+  margin-top:18px;background:var(--gold-bg);border:1px solid var(--gold-bd);
+  border-left:3px solid var(--gold);border-radius:8px;padding:16px 20px;
+}
+.verdict-label{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.verdict p{font-size:14px;color:var(--ink2);line-height:1.7}
+.verdict strong{color:var(--ink);font-weight:600}
+
+/* TWO ACT */
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.act{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:24px;position:relative;overflow:hidden}
+.act::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.act.a1::before{background:var(--green)}
+.act.a2::before{background:var(--blue)}
+.act-tag{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.act.a1 .act-tag{color:var(--green)}
+.act.a2 .act-tag{color:var(--blue)}
+.act-title{font-family:var(--head);font-weight:800;font-size:20px;color:var(--ink);margin-bottom:4px;letter-spacing:-.01em}
+.act-sub{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-bottom:14px}
+.act-body{font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:14px}
+.act-row{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12.5px}
+.act-row:last-child{border-bottom:none}
+.act-row .k{font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex-shrink:0;width:90px;padding-top:3px}
+.act-row .v{color:var(--ink2);line-height:1.55;flex:1}
+.act-row .v strong{color:var(--ink);font-weight:600}
+
+/* REVENUE */
+.rev-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+.rev-card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:18px;position:relative;overflow:hidden}
+.rev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.rev-card.r1::before{background:var(--blue)}
+.rev-card.r2::before{background:var(--gold)}
+.rev-card.r3::before{background:var(--green)}
+.rev-card.r4::before{background:var(--purple)}
+.rev-n{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--muted);margin-bottom:8px}
+.rev-name{font-family:var(--head);font-weight:700;font-size:14px;color:var(--ink);margin-bottom:4px;line-height:1.2}
+.rev-price{font-family:var(--mono);font-size:16px;font-weight:700;margin:8px 0}
+.rev-desc{font-size:11.5px;color:var(--ink2);line-height:1.55;margin-bottom:8px}
+.rev-margin{font-family:var(--mono);font-size:10px;color:var(--green);padding:3px 7px;background:var(--green-bg);border:1px solid var(--green-bd);border-radius:4px;display:inline-block}
+
+/* UNIT ECON */
+.econ{background:var(--ink);border-radius:12px;padding:32px;margin-top:14px;color:#fff}
+.econ-title{font-family:var(--head);font-weight:800;font-size:18px;color:#fff;margin-bottom:6px}
+.econ-sub{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:24px}
+.econ-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.econ-cell{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:16px}
+.econ-lbl{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:7px}
+.econ-val{font-family:var(--head);font-weight:800;font-size:24px;color:#fff;letter-spacing:-.01em;margin-bottom:4px}
+.econ-note{font-size:11px;color:rgba(255,255,255,.55);line-height:1.5}
+
+/* ROADMAP */
+.road{display:flex;flex-direction:column;gap:0;margin-top:14px}
+.road-row{display:grid;grid-template-columns:140px 1fr;gap:0}
+.road-time{display:flex;flex-direction:column;align-items:flex-start;padding:14px 18px;border-right:2px solid var(--border);position:relative}
+.road-time::before{content:'';position:absolute;right:-7px;top:24px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--gold);z-index:1}
+.road-q{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.08em}
+.road-yr{font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:2px;letter-spacing:.06em}
+.road-body{padding:14px 22px 24px 22px}
+.road-phase{font-family:var(--head);font-weight:700;font-size:15px;color:var(--ink);margin-bottom:4px}
+.road-goal{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:10px}
+.road-metrics{display:flex;flex-wrap:wrap;gap:5px}
+.metric{font-family:var(--mono);font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:4px;background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bd);letter-spacing:.04em}
+.metric.g{background:var(--green-bg);color:var(--green);border-color:var(--green-bd)}
+.metric.gold{background:var(--gold-bg);color:var(--gold);border-color:var(--gold-bd)}
+.metric.p{background:var(--purple-bg);color:var(--purple);border-color:var(--purple-bd)}
+
+/* MOAT */
+.moat-block{background:var(--ink);border-radius:12px;padding:32px;margin-top:14px}
+.moat-title{font-family:var(--head);font-weight:900;font-size:22px;color:#fff;letter-spacing:-.02em;margin-bottom:10px}
+.moat-body{font-size:14px;color:rgba(255,255,255,.6);line-height:1.7;max-width:680px;margin-bottom:22px}
+.moat-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.moat-col{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:16px}
+.moat-n{font-family:var(--mono);font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:7px}
+.moat-v{font-family:var(--head);font-weight:700;font-size:14px;color:#fff;margin-bottom:5px}
+.moat-d{font-size:11.5px;color:rgba(255,255,255,.5);line-height:1.5}
+
+/* TRAJECTORY */
+.traj{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+.traj-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:left}
+.traj-yr{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.12em;margin-bottom:8px}
+.traj-arr{font-family:var(--head);font-weight:800;font-size:20px;color:var(--ink);letter-spacing:-.01em;margin-bottom:4px}
+.traj-stage{font-family:var(--mono);font-size:9.5px;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.traj-d{font-size:11.5px;color:var(--ink2);line-height:1.5}
+
+/* NEXT */
+.next{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:24px;margin-top:14px}
+.next-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px}
+.next-col h3{font-family:var(--head);font-weight:700;font-size:13.5px;color:var(--ink);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.next-col ul{list-style:none}
+.next-col li{font-size:12.5px;color:var(--ink2);line-height:1.6;padding:6px 0;display:flex;gap:8px}
+.next-col li::before{content:'→';color:var(--gold);font-weight:700;flex-shrink:0}
+
+/* RISKS */
+.risk-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}
+.risk-row{background:var(--card);border:1px solid var(--border);border-radius:9px;display:grid;grid-template-columns:1fr 1fr;gap:0;overflow:hidden}
+.risk-left{padding:16px 18px;border-right:1px solid var(--border)}
+.risk-right{padding:16px 18px;background:var(--green-bg)}
+.risk-label{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.risk-label.r{color:var(--red)}.risk-label.g{color:var(--green)}
+.risk-text{font-size:12.5px;color:var(--ink2);line-height:1.55}
+
+.divider{height:1px;background:var(--border);margin:52px 0}
+
+@media(max-width:820px){
+  .opt-grid,.rev-grid,.econ-grid,.moat-cols,.traj,.next-grid{grid-template-columns:1fr 1fr}
+  .acts{grid-template-columns:1fr}
+  .road-row{grid-template-columns:90px 1fr}
+  .risk-row{grid-template-columns:1fr}
+  .page{padding:0 18px 60px}
+  nav{padding:0 18px}
+}
+@media(max-width:520px){
+  .opt-grid,.rev-grid,.econ-grid,.moat-cols,.traj,.next-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><em>NBL</em> · BUSINESS MODEL</div>
+  <div class="npill">v1 · Co-Founder Draft</div>
+  <div class="ngap"></div>
+  <div class="nmeta">May 2026 · Internal</div>
+</nav>
+
+<div class="page">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">The Company Behind PROOF</div>
+  <h1>We're not selling a hiring tool.<br/>We're building the <span class="accent">signal layer</span> for human work.</h1>
+  <p class="hero-sub">PROOF is the product. NBL is the company. The product gets us to product-market fit. The company gets us to a billion. They are not the same bet.</p>
+  <div class="thesis-bar">
+    <p><strong>The co-founder thesis:</strong> The resume is a 50-year-old protocol. Every protocol gets replaced eventually — and whoever owns the replacement becomes infrastructure. Most companies attacking hiring try to be a better product. We are building the better <em>protocol</em>. Act 1 — we ship a consumer-led product that earns trust and generates the first scored work artifacts in the world. Act 2 — we license the signal back to every hiring system on earth.</p>
+  </div>
+</div>
+
+<!-- OPTIONS CONSIDERED -->
+<div class="section">
+  <div class="sec-label">Three shapes we considered</div>
+  <h2>Same insight. Three radically different companies.</h2>
+  <p class="section-desc">Before committing to a model, we mapped the three credible shapes this company could take. Each has a different customer, a different defensibility curve, and a different exit. The product matters less than the shape.</p>
+
+  <div class="opt-grid">
+    <div class="opt-card o1">
+      <div class="opt-num">OPTION 01 · INFRASTRUCTURE</div>
+      <div class="opt-name">The Stripe of Hiring Signal</div>
+      <div class="opt-tag">API · embedded · standards play</div>
+      <div class="opt-body">An API every ATS, job board, and edtech platform calls to verify capability. We don't compete with LinkedIn — we make LinkedIn a customer. Boring B2B, devastating moat.</div>
+      <div class="opt-stat">
+        <span class="lbl">Path to $1B ARR</span>
+        100M verifications/yr × $3 = $300M ARR @ 15× multiple
+      </div>
+    </div>
+    <div class="opt-card o2">
+      <div class="opt-num">OPTION 02 · CONSUMER NETWORK</div>
+      <div class="opt-name">Strava for Professional Work</div>
+      <div class="opt-tag">viral · candidate-led · status game</div>
+      <div class="opt-body">Public profiles, weekly challenges, streaks, leaderboards. Candidates compete because their peers do. Employers chase the talent. Bypass HR entirely. Need a cultural moment to fire.</div>
+      <div class="opt-stat">
+        <span class="lbl">Path to $1B ARR</span>
+        5M active × $180 ARPU + recruit fees
+      </div>
+    </div>
+    <div class="opt-card o3">
+      <div class="opt-num">OPTION 03 · ENTERPRISE TERMINAL</div>
+      <div class="opt-name">Bloomberg for Talent</div>
+      <div class="opt-tag">few customers · massive contracts</div>
+      <div class="opt-body">Closed terminal for F500 CHROs, exec search, PE talent diligence. Talent becomes an asset class with transparent pricing. PE firms underwrite deals on our scores.</div>
+      <div class="opt-stat">
+        <span class="lbl">Path to $1B ARR</span>
+        2,000 seats × $250K avg = $500M ARR
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict">
+    <div class="verdict-label">The co-founder decision</div>
+    <p>We don't pick one. We <strong>stack two</strong>. Option 2 is the wedge — it's the only shape that generates the proprietary scored-work dataset nobody else has, because nobody else is foolish enough to run a consumer product in this category. That dataset is the fuel for Option 1, which is where the durable billion-dollar business lives. Option 3 we build last, on top of the data we'll own by then. <strong>One company, two acts, three monetisation surfaces.</strong></p>
+  </div>
+</div>
+
+<!-- THE TWO-ACT COMPANY -->
+<div class="section">
+  <div class="sec-label">The two-act company</div>
+  <h2>Years 1–2 win attention. Years 3–7 win infrastructure.</h2>
+  <p class="section-desc">Act 1 is a Trojan horse. We look like a hiring product — we are actually a data collection apparatus disguised as a hiring product. Act 2 is what we monetise for the next 30 years.</p>
+
+  <div class="acts">
+    <div class="act a1">
+      <div class="act-tag">ACT 1 · WEDGE · YEARS 1–2</div>
+      <div class="act-title">PROOF</div>
+      <div class="act-sub">The consumer-led hiring product</div>
+      <div class="act-body">A candidate-first network where real work earns real credentials. Employers post challenges. Candidates compete publicly. Everyone gets a scored profile. PROOF is the product the market sees.</div>
+      <div class="act-row"><div class="k">Who pays</div><div class="v">Employers per challenge + candidates for Pro subscription</div></div>
+      <div class="act-row"><div class="k">Why it wins</div><div class="v"><strong>Viral loop:</strong> every certificate shared on LinkedIn is a free ad. Every challenge generates 30–200 scored submissions.</div></div>
+      <div class="act-row"><div class="k">What it builds</div><div class="v">The world's only proprietary corpus of <strong>scored real-work artifacts</strong> — the asset Act 2 sells.</div></div>
+      <div class="act-row"><div class="k">Year 2 target</div><div class="v">200K candidate profiles · 5K employers · $25M ARR · 1M scored submissions</div></div>
+    </div>
+    <div class="act a2">
+      <div class="act-tag">ACT 2 · PLATFORM · YEARS 3–7</div>
+      <div class="act-title">NBL Signal</div>
+      <div class="act-sub">The verification rail for every hiring system</div>
+      <div class="act-body">An API that returns a verified capability score for any candidate. Embedded inside ATS systems, job boards, edtech platforms, staffing agencies, and enterprise HR suites. Becomes the standard.</div>
+      <div class="act-row"><div class="k">Who pays</div><div class="v">ATS vendors, job boards, edtech, exec search, enterprise HR — by verification call or seat</div></div>
+      <div class="act-row"><div class="k">Why it wins</div><div class="v"><strong>Standards lock-in.</strong> Once one ATS embeds us, every competing ATS must. Once one F500 demands an NBL score, every recruiter must run candidates through us.</div></div>
+      <div class="act-row"><div class="k">What it sells</div><div class="v">The dataset Act 1 created — now wrapped in an API, a benchmark, a standard.</div></div>
+      <div class="act-row"><div class="k">Year 5 target</div><div class="v">50M+ verification calls/mo · $250M ARR from infrastructure alone</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- REVENUE STREAMS -->
+<div class="section">
+  <div class="sec-label">Four revenue streams · each feeds the next</div>
+  <h2>The flywheel monetises itself four ways.</h2>
+  <p class="section-desc">Each stream is rational on its own. Stacked, they compound — every dollar from one stream lowers the CAC of the next.</p>
+
+  <div class="rev-grid">
+    <div class="rev-card r1">
+      <div class="rev-n">STREAM 01 · ACT 1</div>
+      <div class="rev-name">Challenge Posting</div>
+      <div class="rev-price" style="color:var(--blue)">$0 – $2K</div>
+      <div class="rev-desc">Free for acquisition. Standard ($500): branded certs + talent pool. Premium ($2K): custom rubric + 90-day exclusivity. Per-challenge, no contract.</div>
+      <div class="rev-margin">~82% margin</div>
+    </div>
+    <div class="rev-card r2">
+      <div class="rev-n">STREAM 02 · ACT 1</div>
+      <div class="rev-name">Candidate Pro</div>
+      <div class="rev-price" style="color:var(--gold)">$15 / mo</div>
+      <div class="rev-desc">Score freshness, private practice challenges, AI coaching, analytics. Subscription is driven by score decay mechanic — your asset deteriorates if you stop using it.</div>
+      <div class="rev-margin">~90% margin</div>
+    </div>
+    <div class="rev-card r3">
+      <div class="rev-n">STREAM 03 · BRIDGE</div>
+      <div class="rev-name">Talent Pool License</div>
+      <div class="rev-price" style="color:var(--green)">$15K – $250K / yr</div>
+      <div class="rev-desc">Employers pay annual access to the searchable scored talent pool. Skip the challenge, hire from existing leaderboards. Pure margin — data already exists.</div>
+      <div class="rev-margin">~95% margin</div>
+    </div>
+    <div class="rev-card r4">
+      <div class="rev-n">STREAM 04 · ACT 2</div>
+      <div class="rev-name">Signal API</div>
+      <div class="rev-price" style="color:var(--purple)">$1 – $5 / call</div>
+      <div class="rev-desc">Embedded verification API for ATS / job board / edtech / staffing. Volume tiers. Standards licensing for enterprises. The endgame business.</div>
+      <div class="rev-margin">~88% margin</div>
+    </div>
+  </div>
+</div>
+
+<!-- UNIT ECONOMICS -->
+<div class="section">
+  <div class="sec-label">Unit economics that compound</div>
+  <h2>The numbers that make this a real company.</h2>
+  <p class="section-desc">These are mid-case assumptions for year 2. The flywheel only works if these hold.</p>
+
+  <div class="econ">
+    <div class="econ-title">Per-employer unit economics</div>
+    <div class="econ-sub">Standard tier ($500 first challenge) → expansion path</div>
+    <div class="econ-grid">
+      <div class="econ-cell">
+        <div class="econ-lbl">CAC</div>
+        <div class="econ-val">$120</div>
+        <div class="econ-note">Inbound from candidate-shared certs · 0.18 paid blend</div>
+      </div>
+      <div class="econ-cell">
+        <div class="econ-lbl">First challenge GMV</div>
+        <div class="econ-val">$500</div>
+        <div class="econ-note">82% margin · payback in challenge 1</div>
+      </div>
+      <div class="econ-cell">
+        <div class="econ-lbl">Annual LTV</div>
+        <div class="econ-val">$4.8K</div>
+        <div class="econ-note">3.2 challenges/yr + talent pool expansion</div>
+      </div>
+      <div class="econ-cell">
+        <div class="econ-lbl">LTV : CAC</div>
+        <div class="econ-val">40 : 1</div>
+        <div class="econ-note">Industry benchmark is 3:1. This is why we win.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="econ" style="margin-top:14px">
+    <div class="econ-title">Per-candidate unit economics</div>
+    <div class="econ-sub">Free-to-paid funnel · subscription-driven</div>
+    <div class="econ-grid">
+      <div class="econ-cell">
+        <div class="econ-lbl">CAC</div>
+        <div class="econ-val">$3</div>
+        <div class="econ-note">Almost entirely viral — peer-shared certificates</div>
+      </div>
+      <div class="econ-cell">
+        <div class="econ-lbl">Free → Pro rate</div>
+        <div class="econ-val">7%</div>
+        <div class="econ-note">Triggered by score decay after 90 days</div>
+      </div>
+      <div class="econ-cell">
+        <div class="econ-lbl">Pro annual ARPU</div>
+        <div class="econ-val">$180</div>
+        <div class="econ-note">$15/mo with 10mo blended retention</div>
+      </div>
+      <div class="econ-cell">
+        <div class="econ-lbl">Blended ARPU</div>
+        <div class="econ-val">$12.60</div>
+        <div class="econ-note">Per total candidate · drives volume economics</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GTM ROADMAP -->
+<div class="section">
+  <div class="sec-label">The 24-month GTM</div>
+  <h2>Geography is destiny. We win the GCC first, then export.</h2>
+  <p class="section-desc">India has 70M resumes (Naukri) — too crowded to be the wedge market. The GCC is the highest-pay, lowest-noise hiring market on earth, full of AI-curious enterprises with budgets. We anchor there, then leverage NBL's India distribution.</p>
+
+  <div class="road">
+    <div class="road-row">
+      <div class="road-time"><div class="road-q">Q1 – Q2</div><div class="road-yr">Year 1</div></div>
+      <div class="road-body">
+        <div class="road-phase">Launch Sharp Wedge · Dubai + Abu Dhabi</div>
+        <div class="road-goal">10 lighthouse employer challenges with brand names (ADNOC, Chalhoub, Mubadala, e&). Free for them. We package the launch as a category-creating event: "The first hiring without resumes." Earn 5,000 candidate signups from these 10 challenges alone.</div>
+        <div class="road-metrics"><span class="metric">10 lighthouse logos</span><span class="metric">5K candidates</span><span class="metric g">200K submissions data</span></div>
+      </div>
+    </div>
+    <div class="road-row">
+      <div class="road-time"><div class="road-q">Q3 – Q4</div><div class="road-yr">Year 1</div></div>
+      <div class="road-body">
+        <div class="road-phase">Open Self-Serve · Monetise Standard Tier</div>
+        <div class="road-goal">Launch self-serve employer flow. Standard tier at $500 turns on revenue. Aggressive content engine — every certificate shared is a recruiting signal. Hit 500 paid employers, $300K ARR, and the candidate side crosses 30K.</div>
+        <div class="road-metrics"><span class="metric">500 paid employers</span><span class="metric">30K candidates</span><span class="metric gold">$300K ARR</span></div>
+      </div>
+    </div>
+    <div class="road-row">
+      <div class="road-time"><div class="road-q">Q1 – Q2</div><div class="road-yr">Year 2</div></div>
+      <div class="road-body">
+        <div class="road-phase">India Expansion · Naukri-Adjacent Strategy</div>
+        <div class="road-goal">Enter India with focused vertical wedge: AI-native roles only (PMs, ML, AI Ops). Don't compete with Naukri on volume — compete on signal where they're weakest. Land 2,000 employers in India, 100K candidates. Launch Candidate Pro at $15/mo. Raise Series A.</div>
+        <div class="road-metrics"><span class="metric">2K India employers</span><span class="metric">130K candidates</span><span class="metric gold">$3M ARR</span><span class="metric p">Series A · $20M</span></div>
+      </div>
+    </div>
+    <div class="road-row">
+      <div class="road-time"><div class="road-q">Q3 – Q4</div><div class="road-yr">Year 2</div></div>
+      <div class="road-body">
+        <div class="road-phase">Talent Pool License · Bridge to Act 2</div>
+        <div class="road-goal">Open the talent pool as a license product to staffing firms and exec search. First 30 enterprise contracts at $25–100K. Start the Signal API alpha with 3 ATS partners (Greenhouse, Lever, an India ATS). This is where the company shape begins to shift from product to platform.</div>
+        <div class="road-metrics"><span class="metric">200K candidates</span><span class="metric">5K employers</span><span class="metric gold">$25M ARR</span><span class="metric p">3 ATS pilots</span></div>
+      </div>
+    </div>
+    <div class="road-row">
+      <div class="road-time"><div class="road-q">Year 3</div><div class="road-yr">Pivot</div></div>
+      <div class="road-body">
+        <div class="road-phase">Signal API Public Launch · US Beachhead</div>
+        <div class="road-goal">Open the Signal API to any developer. Launch in San Francisco with the dataset advantage now visible — we have 2M scored submissions, no one else has any. Hire US enterprise sales leader. Series B. The company narrative shifts: from "hiring product" to "the protocol layer for capability."</div>
+        <div class="road-metrics"><span class="metric">Signal API live</span><span class="metric g">2M scored corpus</span><span class="metric gold">$75M ARR</span><span class="metric p">Series B · $60M</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOAT -->
+<div class="section">
+  <div class="sec-label">The moat</div>
+  <h2>Why this becomes uncopyable, fast.</h2>
+  <p class="section-desc">Every hiring company has tried to be a better resume. None have the courage to be a different protocol — because the protocol play requires a multi-year unprofitable data accumulation phase. That's our moat: nobody else will pay the cost.</p>
+
+  <div class="moat-block">
+    <div class="moat-title">Four moats stacking on each other.</div>
+    <div class="moat-body">A single moat is fragile. Four moats compounding makes this a fortress. Each one strengthens as the others grow. By year 4, the company is unattackable in this category.</div>
+    <div class="moat-cols">
+      <div class="moat-col">
+        <div class="moat-n">MOAT 01</div>
+        <div class="moat-v">Proprietary Data</div>
+        <div class="moat-d">Millions of scored real-work submissions, rubric-tagged. The only corpus of its kind. Cannot be scraped. Cannot be bought. Must be earned in real time.</div>
+      </div>
+      <div class="moat-col">
+        <div class="moat-n">MOAT 02</div>
+        <div class="moat-v">Two-Sided Network</div>
+        <div class="moat-d">Every challenge brings candidates. Every candidate brings discoverability. Every cert shared brings employers. Standard network effects, but the artifact is the signal itself.</div>
+      </div>
+      <div class="moat-col">
+        <div class="moat-n">MOAT 03</div>
+        <div class="moat-v">Scoring Standard</div>
+        <div class="moat-d">Once "AIQ score" enters the language — once recruiters ask for it — it becomes infrastructure. The first credible standard becomes the only standard.</div>
+      </div>
+      <div class="moat-col">
+        <div class="moat-n">MOAT 04</div>
+        <div class="moat-v">Distribution Lock-in</div>
+        <div class="moat-d">Once embedded in 3 major ATS systems, switching cost is institutional. The Signal API becomes load-bearing for hiring workflows — invisible and irreplaceable.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FINANCIAL TRAJECTORY -->
+<div class="section">
+  <div class="sec-label">Path to a billion</div>
+  <h2>The trajectory — and the bets at each stage.</h2>
+  <p class="section-desc">Five years to $250M ARR. Seven to a billion-dollar outcome at a 15× infrastructure multiple. Aggressive but not delusional given the data flywheel.</p>
+
+  <div class="traj">
+    <div class="traj-card">
+      <div class="traj-yr">YEAR 1</div>
+      <div class="traj-stage">Pre-Seed → Seed</div>
+      <div class="traj-arr">$300K</div>
+      <div class="traj-d">10 lighthouse + 500 self-serve employers. GCC only. Raise $3M seed on traction.</div>
+    </div>
+    <div class="traj-card">
+      <div class="traj-yr">YEAR 2</div>
+      <div class="traj-stage">Series A</div>
+      <div class="traj-arr">$25M</div>
+      <div class="traj-d">India + GCC live. Candidate Pro live. Talent pool licensing begins. $20M A on dataset narrative.</div>
+    </div>
+    <div class="traj-card">
+      <div class="traj-yr">YEAR 3</div>
+      <div class="traj-stage">Series B</div>
+      <div class="traj-arr">$75M</div>
+      <div class="traj-d">Signal API public. US launch. Narrative pivots from product to infrastructure. $60M B.</div>
+    </div>
+    <div class="traj-card">
+      <div class="traj-yr">YEAR 5</div>
+      <div class="traj-stage">Series C</div>
+      <div class="traj-arr">$250M</div>
+      <div class="traj-d">Signal API is largest revenue line. Standards adoption across major ATS. Path to IPO visible.</div>
+    </div>
+    <div class="traj-card">
+      <div class="traj-yr">YEAR 7</div>
+      <div class="traj-stage">IPO / Strategic</div>
+      <div class="traj-arr">$600M</div>
+      <div class="traj-d">At 15× infrastructure multiple → ~$9B outcome. Comparable: Stripe-shape, not LinkedIn-shape.</div>
+    </div>
+  </div>
+</div>
+
+<!-- RISKS -->
+<div class="section">
+  <div class="sec-label">What kills this · how we defend</div>
+  <h2>The four risks that matter — and our pre-built answers.</h2>
+  <p class="section-desc">Every billion-dollar pitch glosses over the failure modes. Here are ours, named honestly, with the defenses we'll build in advance.</p>
+
+  <div class="risk-grid">
+    <div class="risk-row">
+      <div class="risk-left">
+        <div class="risk-label r">RISK 01 · COLD START</div>
+        <div class="risk-text">Two-sided marketplace problem. Employers won't post without candidates. Candidates won't show up without employers. The classic chicken-and-egg that kills hiring marketplaces.</div>
+      </div>
+      <div class="risk-right">
+        <div class="risk-label g">DEFENSE</div>
+        <div class="risk-text">Solve the employer side first with 10 free lighthouse challenges with marquee brands. The brand pulls candidates. The candidates create the artifact library. Six months of pure data investment before monetisation.</div>
+      </div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-left">
+        <div class="risk-label r">RISK 02 · LINKEDIN BUILDS THIS</div>
+        <div class="risk-text">Microsoft has the distribution, the data, and the capital. If they decide capability scoring matters, they ship it next quarter and we're irrelevant.</div>
+      </div>
+      <div class="risk-right">
+        <div class="risk-label g">DEFENSE</div>
+        <div class="risk-text">LinkedIn cannibalises its own resume-based business by doing this. They won't. By the time they care, we have the dataset and the standard. The acquisition conversation favours us — they buy us, not build us.</div>
+      </div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-left">
+        <div class="risk-label r">RISK 03 · SCORING CREDIBILITY</div>
+        <div class="risk-text">If the AIQ score is seen as gameable, biased, or arbitrary, the whole platform collapses. The product is trust in the score.</div>
+      </div>
+      <div class="risk-right">
+        <div class="risk-label g">DEFENSE</div>
+        <div class="risk-text">Publish the rubric openly. Third-party audit each year. Process trail requirement makes gaming detectable. Recruit an academic advisory board (IO psych, ML fairness) by month 6.</div>
+      </div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-left">
+        <div class="risk-label r">RISK 04 · ENTERPRISE SALES BURNS US</div>
+        <div class="risk-text">Act 2 requires enterprise sales motion we don't have. Long cycles, RFPs, procurement. The wrong hire kills the company by burning runway.</div>
+      </div>
+      <div class="risk-right">
+        <div class="risk-label g">DEFENSE</div>
+        <div class="risk-text">Don't sell Act 2 until Act 1 is generating $25M ARR. By then we hire from a position of strength, with a story and a dataset, not a pitch. Wedge first via ATS partnerships, not direct enterprise.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEXT 90 DAYS -->
+<div class="section">
+  <div class="sec-label">The next 90 days</div>
+  <h2>What we ship before anything else matters.</h2>
+  <p class="section-desc">The first 90 days are operational, not strategic. The strategy is set. Now we execute it in the smallest possible scope to prove the wedge.</p>
+
+  <div class="next">
+    <div class="next-grid">
+      <div class="next-col">
+        <h3>Days 1–30 · Foundation</h3>
+        <ul>
+          <li>Lock down 3 lighthouse employer LOIs in GCC (founder sales)</li>
+          <li>Ship MVP: JD upload → challenge → submission → score → leaderboard</li>
+          <li>Hire founding engineer + founding designer</li>
+          <li>Publish the AIQ rubric publicly as a manifesto</li>
+        </ul>
+      </div>
+      <div class="next-col">
+        <h3>Days 31–60 · First Cycle</h3>
+        <ul>
+          <li>Run challenge 1 with lighthouse employer — 100+ submissions target</li>
+          <li>Launch candidate landing page; convert via PR splash</li>
+          <li>Build the first 5 challenge templates for the library</li>
+          <li>Begin weekly investor updates to seed Series A FOMO early</li>
+        </ul>
+      </div>
+      <div class="next-col">
+        <h3>Days 61–90 · Proof of Wedge</h3>
+        <ul>
+          <li>Run 3 concurrent challenges across 3 industries</li>
+          <li>Publish first "State of AI Hiring" report — earned media play</li>
+          <li>Open self-serve employer flow with Standard tier pricing</li>
+          <li>Close $3M seed on traction + dataset narrative</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div style="text-align:center;padding:20px 0">
+  <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px">END · BUSINESS MODEL v1</div>
+  <div style="font-family:var(--head);font-size:15px;color:var(--ink);font-weight:600;letter-spacing:-.01em">The product is PROOF. The company is NBL. The category is signal.</div>
+</div>
+
+</div>
+</body>
+</html>
