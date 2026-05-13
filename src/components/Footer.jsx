@@ -2,22 +2,23 @@ import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 const COLS = [
-  { title: 'product',  links: [
-    { to: '/#how', label: 'how it works' },
+  { title: 'audiences', links: [
+    { to: '/for-builders', label: 'for builders' },
+    { to: '/for-corporates', label: 'for corporates' },
+    { to: '/for-universities', label: 'for universities' },
+    { to: '/for-governments', label: 'for governments' },
+    { to: '/nationals', label: 'nationals' },
+    { to: '/spear', label: 'spear · top 1%' },
+  ]},
+  { title: 'product', links: [
+    { to: '/#how', label: 'the loop' },
     { to: '/#pricing', label: 'pricing' },
-    { to: '/employer', label: 'for employers' },
-    { to: '/candidate', label: 'for candidates' },
+    { to: '/manifesto', label: 'manifesto' },
   ]},
   { title: 'platform', links: [
     { to: '/signin', label: 'sign in' },
     { to: '/app/challenges', label: 'browse challenges' },
     { to: '/admin', label: 'admin console' },
-  ]},
-  { title: 'company',  links: [
-    { to: '#', label: 'about nbl' },
-    { to: '#', label: 'press' },
-    { to: '#', label: 'careers' },
-    { to: '#', label: 'contact' },
   ]},
 ]
 
@@ -32,17 +33,17 @@ export default function Footer() {
   return (
     <footer className="bg-bg border-t border-line">
       <div className="mx-auto max-w-[1280px] px-5 md:px-10 py-16 md:py-20">
-        {/* Massive wordmark */}
         <div className="mb-14 pb-12 border-b border-line">
           <div className="flex items-end justify-between gap-8 flex-wrap">
             <div>
               <Link to="/" className="font-sans font-black tracking-tighter text-ink text-[80px] md:text-[140px] leading-[0.85] block">
                 proof<span className="text-orange">.</span>
               </Link>
-              <div className="mt-3 font-mono text-[10px] tracking-wide2 text-ink-dim">→ vol. 1 · by nbl · est. 2026</div>
+              <div className="mt-3 font-mono text-[10px] tracking-wide2 text-ink-dim">→ vol. 1 · by nbl · est. 2026 · gcc + india</div>
             </div>
             <p className="font-sans text-[16px] md:text-[18px] text-ink-dim max-w-md leading-[1.5]">
-              The infrastructure for what comes after the résumé. Real work, scored, signed, portable.
+              The new résumé for the self-taught AI generation.<br/>
+              Hire by what you ship.
             </p>
           </div>
         </div>
@@ -58,6 +59,7 @@ export default function Footer() {
               operational
             </div>
             <div className="font-mono text-[9.5px] tracking-wide2 text-ink-ghost mt-2 tabular">{ts} · UTC</div>
+            <div className="font-mono text-[9.5px] tracking-wide2 text-ink-ghost mt-1">v0.1 · may 2026</div>
           </div>
 
           {COLS.map((col) => (
@@ -78,7 +80,7 @@ export default function Footer() {
 
         <div className="mt-14 pt-6 border-t border-line flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 font-mono text-[10px] tracking-wide2 text-ink-dim">
           <span>© {new Date().getFullYear()} · nbl · all evidence signed</span>
-          <span>v1.0 · may 2026</span>
+          <span>north-star: placements per challenge shipped</span>
         </div>
       </div>
     </footer>

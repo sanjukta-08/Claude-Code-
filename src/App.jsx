@@ -1,10 +1,15 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import Layout from './pages/Layout'
 import AppLayout from './pages/AppLayout'
 import HomePage from './pages/HomePage'
 import EmployerPage from './pages/EmployerPage'
 import CandidatePage from './pages/CandidatePage'
+import UniversitiesPage from './pages/UniversitiesPage'
+import GovernmentsPage from './pages/GovernmentsPage'
+import NationalsPage from './pages/NationalsPage'
+import SpearPage from './pages/SpearPage'
+import ManifestoPage from './pages/ManifestoPage'
 import SignInPage from './pages/SignInPage'
 
 import ChallengeBoardPage from './pages/app/ChallengeBoardPage'
@@ -27,8 +32,19 @@ export default function App() {
           {/* Marketing */}
           <Route element={<Layout />}>
             <Route path="/" element={<HomePage />} />
-            <Route path="/employer" element={<EmployerPage />} />
-            <Route path="/candidate" element={<CandidatePage />} />
+
+            {/* PRD audience routes */}
+            <Route path="/for-builders"     element={<CandidatePage />} />
+            <Route path="/for-corporates"   element={<EmployerPage />} />
+            <Route path="/for-universities" element={<UniversitiesPage />} />
+            <Route path="/for-governments"  element={<GovernmentsPage />} />
+            <Route path="/nationals"        element={<NationalsPage />} />
+            <Route path="/spear"            element={<SpearPage />} />
+            <Route path="/manifesto"        element={<ManifestoPage />} />
+
+            {/* Legacy aliases (back-compat) */}
+            <Route path="/employer"  element={<Navigate to="/for-corporates" replace />} />
+            <Route path="/candidate" element={<Navigate to="/for-builders" replace />} />
           </Route>
 
           {/* Auth */}

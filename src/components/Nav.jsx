@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
+import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion'
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
+  const [audOpen, setAudOpen] = useState(false)
   const { scrollY } = useScroll()
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 12))
 
@@ -23,9 +24,39 @@ export default function Nav() {
 
       <div className="ml-10 hidden md:flex items-center gap-7 font-mono text-[11px] tracking-wide2 text-ink-dim">
         <Link to="/#how" className="hover:text-ink transition-colors">how it works</Link>
+        <div
+          className="relative"
+          onMouseEnter={() => setAudOpen(true)}
+          onMouseLeave={() => setAudOpen(false)}
+        >
+          <button className="hover:text-ink transition-colors flex items-center gap-1.5">
+            audiences <span className="text-ink-ghost">{audOpen ? '−' : '+'}</span>
+          </button>
+          <AnimatePresence>
+            {audOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.18 }}
+                className="absolute top-full left-0 mt-2 w-[220px] py-2 rounded-md border border-line bg-canvas shadow-card"
+              >
+                {[
+                  ['/for-builders',     '→ for builders'],
+                  ['/for-corporates',   '→ for corporates'],
+                  ['/for-universities', '→ for universities'],
+                  ['/for-governments',  '→ for governments'],
+                  ['/nationals',        '→ nationals · sovereign'],
+                  ['/spear',            '→ spear · top 1%'],
+                ].map(([to, label]) => (
+                  <Link key={to} to={to} className="block px-4 py-2 font-mono text-[11px] tracking-wide2 text-ink-dim hover:bg-bg hover:text-ink transition">
+                    {label}
+                  </Link>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
         <Link to="/#pricing" className="hover:text-ink transition-colors">pricing</Link>
-        <Link to="/employer" className="hover:text-ink transition-colors">for employers</Link>
-        <Link to="/candidate" className="hover:text-ink transition-colors">for candidates</Link>
+        <Link to="/manifesto" className="hover:text-ink transition-colors">manifesto</Link>
       </div>
 
       <div className="flex-1" />
