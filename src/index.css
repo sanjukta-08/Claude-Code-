@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --ink: #0A0E1A;
+  --gold: #FFC53D;
+}
+
+html, body {
+  background: var(--ink);
+  color: #E8EAF2;
+}
+
+body {
+  font-feature-settings: 'ss01', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(255, 197, 61, 0.25);
+  color: #FFE08A;
+}
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-scrolling iframe { pointer-events: none; }
+
+/* Subtle grain texture */
+.grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Scrollbar (subtle) */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,197,61,0.18); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,197,61,0.32); }
+
+/* Tabular nums for live counters */
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* Glow utilities */
+.glow-gold {
+  box-shadow:
+    0 0 0 1px rgba(255,197,61,0.18),
+    0 0 40px rgba(255,197,61,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.glow-gold-soft {
+  box-shadow:
+    0 0 0 1px rgba(255,197,61,0.10),
+    0 0 80px rgba(255,197,61,0.04);
+}
+
+/* Scanline for operating-theatre frame */
+.scanline {
+  background-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 197, 61, 0.04) 50%,
+    transparent 100%
+  );
+  background-size: 100% 8px;
+}
+
+/* Diagonal hatch (used in "dead JD" panel) */
+.hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(168, 176, 200, 0.04) 0,
+    rgba(168, 176, 200, 0.04) 1px,
+    transparent 1px,
+    transparent 8px
+  );
+}
+
+/* Glass frame corner */
+.corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid rgba(255, 197, 61, 0.45);
+}
+.corner.tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+.corner.tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+.corner.bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+.corner.br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+/* Signed timestamp tooltip */
+.signed-tooltip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 197, 61, 0.7);
+}
