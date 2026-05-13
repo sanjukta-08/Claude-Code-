@@ -1,17 +1,16 @@
-/**
- * Status / tag pill. Used everywhere for consistent badges.
- */
 export default function Pill({ tone = 'neutral', size = 'sm', dot, children, className = '' }) {
   return (
     <span
       className={`inline-flex items-center gap-1.5 font-mono font-semibold tracking-wide3 uppercase
         rounded-md border ${sizeCls[size]} ${toneCls[tone]} ${className}`}
     >
-      {dot && <span className={`relative inline-flex h-1.5 w-1.5 rounded-full ${dotCls[tone]}`}>
-        {tone === 'live' && (
-          <span className="absolute inline-flex h-full w-full rounded-full bg-signal-green opacity-50 animate-ping" />
-        )}
-      </span>}
+      {dot && (
+        <span className={`relative inline-flex h-1.5 w-1.5 rounded-full ${dotCls[tone]}`}>
+          {(tone === 'live' || tone === 'green') && (
+            <span className={`absolute inline-flex h-full w-full rounded-full opacity-50 animate-ping ${dotCls[tone]}`} />
+          )}
+        </span>
+      )}
       {children}
     </span>
   )
@@ -24,30 +23,30 @@ const sizeCls = {
 }
 
 const toneCls = {
-  neutral: 'border-white/[0.10] text-bone-dim bg-white/[0.02]',
-  bone:    'border-bone/[0.20] text-bone bg-bone/[0.04]',
-  gold:    'border-gold/40 text-gold bg-gold/[0.06]',
-  green:   'border-signal-green/40 text-signal-green bg-signal-green-dim',
-  red:     'border-signal-red/40 text-signal-red bg-signal-red-dim',
-  blue:    'border-signal-blue/40 text-signal-blue bg-signal-blue-dim',
-  live:    'border-signal-green/40 text-signal-green bg-signal-green-dim',
-  closed:  'border-gold/40 text-gold bg-gold/[0.06]',
-  awarded: 'border-gold/50 text-gold bg-gold/[0.10]',
-  draft:   'border-white/[0.10] text-bone-ghost bg-white/[0.02]',
-  free:    'border-bone-ghost/30 text-bone-ghost bg-white/[0.02]',
-  standard:'border-bone/[0.20] text-bone bg-bone/[0.04]',
-  premium: 'border-gold/50 text-gold bg-gold/[0.06]',
+  neutral: 'border-noir/12 text-coffee bg-paper/60',
+  bone:    'border-noir/15 text-noir bg-noir/[0.03]',
+  gold:    'border-crimson/40 text-crimson bg-crimson/[0.06]',
+  green:   'border-moss/40 text-moss bg-moss/[0.08]',
+  red:     'border-crimson/40 text-crimson bg-crimson/[0.06]',
+  blue:    'border-noir/15 text-noir bg-noir/[0.04]',
+  live:    'border-moss/40 text-moss bg-moss/[0.08]',
+  closed:  'border-crimson/40 text-crimson bg-crimson/[0.06]',
+  awarded: 'border-crimson/50 text-crimson bg-crimson/[0.10]',
+  draft:   'border-noir/10 text-coffee-dim bg-noir/[0.02]',
+  free:    'border-coffee/20 text-coffee bg-noir/[0.02]',
+  standard:'border-noir/15 text-noir bg-noir/[0.03]',
+  premium: 'border-crimson/40 text-crimson bg-crimson/[0.06]',
 }
 
 const dotCls = {
-  neutral: 'bg-bone-ghost',
-  bone:    'bg-bone',
-  gold:    'bg-gold',
-  green:   'bg-signal-green',
-  red:     'bg-signal-red',
-  blue:    'bg-signal-blue',
-  live:    'bg-signal-green',
-  closed:  'bg-gold',
-  awarded: 'bg-gold',
-  draft:   'bg-bone-ghost',
+  neutral: 'bg-coffee',
+  bone:    'bg-noir',
+  gold:    'bg-crimson',
+  green:   'bg-moss',
+  red:     'bg-crimson',
+  blue:    'bg-noir',
+  live:    'bg-moss',
+  closed:  'bg-crimson',
+  awarded: 'bg-crimson',
+  draft:   'bg-coffee-dim',
 }

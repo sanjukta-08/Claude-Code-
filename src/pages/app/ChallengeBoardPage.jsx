@@ -64,17 +64,17 @@ export default function ChallengeBoardPage() {
                 onClick={() => setFilter(f.id)}
                 className={`px-3.5 h-9 inline-flex items-center gap-2 rounded-full font-mono text-[10.5px] tracking-wide2 transition
                   ${filter === f.id
-                    ? 'bg-gold/[0.08] border border-gold/40 text-gold'
-                    : 'border border-white/[0.08] text-bone-dim hover:text-bone hover:border-white/[0.18]'}`}
+                    ? 'bg-crimson/[0.08] border border-crimson/40 text-crimson'
+                    : 'border border-noir/10 text-coffee hover:text-noir hover:border-noir/20'}`}
               >
                 {f.label.toUpperCase()}
-                <span className={`tabular ${filter === f.id ? 'text-gold/70' : 'text-bone-ghost'}`}>{count}</span>
+                <span className={`tabular ${filter === f.id ? 'text-crimson/70' : 'text-coffee-dim'}`}>{count}</span>
               </button>
             )
           })}
         </div>
         <div className="md:ml-auto relative md:w-72">
-          <IconSearch size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-bone-ghost pointer-events-none" />
+          <IconSearch size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-coffee-dim pointer-events-none" />
           <Input
             value={q}
             onChange={(e) => setQ(e.target.value)}
@@ -137,11 +137,11 @@ function FeaturedCard({ challenge, submitted, submissions }) {
   const closed = challenge.status === 'closed' || isExpired(challenge.deadline)
   return (
     <Link to={`/app/challenges/${challenge.id}`} className="group block">
-      <div className="relative rounded-2xl border border-gold/30 bg-gradient-to-br from-gold/[0.05] to-transparent
-        overflow-hidden p-7 md:p-9 hover:border-gold/50 transition-all duration-300">
+      <div className="relative rounded-2xl border border-crimson/30 bg-gradient-to-br from-crimson/[0.05] to-transparent
+        overflow-hidden p-7 md:p-9 hover:border-crimson/50 transition-all duration-300">
         <div
           className="absolute inset-0 -z-10"
-          style={{ background: 'radial-gradient(ellipse 600px 300px at 80% 20%, rgba(255,197,61,0.06), transparent 60%)' }}
+          style={{ background: 'radial-gradient(ellipse 600px 300px at 80% 20%, rgba(197,48,48,0.05), transparent 60%)' }}
         />
 
         <div className="flex items-start justify-between gap-6 flex-wrap">
@@ -149,13 +149,13 @@ function FeaturedCard({ challenge, submitted, submissions }) {
             <Avatar logo={challenge.company.logo} size="xl" tone="gold" />
             <div className="min-w-0">
               <Pill tone="gold" className="mb-3">FEATURED · NEW</Pill>
-              <h2 className="font-head font-extrabold tracking-tighter text-[26px] md:text-[34px] leading-[1.05] text-bone">
+              <h2 className="font-serif font-light tracking-tighter text-[26px] md:text-[34px] leading-[1.05] text-noir">
                 {challenge.role}
               </h2>
-              <div className="mt-2 font-mono text-[11px] tracking-wide2 text-bone-ghost">
+              <div className="mt-2 font-mono text-[11px] tracking-wide2 text-coffee-dim">
                 {challenge.company.name} · {challenge.id}
               </div>
-              <p className="mt-4 font-body text-[14px] text-bone-dim leading-[1.6] max-w-md">
+              <p className="mt-4 font-sans text-[14px] text-coffee leading-[1.6] max-w-md">
                 Top {challenge.topN} candidates earn a guaranteed interview with {challenge.company.name}.
                 Submit a 1-page strategy, your reflection, your process trail. 72 hours.
               </p>
@@ -164,16 +164,16 @@ function FeaturedCard({ challenge, submitted, submissions }) {
 
           <div className="flex flex-col items-start md:items-end gap-3">
             {submitted && <Pill tone="green" dot>SUBMITTED</Pill>}
-            <div className="flex items-center gap-1.5 text-bone">
-              <IconClock size={13} className="text-gold" />
+            <div className="flex items-center gap-1.5 text-noir">
+              <IconClock size={13} className="text-crimson" />
               <span className="font-mono text-[13px] tabular">
                 <Countdown deadline={challenge.deadline} className="text-[13px]" />
               </span>
             </div>
-            <div className="font-mono text-[10px] tracking-wide3 text-bone-ghost tabular">
+            <div className="font-mono text-[10px] tracking-wide3 text-coffee-dim tabular">
               {submissions} SUBMISSION{submissions === 1 ? '' : 'S'}
             </div>
-            <span className="mt-2 inline-flex items-center gap-2 font-mono text-[11px] tracking-wide3 text-gold group-hover:gap-3 transition-all">
+            <span className="mt-2 inline-flex items-center gap-2 font-mono text-[11px] tracking-wide3 text-crimson group-hover:gap-3 transition-all">
               ENTER <IconArrowRight size={13} />
             </span>
           </div>
@@ -187,7 +187,7 @@ function ChallengeCardV2({ challenge, submitted, submissions }) {
   const closed = challenge.status === 'closed' || isExpired(challenge.deadline)
   return (
     <Link to={`/app/challenges/${challenge.id}`} className="group block h-full">
-      <Panel padded={false} className="h-full hover:border-gold/30 hover:bg-ink-700/60 transition-all duration-300 overflow-hidden">
+      <Panel padded={false} className="h-full hover:border-crimson/30 hover:bg-paper transition-all duration-300 overflow-hidden">
         <div className="p-5 flex flex-col h-full">
           <div className="flex items-start justify-between gap-3 mb-4">
             <Avatar logo={challenge.company.logo} size="md" tone="gold" />
@@ -196,29 +196,29 @@ function ChallengeCardV2({ challenge, submitted, submissions }) {
             </Pill>
           </div>
 
-          <div className="font-mono text-[10px] tracking-wide2 text-bone-ghost mb-1">
+          <div className="font-mono text-[10px] tracking-wide2 text-coffee-dim mb-1">
             {challenge.company.name}
           </div>
-          <h3 className="font-head font-bold text-[18px] text-bone leading-snug tracking-tight mb-4 line-clamp-2">
+          <h3 className="font-serif text-[18px] text-noir leading-snug tracking-tight mb-4 line-clamp-2">
             {challenge.role}
           </h3>
 
-          <div className="mt-auto pt-4 border-t border-white/[0.05] grid grid-cols-3 gap-2">
+          <div className="mt-auto pt-4 border-t border-noir/8 grid grid-cols-3 gap-2">
             <Mini label="ENDS" value={closed ? 'CLOSED' : <Countdown deadline={challenge.deadline} className="text-[10.5px]" />} accent={!closed} />
             <Mini label="SUBS" value={submissions} />
             <Mini label="TOP" value={challenge.topN} />
           </div>
 
           <div className="mt-4 flex items-center justify-between">
-            <span className="inline-flex items-center gap-1.5 font-mono text-[9.5px] tracking-wide3 text-bone-ghost">
-              <IconAward size={11} className="text-gold/70" /> GUARANTEED INTERVIEW
+            <span className="inline-flex items-center gap-1.5 font-mono text-[9.5px] tracking-wide3 text-coffee-dim">
+              <IconAward size={11} className="text-crimson/70" /> GUARANTEED INTERVIEW
             </span>
             {submitted ? (
-              <span className="inline-flex items-center gap-1 font-mono text-[10px] tracking-wide3 text-signal-green">
+              <span className="inline-flex items-center gap-1 font-mono text-[10px] tracking-wide3 text-moss">
                 <IconCheck size={11} /> SUBMITTED
               </span>
             ) : (
-              <span className="font-mono text-[10px] tracking-wide3 text-gold group-hover:translate-x-0.5 transition">→</span>
+              <span className="font-mono text-[10px] tracking-wide3 text-crimson group-hover:translate-x-0.5 transition">→</span>
             )}
           </div>
         </div>
@@ -230,8 +230,8 @@ function ChallengeCardV2({ challenge, submitted, submissions }) {
 function Mini({ label, value, accent }) {
   return (
     <div>
-      <div className="font-mono text-[8.5px] tracking-wide3 text-bone-ghost">{label}</div>
-      <div className={`mt-0.5 font-mono text-[11px] tabular ${accent ? 'text-gold' : 'text-bone'}`}>{value}</div>
+      <div className="font-mono text-[8.5px] tracking-wide3 text-coffee-dim">{label}</div>
+      <div className={`mt-0.5 font-mono text-[11px] tabular ${accent ? 'text-crimson' : 'text-noir'}`}>{value}</div>
     </div>
   )
 }

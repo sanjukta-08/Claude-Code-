@@ -31,7 +31,7 @@ export default function ProfilePage() {
   const subs = useSubmissions({ candidateId: session?.candidateId })
 
   if (!candidate) {
-    return <PageShell><div className="font-mono text-bone-ghost">Loading…</div></PageShell>
+    return <PageShell><div className="font-mono text-coffee-dim">Loading…</div></PageShell>
   }
 
   // Sort submissions chronologically for the sparkline
@@ -54,15 +54,15 @@ export default function ProfilePage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <Panel padded={false} className="overflow-hidden bg-gradient-to-br from-gold/[0.04] to-transparent border-gold/20">
-          <div className="absolute inset-0 -z-10" style={{ background: 'radial-gradient(ellipse at top right, rgba(255,197,61,0.06), transparent 60%)' }} />
+        <Panel padded={false} className="overflow-hidden bg-gradient-to-br from-crimson/[0.04] to-transparent border-crimson/20">
+          <div className="absolute inset-0 -z-10" style={{ background: 'radial-gradient(ellipse at top right, rgba(197,48,48,0.05), transparent 60%)' }} />
           <div className="p-7 md:p-9 grid grid-cols-1 md:grid-cols-[auto_1fr_auto] gap-6 md:gap-10 items-center">
             <Avatar name={candidate.name} size="2xl" tone="gold" />
             <div className="min-w-0">
-              <h2 className="font-head font-extrabold tracking-tighter text-[26px] md:text-[34px] leading-[1.05] text-bone">
+              <h2 className="font-serif font-light tracking-tighter text-[26px] md:text-[34px] leading-[1.05] text-noir">
                 {candidate.name}
               </h2>
-              <div className="mt-1 font-body text-[13.5px] text-bone-dim">{candidate.currentRole}</div>
+              <div className="mt-1 font-sans text-[13.5px] text-coffee">{candidate.currentRole}</div>
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <Pill tone="gold">{aiq.count} CHALLENGE{aiq.count === 1 ? '' : 'S'} COMPLETED</Pill>
                 <Pill tone="neutral">{candidate.id}</Pill>
@@ -70,11 +70,11 @@ export default function ProfilePage() {
               </div>
             </div>
             <div className="text-left md:text-right">
-              <div className="font-mono text-[9.5px] tracking-wide3 text-bone-ghost">AGGREGATE AIQ</div>
-              <div className="font-head font-extrabold tracking-tightest text-[56px] md:text-[72px] leading-none text-gold tabular">
+              <div className="font-mono text-[9.5px] tracking-wide3 text-coffee-dim">AGGREGATE AIQ</div>
+              <div className="font-serif font-light tracking-tighter text-[56px] md:text-[72px] leading-none text-crimson tabular">
                 {aiq.total ? aiqValue : '—'}
               </div>
-              <div className="font-mono text-[10px] tracking-wide2 text-bone-ghost mt-1">
+              <div className="font-mono text-[10px] tracking-wide2 text-coffee-dim mt-1">
                 {aiq.count > 0 ? `AVG OF ${aiq.count} CHALLENGE${aiq.count === 1 ? '' : 'S'}` : 'NO SUBMISSIONS YET'}
               </div>
               {totals.length > 1 && (
@@ -101,8 +101,8 @@ export default function ProfilePage() {
       {aiq.dimensions && (
         <section className="mt-10">
           <div className="flex items-center gap-2.5 mb-4">
-            <span className="h-px w-5 bg-gold/60" />
-            <span className="font-mono text-[10px] tracking-wide3 text-gold">DIMENSION PROFILE · AVG ACROSS ALL CHALLENGES</span>
+            <span className="h-px w-5 bg-crimson/60" />
+            <span className="font-mono text-[10px] tracking-wide3 text-crimson">DIMENSION PROFILE · AVG ACROSS ALL CHALLENGES</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {Object.entries(aiq.dimensions).map(([code, score]) => (
@@ -116,8 +116,8 @@ export default function ProfilePage() {
       <section className="mt-10">
         <div className="flex items-center justify-between gap-3 mb-4">
           <div className="flex items-center gap-2.5">
-            <span className="h-px w-5 bg-gold/60" />
-            <span className="font-mono text-[10px] tracking-wide3 text-gold">CHALLENGE HISTORY</span>
+            <span className="h-px w-5 bg-crimson/60" />
+            <span className="font-mono text-[10px] tracking-wide3 text-crimson">CHALLENGE HISTORY</span>
           </div>
           <Button to="/app/challenges" variant="ghost" size="sm" iconRight={<IconArrowUpRight size={11} />}>
             Take another
@@ -133,7 +133,7 @@ export default function ProfilePage() {
           />
         ) : (
           <Panel padded={false}>
-            <div className="grid grid-cols-[40px_1fr_80px_80px_24px] md:grid-cols-[40px_1fr_140px_80px_80px_24px] gap-3 px-5 py-3 border-b border-white/[0.05] font-mono text-[9px] tracking-wide3 text-bone-ghost">
+            <div className="grid grid-cols-[40px_1fr_80px_80px_24px] md:grid-cols-[40px_1fr_140px_80px_80px_24px] gap-3 px-5 py-3 border-b border-noir/8 font-mono text-[9px] tracking-wide3 text-coffee-dim">
               <div></div>
               <div>ROLE</div>
               <div className="hidden md:block">SUBMITTED</div>
@@ -152,20 +152,20 @@ export default function ProfilePage() {
                   key={s.id}
                   to={`/app/submissions/${s.id}`}
                   className={`grid grid-cols-[40px_1fr_80px_80px_24px] md:grid-cols-[40px_1fr_140px_80px_80px_24px] gap-3 px-5 py-3.5 items-center
-                    transition-colors group hover:bg-gold/[0.025]
-                    ${i > 0 ? 'border-t border-white/[0.04]' : ''}`}
+                    transition-colors group hover:bg-crimson/[0.03]
+                    ${i > 0 ? 'border-t border-noir/6' : ''}`}
                 >
                   <Avatar logo={ch.company.logo} size="sm" tone="gold" />
                   <div className="min-w-0">
-                    <div className="font-head font-semibold text-[13.5px] text-bone truncate group-hover:text-gold transition">{ch.role}</div>
-                    <div className="font-mono text-[10px] tracking-wide2 text-bone-ghost truncate">{ch.company.name} · {ch.id}</div>
+                    <div className="font-serif text-[13.5px] text-noir truncate group-hover:text-crimson transition">{ch.role}</div>
+                    <div className="font-mono text-[10px] tracking-wide2 text-coffee-dim truncate">{ch.company.name} · {ch.id}</div>
                   </div>
-                  <div className="hidden md:block font-mono text-[10.5px] tracking-wide2 text-bone-ghost tabular">{formatRelative(s.submittedAt)}</div>
-                  <div className="text-right font-head font-bold text-[15px] text-bone tabular">{s.scores.total}</div>
-                  <div className="text-right font-mono text-[10.5px] tracking-wide2 text-bone-dim tabular">
+                  <div className="hidden md:block font-mono text-[10.5px] tracking-wide2 text-coffee-dim tabular">{formatRelative(s.submittedAt)}</div>
+                  <div className="text-right font-serif text-[15px] text-noir tabular">{s.scores.total}</div>
+                  <div className="text-right font-mono text-[10.5px] tracking-wide2 text-coffee tabular">
                     #{rank}/{allSubsCh.length}
                   </div>
-                  <IconChevronRight size={13} className="text-bone-ghost group-hover:text-gold transition" />
+                  <IconChevronRight size={13} className="text-coffee-dim group-hover:text-crimson transition" />
                 </Link>
               )
             })}
@@ -179,8 +179,8 @@ export default function ProfilePage() {
 function KpiInline({ label, value, accent, mono }) {
   return (
     <Panel className="!py-4">
-      <div className="font-mono text-[9px] tracking-wide3 text-bone-ghost">{label}</div>
-      <div className={`mt-2 leading-none ${mono ? 'font-mono text-[14px]' : 'font-head font-extrabold tracking-tightest text-[28px] tabular'} ${accent ? 'text-gold' : 'text-bone'}`}>
+      <div className="font-mono text-[9px] tracking-wide3 text-coffee-dim">{label}</div>
+      <div className={`mt-2 leading-none ${mono ? 'font-mono text-[14px]' : 'font-serif font-light tracking-tighter text-[28px] tabular'} ${accent ? 'text-crimson' : 'text-noir'}`}>
         {value || '—'}
       </div>
     </Panel>

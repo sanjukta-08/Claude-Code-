@@ -1,6 +1,3 @@
-/**
- * Avatar — initials-based, three sizes, two tones (gold for candidates, neutral for companies).
- */
 export default function Avatar({ name = '?', size = 'md', tone = 'gold', logo, className = '' }) {
   const initials = logo
     ? logo.slice(0, 2).toUpperCase()
@@ -14,8 +11,9 @@ export default function Avatar({ name = '?', size = 'md', tone = 'gold', logo, c
 
   return (
     <div
-      className={`relative flex-shrink-0 inline-flex items-center justify-center font-head font-bold rounded-md
+      className={`relative flex-shrink-0 inline-flex items-center justify-center font-serif italic rounded-md
         ${sizeCls[size]} ${toneCls[tone]} ${className}`}
+      style={{ fontVariationSettings: '"opsz" 60' }}
     >
       {initials}
     </div>
@@ -23,17 +21,18 @@ export default function Avatar({ name = '?', size = 'md', tone = 'gold', logo, c
 }
 
 const sizeCls = {
-  xs: 'h-6 w-6 text-[10px] rounded-md',
-  sm: 'h-8 w-8 text-[11px] rounded-md',
-  md: 'h-10 w-10 text-[13px] rounded-lg',
-  lg: 'h-12 w-12 text-[15px] rounded-lg',
-  xl: 'h-16 w-16 text-[20px] rounded-xl',
-  '2xl': 'h-20 w-20 text-[24px] rounded-2xl',
+  xs: 'h-6 w-6 text-[11px] rounded-md',
+  sm: 'h-8 w-8 text-[12px] rounded-md',
+  md: 'h-10 w-10 text-[14px] rounded-lg',
+  lg: 'h-12 w-12 text-[16px] rounded-lg',
+  xl: 'h-16 w-16 text-[22px] rounded-xl',
+  '2xl': 'h-20 w-20 text-[26px] rounded-2xl',
 }
 
 const toneCls = {
-  gold:   'bg-gold/[0.08] border border-gold/30 text-gold',
-  bone:   'bg-bone/[0.05] border border-bone/[0.14] text-bone',
-  ghost:  'bg-white/[0.04] border border-white/[0.08] text-bone-dim',
-  filled: 'bg-gold text-ink border border-gold',
+  gold:   'bg-crimson/[0.08] border border-crimson/30 text-crimson',
+  bone:   'bg-noir/[0.04] border border-noir/15 text-noir',
+  ghost:  'bg-noir/[0.03] border border-noir/10 text-coffee',
+  filled: 'bg-crimson text-paper border border-crimson',
+  noir:   'bg-noir text-paper border border-noir',
 }

@@ -63,7 +63,7 @@ export default function SubmitPage() {
 
   return (
     <PageShell size="narrow">
-      <Link to={`/app/challenges/${challenge.id}`} className="font-mono text-[10px] tracking-wide3 text-bone-ghost hover:text-gold transition inline-flex items-center gap-1.5">
+      <Link to={`/app/challenges/${challenge.id}`} className="font-mono text-[10px] tracking-wide3 text-coffee-dim hover:text-crimson transition inline-flex items-center gap-1.5">
         <IconChevronLeft size={11} /> BACK TO BRIEF
       </Link>
 
@@ -71,15 +71,15 @@ export default function SubmitPage() {
       <div className="mt-5 mb-7 flex items-start gap-4">
         <Avatar logo={challenge.company.logo} size="lg" tone="gold" />
         <div className="min-w-0">
-          <div className="font-mono text-[10px] tracking-wide2 text-bone-ghost mb-1">
+          <div className="font-mono text-[10px] tracking-wide2 text-coffee-dim mb-1">
             {challenge.company.name} · {challenge.id}
           </div>
-          <h1 className="font-head font-extrabold tracking-tighter text-[28px] md:text-[36px] leading-[1.05] text-bone">
+          <h1 className="font-serif font-light tracking-tighter text-[28px] md:text-[36px] leading-[1.05] text-noir">
             Submit your work
           </h1>
-          <div className="mt-2 flex items-center gap-3 font-mono text-[10px] tracking-wide3 text-bone-ghost">
+          <div className="mt-2 flex items-center gap-3 font-mono text-[10px] tracking-wide3 text-coffee-dim">
             <span className="inline-flex items-center gap-1.5">
-              <IconClock size={11} className="text-gold" />
+              <IconClock size={11} className="text-crimson" />
               <Countdown deadline={challenge.deadline} className="text-[11px]" />
             </span>
             <span>·</span>
@@ -88,7 +88,7 @@ export default function SubmitPage() {
         </div>
       </div>
 
-      <p className="mb-8 font-body text-[14px] text-bone-dim leading-[1.65] max-w-xl">
+      <p className="mb-8 font-sans text-[14px] text-coffee leading-[1.65] max-w-xl">
         Three parts. All required. Scoring happens the moment you submit — but stays sealed
         until the challenge deadline closes.
       </p>
@@ -128,7 +128,7 @@ export default function SubmitPage() {
           complete={validReflection}
         >
           <Field label="Your reflection" hint={
-            <span className={`tabular ${validReflection ? 'text-signal-green' : 'text-bone-ghost'}`}>
+            <span className={`tabular ${validReflection ? 'text-moss' : 'text-coffee-dim'}`}>
               {wc} / 500 words
             </span>
           }>
@@ -140,10 +140,10 @@ export default function SubmitPage() {
             />
           </Field>
           {/* Word count visual */}
-          <div className="mt-3 h-1 rounded-full bg-white/[0.05] overflow-hidden">
+          <div className="mt-3 h-1 rounded-full bg-noir/[0.05] overflow-hidden">
             <motion.div
               animate={{ width: `${Math.min(100, (wc / 500) * 100)}%` }}
-              className={`h-full ${validReflection ? 'bg-signal-green' : 'bg-gold/60'}`}
+              className={`h-full ${validReflection ? 'bg-moss' : 'bg-crimson/60'}`}
               transition={{ duration: 0.3 }}
             />
           </div>
@@ -160,7 +160,7 @@ export default function SubmitPage() {
           <div className="space-y-2">
             {processTrail.map((t, i) => (
               <div key={i} className="flex gap-2 items-center">
-                <span className="font-mono text-[10px] tracking-wide2 text-bone-ghost w-8 tabular">{String(i + 1).padStart(2, '0')}</span>
+                <span className="font-mono text-[10px] tracking-wide2 text-coffee-dim w-8 tabular">{String(i + 1).padStart(2, '0')}</span>
                 <MonoInput
                   type="text"
                   placeholder="screenshot-1.png  /  https://...  /  prompt rev 3"
@@ -171,7 +171,7 @@ export default function SubmitPage() {
                 {processTrail.length > 1 && (
                   <button
                     onClick={() => removeTrail(i)}
-                    className="h-10 w-10 rounded-md text-bone-ghost hover:text-signal-red hover:bg-signal-red-dim transition flex items-center justify-center flex-shrink-0"
+                    className="h-10 w-10 rounded-md text-coffee-dim hover:text-crimson hover:bg-crimson/[0.06] transition flex items-center justify-center flex-shrink-0"
                   >
                     <IconClose size={12} />
                   </button>
@@ -181,7 +181,7 @@ export default function SubmitPage() {
             {processTrail.length < 10 && (
               <button
                 onClick={addTrail}
-                className="inline-flex items-center gap-1.5 font-mono text-[10.5px] tracking-wide3 text-gold hover:text-gold-glow transition mt-2"
+                className="inline-flex items-center gap-1.5 font-mono text-[10.5px] tracking-wide3 text-crimson hover:text-crimson transition mt-2"
               >
                 <IconPlus size={11} /> ADD ROW
               </button>
@@ -193,8 +193,8 @@ export default function SubmitPage() {
       {/* Sticky submit */}
       <div className="sticky bottom-4 z-20 mt-8">
         <div className="flex items-center justify-between gap-3 px-5 py-3
-          rounded-2xl border border-white/[0.08] bg-ink-800/95 backdrop-blur-md shadow-xl">
-          <div className="font-mono text-[10px] tracking-wide3 text-bone-ghost">
+          rounded-2xl border border-noir/10 bg-paper backdrop-blur-md shadow-xl">
+          <div className="font-mono text-[10px] tracking-wide3 text-coffee-dim">
             {!canSubmit ? 'COMPLETE ALL 3 PARTS · 50+ WORD REFLECTION' : '✓ READY TO SEAL'}
           </div>
           <Button
@@ -205,7 +205,7 @@ export default function SubmitPage() {
             {submitting ? 'SEALING · SCORING…' : 'Submit & seal'}
           </Button>
         </div>
-        {error && <div className="mt-2 font-mono text-[10px] text-signal-red text-center">{error}</div>}
+        {error && <div className="mt-2 font-mono text-[10px] text-crimson text-center">{error}</div>}
       </div>
     </PageShell>
   )
@@ -217,18 +217,18 @@ function Block({ n, title, desc, icon, complete, children }) {
       <div className="p-5 md:p-6">
         <div className="flex items-start gap-3 mb-4">
           <span className={`h-8 w-8 rounded-md flex items-center justify-center flex-shrink-0
-            ${complete ? 'border border-signal-green/40 bg-signal-green-dim text-signal-green'
-                       : 'border border-gold/30 bg-gold/[0.06] text-gold'}`}>
+            ${complete ? 'border border-moss/40 bg-moss/[0.10] text-moss'
+                       : 'border border-crimson/30 bg-crimson/[0.06] text-crimson'}`}>
             {complete ? <IconCheck size={14} /> : icon}
           </span>
           <div className="min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <span className={`font-mono text-[10px] tracking-wide3 ${complete ? 'text-signal-green' : 'text-gold'}`}>
+              <span className={`font-mono text-[10px] tracking-wide3 ${complete ? 'text-moss' : 'text-crimson'}`}>
                 PART {n}
               </span>
             </div>
-            <div className="font-head font-bold text-[18px] text-bone leading-tight">{title}</div>
-            <p className="mt-1.5 font-body text-[13px] text-bone-dim leading-[1.6]">{desc}</p>
+            <div className="font-serif text-[18px] text-noir leading-tight">{title}</div>
+            <p className="mt-1.5 font-sans text-[13px] text-coffee leading-[1.6]">{desc}</p>
           </div>
         </div>
         {children}
@@ -241,13 +241,13 @@ function ProgressStep({ n, label, complete }) {
   return (
     <div className={`flex items-center gap-2.5 px-3 py-2 rounded-lg border transition
       ${complete
-        ? 'border-signal-green/30 bg-signal-green-dim'
-        : 'border-white/[0.06] bg-ink-800/40'}`}>
+        ? 'border-moss/30 bg-moss/[0.10]'
+        : 'border-noir/8 bg-cream'}`}>
       <span className={`h-5 w-5 rounded-md flex items-center justify-center font-mono text-[9px]
-        ${complete ? 'bg-signal-green text-ink' : 'border border-white/[0.10] text-bone-ghost'}`}>
+        ${complete ? 'bg-moss text-ink' : 'border border-noir/12 text-coffee-dim'}`}>
         {complete ? <IconCheck size={10} /> : n}
       </span>
-      <span className={`font-mono text-[10px] tracking-wide3 ${complete ? 'text-signal-green' : 'text-bone-dim'}`}>
+      <span className={`font-mono text-[10px] tracking-wide3 ${complete ? 'text-moss' : 'text-coffee'}`}>
         {label.toUpperCase()}
       </span>
     </div>

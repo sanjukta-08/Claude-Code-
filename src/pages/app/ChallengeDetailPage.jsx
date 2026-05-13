@@ -28,10 +28,10 @@ export default function ChallengeDetailPage() {
   return (
     <PageShell>
       {/* Breadcrumb */}
-      <div className="mb-5 flex items-center gap-2 font-mono text-[10px] tracking-wide3 text-bone-ghost">
-        <Link to="/app/challenges" className="hover:text-bone transition">CHALLENGES</Link>
+      <div className="mb-5 flex items-center gap-2 font-mono text-[10px] tracking-wide3 text-coffee-dim">
+        <Link to="/app/challenges" className="hover:text-noir transition">CHALLENGES</Link>
         <IconChevronRight size={11} />
-        <span className="text-bone">{challenge.id}</span>
+        <span className="text-noir">{challenge.id}</span>
       </div>
 
       <motion.div
@@ -47,15 +47,15 @@ export default function ChallengeDetailPage() {
             <Avatar logo={challenge.company.logo} size="xl" tone="gold" />
             <div className="min-w-0">
               <div className="flex items-center gap-2 mb-2 flex-wrap">
-                <span className="font-head font-bold text-[14px] text-bone">{challenge.company.name}</span>
-                <span className="font-mono text-[10px] text-bone-ghost">·</span>
-                <span className="font-mono text-[10px] tracking-wide2 text-bone-ghost">{challenge.id}</span>
+                <span className="font-serif text-[14px] text-noir">{challenge.company.name}</span>
+                <span className="font-mono text-[10px] text-coffee-dim">·</span>
+                <span className="font-mono text-[10px] tracking-wide2 text-coffee-dim">{challenge.id}</span>
                 <Pill tone={challenge.tier === 'premium' ? 'premium' : 'standard'}>{challenge.tier}</Pill>
               </div>
-              <h1 className="font-head font-extrabold tracking-tighter text-[30px] md:text-[42px] leading-[1.05] text-bone">
+              <h1 className="font-serif font-light tracking-tighter text-[30px] md:text-[42px] leading-[1.05] text-noir">
                 {challenge.role}
               </h1>
-              <p className="mt-4 font-body text-[15px] text-bone-dim leading-[1.65] max-w-2xl">
+              <p className="mt-4 font-sans text-[15px] text-coffee leading-[1.65] max-w-2xl">
                 72 hours of real work. Scored across 5 dimensions. Top {challenge.topN} earn a guaranteed
                 interview with {challenge.company.name}.
               </p>
@@ -64,8 +64,8 @@ export default function ChallengeDetailPage() {
 
           {/* Brief */}
           <Section kicker="01 · THE BRIEF" title="What you'll build">
-            <Panel className="bg-gold/[0.02] border-gold/15">
-              <pre className="font-mono text-[12.5px] md:text-[13px] leading-[1.8] text-bone whitespace-pre-wrap">
+            <Panel className="bg-crimson/[0.03] border-crimson/15">
+              <pre className="font-mono text-[12.5px] md:text-[13px] leading-[1.8] text-noir whitespace-pre-wrap">
 {challenge.brief}
               </pre>
             </Panel>
@@ -73,7 +73,7 @@ export default function ChallengeDetailPage() {
 
           {/* Rubric */}
           <Section kicker="02 · THE RUBRIC" title="How you'll be scored — fully public">
-            <p className="font-body text-[13.5px] text-bone-dim mb-4 max-w-2xl">
+            <p className="font-sans text-[13.5px] text-coffee mb-4 max-w-2xl">
               Five dimensions. 200 points each. Total 1,000. Knowing what gets measured is half the work.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -81,12 +81,12 @@ export default function ChallengeDetailPage() {
                 <Panel key={code} className="!p-4">
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] tracking-wide3 text-gold">{code}</span>
-                      <span className="font-head font-bold text-[14px] text-bone">{d.name}</span>
+                      <span className="font-mono text-[10px] tracking-wide3 text-crimson">{code}</span>
+                      <span className="font-serif text-[14px] text-noir">{d.name}</span>
                     </div>
-                    <span className="font-mono text-[10px] tracking-wide2 text-bone-ghost">/ {d.max}</span>
+                    <span className="font-mono text-[10px] tracking-wide2 text-coffee-dim">/ {d.max}</span>
                   </div>
-                  <p className="font-body text-[12.5px] text-bone-dim leading-[1.55]">{d.desc}</p>
+                  <p className="font-sans text-[12.5px] text-coffee leading-[1.55]">{d.desc}</p>
                 </Panel>
               ))}
             </div>
@@ -107,30 +107,30 @@ export default function ChallengeDetailPage() {
           <Panel className="relative overflow-hidden">
             <div
               className="absolute inset-0 -z-10"
-              style={{ background: 'radial-gradient(ellipse at top right, rgba(255,197,61,0.05), transparent 60%)' }}
+              style={{ background: 'radial-gradient(ellipse at top right, rgba(197,48,48,0.04), transparent 60%)' }}
             />
 
             <div className="flex items-center gap-2 mb-2">
-              <IconClock size={13} className="text-gold" />
-              <span className="font-mono text-[9.5px] tracking-wide3 text-bone-ghost">DEADLINE</span>
+              <IconClock size={13} className="text-crimson" />
+              <span className="font-mono text-[9.5px] tracking-wide3 text-coffee-dim">DEADLINE</span>
             </div>
-            <div className="font-head font-extrabold tracking-tightest text-[28px] text-bone leading-none">
+            <div className="font-serif font-light tracking-tighter text-[28px] text-noir leading-none">
               <Countdown deadline={challenge.deadline} className="text-[28px]" />
             </div>
-            <div className="font-mono text-[10px] tracking-wide2 text-bone-ghost mt-2">
+            <div className="font-mono text-[10px] tracking-wide2 text-coffee-dim mt-2">
               {shortDate(challenge.deadline)}
             </div>
 
-            <div className="my-5 h-px bg-white/[0.06]" />
+            <div className="my-5 h-px bg-noir/[0.06]" />
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <div className="font-mono text-[9px] tracking-wide3 text-bone-ghost">REWARD</div>
-                <div className="mt-1 font-mono text-[11.5px] text-gold">{challenge.bounty}</div>
+                <div className="font-mono text-[9px] tracking-wide3 text-coffee-dim">REWARD</div>
+                <div className="mt-1 font-mono text-[11.5px] text-crimson">{challenge.bounty}</div>
               </div>
               <div>
-                <div className="font-mono text-[9px] tracking-wide3 text-bone-ghost">SUBMISSIONS</div>
-                <div className="mt-1 font-head font-bold text-[16px] text-bone tabular">{allSubs.length}</div>
+                <div className="font-mono text-[9px] tracking-wide3 text-coffee-dim">SUBMISSIONS</div>
+                <div className="mt-1 font-serif text-[16px] text-noir tabular">{allSubs.length}</div>
               </div>
             </div>
 
@@ -148,7 +148,7 @@ export default function ChallengeDetailPage() {
               )}
             </div>
 
-            <div className="mt-4 font-mono text-[9.5px] tracking-wide3 text-bone-ghost text-center">
+            <div className="mt-4 font-mono text-[9.5px] tracking-wide3 text-coffee-dim text-center">
               NO RESUME · NO COVER LETTER
             </div>
           </Panel>
@@ -162,10 +162,10 @@ function Section({ kicker, title, children }) {
   return (
     <section className="mt-10 first:mt-0">
       <div className="flex items-center gap-2.5 mb-2">
-        <span className="h-px w-5 bg-gold/60" />
-        <span className="font-mono text-[10px] tracking-wide3 text-gold">{kicker}</span>
+        <span className="h-px w-5 bg-crimson/60" />
+        <span className="font-mono text-[10px] tracking-wide3 text-crimson">{kicker}</span>
       </div>
-      <h2 className="font-head font-bold tracking-tighter text-[22px] md:text-[26px] text-bone mb-5">
+      <h2 className="font-serif tracking-tighter text-[22px] md:text-[26px] text-noir mb-5">
         {title}
       </h2>
       {children}
@@ -177,13 +177,13 @@ function Part({ n, title, body, icon }) {
   return (
     <Panel className="!p-5">
       <div className="flex items-center gap-2 mb-3">
-        <span className="h-7 w-7 rounded-md border border-gold/30 bg-gold/[0.06] flex items-center justify-center text-gold">
+        <span className="h-7 w-7 rounded-md border border-crimson/30 bg-crimson/[0.06] flex items-center justify-center text-crimson">
           {icon}
         </span>
-        <span className="font-mono text-[10px] tracking-wide3 text-gold">PART {n}</span>
+        <span className="font-mono text-[10px] tracking-wide3 text-crimson">PART {n}</span>
       </div>
-      <div className="font-head font-bold text-[15px] text-bone mb-1.5">{title}</div>
-      <p className="font-body text-[12.5px] text-bone-dim leading-[1.6]">{body}</p>
+      <div className="font-serif text-[15px] text-noir mb-1.5">{title}</div>
+      <p className="font-sans text-[12.5px] text-coffee leading-[1.6]">{body}</p>
     </Panel>
   )
 }

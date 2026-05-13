@@ -1,15 +1,9 @@
-/**
- * DataTable — denser, scannable, scaled for hiring-platform aesthetics.
- *
- * Usage:
- *   <DataTable columns={[{key, header, render, align, width}]} rows={...} onRowClick={...} />
- */
 export default function DataTable({ columns, rows, onRowClick, empty, footer, className = '' }) {
   const tpl = columns.map((c) => c.width || '1fr').join(' ')
   return (
-    <div className={`rounded-xl border border-white/[0.06] bg-ink-700/30 overflow-hidden ${className}`}>
+    <div className={`rounded-xl border border-noir/10 bg-paper overflow-hidden ${className}`}>
       <div
-        className="grid gap-4 px-5 py-3 border-b border-white/[0.05] font-mono text-[9px] tracking-wide3 text-bone-ghost"
+        className="grid gap-4 px-5 py-3 border-b border-noir/8 font-mono text-[9px] tracking-wide3 text-coffee"
         style={{ gridTemplateColumns: tpl }}
       >
         {columns.map((c) => (
@@ -17,7 +11,7 @@ export default function DataTable({ columns, rows, onRowClick, empty, footer, cl
         ))}
       </div>
       {rows.length === 0 ? (
-        <div className="px-5 py-12 text-center font-mono text-[10px] tracking-wide3 text-bone-ghost">
+        <div className="px-5 py-12 text-center font-mono text-[10px] tracking-wide3 text-coffee-dim">
           {empty || 'NO ROWS'}
         </div>
       ) : (
@@ -26,9 +20,9 @@ export default function DataTable({ columns, rows, onRowClick, empty, footer, cl
             key={row.id || i}
             onClick={onRowClick ? () => onRowClick(row) : undefined}
             className={`grid gap-4 px-5 py-3.5 items-center transition-colors
-              ${onRowClick ? 'cursor-pointer hover:bg-gold/[0.025]' : ''}
-              ${i > 0 ? 'border-t border-white/[0.04]' : ''}
-              ${row._highlight ? 'bg-gold/[0.02]' : ''}`}
+              ${onRowClick ? 'cursor-pointer hover:bg-crimson/[0.03]' : ''}
+              ${i > 0 ? 'border-t border-noir/6' : ''}
+              ${row._highlight ? 'bg-crimson/[0.03]' : ''}`}
             style={{ gridTemplateColumns: tpl }}
           >
             {columns.map((c) => (
@@ -40,7 +34,7 @@ export default function DataTable({ columns, rows, onRowClick, empty, footer, cl
         ))
       )}
       {footer && (
-        <div className="px-5 py-3 border-t border-white/[0.05] bg-ink-800/40 font-mono text-[10px] tracking-wide3 text-bone-ghost">
+        <div className="px-5 py-3 border-t border-noir/8 bg-cream font-mono text-[10px] tracking-wide3 text-coffee">
           {footer}
         </div>
       )}
@@ -48,8 +42,4 @@ export default function DataTable({ columns, rows, onRowClick, empty, footer, cl
   )
 }
 
-const alignCls = {
-  left:   'text-left',
-  right:  'text-right',
-  center: 'text-center',
-}
+const alignCls = { left: 'text-left', right: 'text-right', center: 'text-center' }

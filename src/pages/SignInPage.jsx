@@ -16,14 +16,14 @@ export default function SignInPage() {
   const next = params.get('next')
 
   return (
-    <main className="min-h-screen app-bg text-bone flex flex-col">
+    <main className="min-h-screen paper-bg text-noir flex flex-col">
       <header className="flex items-center justify-between px-6 md:px-10 py-5">
         <Link to="/" className="inline-flex items-center gap-2">
           <Mark />
-          <span className="font-head font-extrabold tracking-wide2 text-[13px] text-bone">PROOF</span>
-          <span className="font-mono text-[9px] tracking-wide3 text-bone-ghost">· SIGN IN</span>
+          <span className="font-serif font-light tracking-wide2 text-[13px] text-noir">PROOF</span>
+          <span className="font-mono text-[9px] tracking-wide3 text-coffee-dim">· SIGN IN</span>
         </Link>
-        <Link to="/" className="font-mono text-[10px] tracking-wide3 text-bone-ghost hover:text-gold transition">
+        <Link to="/" className="font-mono text-[10px] tracking-wide3 text-coffee-dim hover:text-crimson transition">
           ← BACK TO HOME
         </Link>
       </header>
@@ -38,7 +38,7 @@ export default function SignInPage() {
         </div>
       </div>
 
-      <footer className="px-6 md:px-10 py-5 font-mono text-[10px] tracking-wide3 text-bone-ghost text-center">
+      <footer className="px-6 md:px-10 py-5 font-mono text-[10px] tracking-wide3 text-coffee-dim text-center">
         DEMO MODE · NO EMAIL VERIFICATION · DATA PERSISTS IN BROWSER
       </footer>
     </main>
@@ -54,10 +54,10 @@ function ModePicker({ setMode }) {
       transition={{ duration: 0.5, ease }}
     >
       <Pill tone="gold" className="mb-5">CHOOSE YOUR DOOR</Pill>
-      <h1 className="font-head font-extrabold tracking-tighter text-[36px] leading-[1.02] text-bone mb-3">
+      <h1 className="font-serif font-light tracking-tighter text-[36px] leading-[1.02] text-noir mb-3">
         How will you<br/>enter PROOF?
       </h1>
-      <p className="font-body text-[14px] text-bone-dim leading-[1.6] mb-8">
+      <p className="font-sans text-[14px] text-coffee leading-[1.6] mb-8">
         Demo mode — no email verification needed. Your data persists in this browser.
       </p>
 
@@ -85,16 +85,16 @@ function ModePicker({ setMode }) {
 
 function ModeCard({ onClick, tone, kicker, title, sub, icon }) {
   const cls = tone === 'gold'
-    ? 'hover:border-gold/40 hover:bg-gold/[0.03]'
-    : 'hover:border-signal-blue/40 hover:bg-signal-blue-dim'
+    ? 'hover:border-crimson/40 hover:bg-crimson/[0.04]'
+    : 'hover:border-noir/40 hover:bg-noir/[0.05]'
   const iconCls = tone === 'gold'
-    ? 'bg-gold/[0.08] border-gold/30 text-gold'
-    : 'bg-signal-blue-dim border-signal-blue/30 text-signal-blue'
-  const accentCls = tone === 'gold' ? 'text-gold' : 'text-signal-blue'
+    ? 'bg-crimson/[0.08] border-crimson/30 text-crimson'
+    : 'bg-noir/[0.05] border-noir/25 text-noir'
+  const accentCls = tone === 'gold' ? 'text-crimson' : 'text-noir'
   return (
     <button
       onClick={onClick}
-      className={`group w-full text-left rounded-xl border border-white/[0.08] bg-ink-700/40 p-5 transition-all duration-200 ${cls}`}
+      className={`group w-full text-left rounded-xl border border-noir/10 bg-paper p-5 transition-all duration-200 ${cls}`}
     >
       <div className="flex items-center gap-4">
         <span className={`h-10 w-10 rounded-md border flex items-center justify-center ${iconCls}`}>
@@ -102,8 +102,8 @@ function ModeCard({ onClick, tone, kicker, title, sub, icon }) {
         </span>
         <div className="flex-1 min-w-0">
           <div className={`font-mono text-[9.5px] tracking-wide3 mb-1 ${accentCls}`}>{kicker}</div>
-          <div className="font-head font-bold text-[16px] text-bone">{title}</div>
-          <div className="font-body text-[12.5px] text-bone-dim mt-0.5">{sub}</div>
+          <div className="font-serif text-[16px] text-noir">{title}</div>
+          <div className="font-sans text-[12.5px] text-coffee mt-0.5">{sub}</div>
         </div>
         <IconArrowRight size={14} className={`${accentCls} group-hover:translate-x-0.5 transition`} />
       </div>
@@ -135,14 +135,14 @@ function CandidateSignIn({ next, onBack }) {
       exit={{ opacity: 0, x: -12 }}
       transition={{ duration: 0.35 }}
     >
-      <button onClick={onBack} className="font-mono text-[10px] tracking-wide3 text-bone-ghost hover:text-gold transition mb-5 inline-flex items-center gap-1.5">
+      <button onClick={onBack} className="font-mono text-[10px] tracking-wide3 text-coffee-dim hover:text-crimson transition mb-5 inline-flex items-center gap-1.5">
         <IconChevronLeft size={11} /> BACK
       </button>
       <Pill tone="gold" className="mb-3">AS CANDIDATE</Pill>
-      <h1 className="font-head font-extrabold tracking-tighter text-[28px] leading-[1.05] text-bone mb-2">
+      <h1 className="font-serif font-light tracking-tighter text-[28px] leading-[1.05] text-noir mb-2">
         Two minutes. No resume.
       </h1>
-      <p className="font-body text-[13.5px] text-bone-dim mb-7">
+      <p className="font-sans text-[13.5px] text-coffee mb-7">
         Just enough to issue your certificates and credit your AIQ.
       </p>
 
@@ -177,14 +177,14 @@ function AdminSignIn({ next, onBack }) {
       exit={{ opacity: 0, x: -12 }}
       transition={{ duration: 0.35 }}
     >
-      <button onClick={onBack} className="font-mono text-[10px] tracking-wide3 text-bone-ghost hover:text-gold transition mb-5 inline-flex items-center gap-1.5">
+      <button onClick={onBack} className="font-mono text-[10px] tracking-wide3 text-coffee-dim hover:text-crimson transition mb-5 inline-flex items-center gap-1.5">
         <IconChevronLeft size={11} /> BACK
       </button>
       <Pill tone="blue" className="mb-3">AS ADMIN</Pill>
-      <h1 className="font-head font-extrabold tracking-tighter text-[28px] leading-[1.05] text-bone mb-2">
+      <h1 className="font-serif font-light tracking-tighter text-[28px] leading-[1.05] text-noir mb-2">
         Your console awaits.
       </h1>
-      <p className="font-body text-[13.5px] text-bone-dim mb-7">
+      <p className="font-sans text-[13.5px] text-coffee mb-7">
         Post a JD, watch it become a challenge, pick from the scored leaderboard.
       </p>
       <form onSubmit={submit} className="space-y-4">
@@ -199,7 +199,7 @@ function AdminSignIn({ next, onBack }) {
 
 function Mark() {
   return (
-    <svg width="22" height="22" viewBox="0 0 32 32" fill="none" className="text-gold">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none" className="text-crimson">
       <rect x="0.5" y="0.5" width="31" height="31" rx="6.5" stroke="currentColor" strokeOpacity="0.35" />
       <path d="M9 22V10h5.6a4 4 0 0 1 0 8H12v4Zm3-7h2.4a1.5 1.5 0 0 0 0-3H12Z" fill="currentColor" />
     </svg>
