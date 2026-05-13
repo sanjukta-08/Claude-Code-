@@ -1,5 +1,6 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useMagnetic } from '../lib/useMagnetic'
 
 const ease = [0.22, 1, 0.36, 1]
@@ -53,6 +54,7 @@ export default function DualCTA() {
             polarity="L"
             hovered={hovered}
             setHovered={setHovered}
+            to="/employer"
             tag="01 · NORTH POLE"
             kicker="YOU'RE HIRING"
             title="Post your first challenge."
@@ -65,6 +67,7 @@ export default function DualCTA() {
             polarity="R"
             hovered={hovered}
             setHovered={setHovered}
+            to="/candidate"
             tag="02 · SOUTH POLE"
             kicker="YOU'RE SHIPPING"
             title="Earn your first score."
@@ -88,11 +91,11 @@ export default function DualCTA() {
   )
 }
 
-function CTA({ polarity, hovered, setHovered, tag, kicker, title, body, cta, tone, tsLabel }) {
+function CTA({ polarity, hovered, setHovered, to, tag, kicker, title, body, cta, tone, tsLabel }) {
   const mag = useMagnetic({ strength: 0.10, stiffness: 220, damping: 22 })
   const [hovering, setHovering] = useState(false)
+  const MotionLink = motion(Link)
 
-  // Repulsion: when the OTHER pole is hovered, drift outward
   const drift =
     hovered && hovered !== polarity
       ? polarity === 'L' ? -22 : 22
@@ -108,8 +111,8 @@ function CTA({ polarity, hovered, setHovered, tag, kicker, title, body, cta, ton
       onMouseLeave={() => setHovered(null)}
       className="relative"
     >
-      <motion.a
-        href="#"
+      <MotionLink
+        to={to}
         ref={mag.ref}
         style={{ x: mag.x, y: mag.y }}
         onMouseMove={mag.onMove}
@@ -173,7 +176,7 @@ function CTA({ polarity, hovered, setHovered, tag, kicker, title, body, cta, ton
             </motion.span>
           </div>
         </div>
-      </motion.a>
+      </MotionLink>
     </motion.div>
   )
 }

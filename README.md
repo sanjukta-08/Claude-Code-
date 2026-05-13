@@ -26,15 +26,25 @@ Open http://localhost:5173.
 | `signal-red` | `#FF6B6B` |
 | `signal-blue` | `#5B9CFF` |
 
-## Sections
-1. **Nav** — sticky, blurred-on-scroll, live challenge counter
-2. **Hero** — operating-theatre JD → analyzing → challenge brief, ends in a SIGNED · SEALED stamp
+## Routes
+- `/` — home (full marketing site)
+- `/employer` — deep-link page for hiring managers
+- `/candidate` — deep-link page for candidates
+
+## Home sections
+1. **Nav** — sticky, blurred-on-scroll, live challenge counter, router links
+2. **Hero** — operating-theatre JD → analyzing → challenge brief. Cycles through 4 role pairs (PM, ENG, DSG, OPS). Replay any time. Pair indicator pills.
 3. **Problem** — count-up stats, Naval quote
 4. **Mechanism** — Paste · Transform · Ship
-5. **AIQ Score** — five dimensions with hover-reveal verified rubric
-6. **Live Proof** — live counters + cert feed
-7. **Dual CTA** — magnetic opposing poles (Hiring / Shipping)
-8. **Footer** — system-operational status
+5. **Pipeline** — Linear-style scroll-pinned storytelling: 320vh sticky section that progresses JD → Analyze → Brief → Score as you scroll. Connector lines fill, score counts up to 742, SEALED stamp lands.
+6. **AIQ Score** — five dimensions with hover-reveal verified rubric
+7. **Live Proof** — live counters + cert feed
+8. **Dual CTA** — magnetic opposing poles deep-linking to /employer and /candidate
+9. **Footer** — system-operational status
+
+## Page sections
+**`/employer`** — Hero with parsed JD console · 3-step flow · time-saved stats · pricing tiers · closing CTA
+**`/candidate`** — Hero with AIQ profile sample · 3-step flow · ownership stats · live open challenges · closing CTA
 
 ## Interactions
 - **Hero replay** — `↻ REPLAY` button in observation status bar

@@ -11,6 +11,9 @@ export function useLenis() {
       touchMultiplier: 1.5,
     })
 
+    // Expose globally so route-change handlers can scroll to top
+    if (typeof window !== 'undefined') window.__lenis = lenis
+
     function raf(time) {
       lenis.raf(time)
       requestAnimationFrame(raf)
@@ -19,6 +22,9 @@ export function useLenis() {
 
     return () => {
       cancelAnimationFrame(id)
+      if (typeof window !== 'undefined' && window.__lenis === lenis) {
+        window.__lenis = null
+      }
       lenis.destroy()
     }
   }, [])

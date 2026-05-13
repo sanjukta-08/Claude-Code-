@@ -1,5 +1,6 @@
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useLiveTicker } from '../lib/useCountUp'
 
 export default function Nav() {
@@ -19,13 +20,13 @@ export default function Nav() {
           ? 'bg-ink-900/80 backdrop-blur-xl border-b border-white/[0.06]'
           : 'bg-transparent border-b border-transparent'}`}
     >
-      <a href="#top" className="group flex items-center gap-2.5">
+      <Link to="/" className="group flex items-center gap-2.5">
         <Mark />
         <span className="font-head font-extrabold tracking-wide2 text-[13px] text-bone">
           PROOF
         </span>
         <span className="font-mono text-[9px] tracking-wide3 text-bone-ghost">v1</span>
-      </a>
+      </Link>
 
       <div className="ml-5 hidden md:flex items-center gap-2">
         <span className="relative flex h-1.5 w-1.5">
@@ -40,13 +41,14 @@ export default function Nav() {
       <div className="flex-1" />
 
       <div className="hidden md:flex items-center gap-7 font-body text-[13px] text-bone-dim">
-        <a href="#how" className="hover:text-bone transition-colors">How it works</a>
-        <a href="#score" className="hover:text-bone transition-colors">The score</a>
-        <a href="#proof" className="hover:text-bone transition-colors">Live proof</a>
+        <Link to="/#how" className="hover:text-bone transition-colors">How it works</Link>
+        <Link to="/#score" className="hover:text-bone transition-colors">The score</Link>
+        <Link to="/employer" className="hover:text-bone transition-colors">For employers</Link>
+        <Link to="/candidate" className="hover:text-bone transition-colors">For candidates</Link>
       </div>
 
-      <a
-        href="#cta"
+      <Link
+        to="/#cta"
         className="ml-5 md:ml-7 group relative inline-flex items-center gap-2
           px-3.5 h-8 rounded-full
           bg-bone/[0.04] border border-bone/[0.10] hover:border-gold/40
@@ -55,7 +57,7 @@ export default function Nav() {
       >
         Sign in
         <span className="font-mono text-[9px] tracking-wide3 text-bone-ghost group-hover:text-gold/70 transition">→</span>
-      </a>
+      </Link>
     </motion.nav>
   )
 }
