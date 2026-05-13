@@ -1,11 +1,17 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../../context/AuthContext'
 import { useChallenge } from '../../lib/useData'
-import { PageShell } from '../../components/app/Section'
 import { db } from '../../lib/db'
 import { scoreSubmission } from '../../lib/scoring'
+import PageShell from '../../ui/PageShell'
+import { Panel } from '../../ui/Panel'
+import Button from '../../ui/Button'
+import Avatar from '../../ui/Avatar'
+import { Field, Input, Textarea, MonoInput } from '../../ui/Field'
+import Countdown from '../../components/app/Countdown'
+import { IconCheck, IconChevronLeft, IconArrowRight, IconClose, IconPlus, IconFile, IconSparkles, IconAward, IconClock } from '../../ui/Icons'
 
 export default function SubmitPage() {
   const { id } = useParams()
@@ -36,12 +42,9 @@ export default function SubmitPage() {
     setSubmitting(true)
     setError(null)
     try {
-      // Simulate scoring latency
       await new Promise((r) => setTimeout(r, 1100))
-
       const trail = processTrail.filter((t) => t.trim())
       const scores = scoreSubmission({ deliverableUrl, reflection, processTrail: trail })
-
       const sub = db.createSubmission({
         challengeId: challenge.id,
         candidateId: session.candidateId,
@@ -59,68 +62,118 @@ export default function SubmitPage() {
   }
 
   return (
-    <PageShell>
-      <Link to={`/app/challenges/${challenge.id}`} className="font-mono text-[10px] tracking-wide3 text-bone-ghost hover:text-gold transition">
-        ← BACK TO BRIEF
+    <PageShell size="narrow">
+      <Link to={`/app/challenges/${challenge.id}`} className="font-mono text-[10px] tracking-wide3 text-bone-ghost hover:text-gold transition inline-flex items-center gap-1.5">
+        <IconChevronLeft size={11} /> BACK TO BRIEF
       </Link>
 
-      <h1 className="mt-5 font-head font-extrabold tracking-tighter text-[34px] md:text-[44px] text-bone leading-[1.05]">
-        Submit your work.
-      </h1>
-      <p className="mt-3 font-body text-[14.5px] text-bone-dim max-w-2xl">
-        Three parts. All required. Your score returns instantly when you submit — but it stays sealed until the challenge deadline closes.
+      {/* Header */}
+      <div className="mt-5 mb-7 flex items-start gap-4">
+        <Avatar logo={challenge.company.logo} size="lg" tone="gold" />
+        <div className="min-w-0">
+          <div className="font-mono text-[10px] tracking-wide2 text-bone-ghost mb-1">
+            {challenge.company.name} · {challenge.id}
+          </div>
+          <h1 className="font-head font-extrabold tracking-tighter text-[28px] md:text-[36px] leading-[1.05] text-bone">
+            Submit your work
+          </h1>
+          <div className="mt-2 flex items-center gap-3 font-mono text-[10px] tracking-wide3 text-bone-ghost">
+            <span className="inline-flex items-center gap-1.5">
+              <IconClock size={11} className="text-gold" />
+              <Countdown deadline={challenge.deadline} className="text-[11px]" />
+            </span>
+            <span>·</span>
+            <span>SCORING · INSTANT</span>
+          </div>
+        </div>
+      </div>
+
+      <p className="mb-8 font-body text-[14px] text-bone-dim leading-[1.65] max-w-xl">
+        Three parts. All required. Scoring happens the moment you submit — but stays sealed
+        until the challenge deadline closes.
       </p>
 
-      <div className="mt-10 space-y-7 max-w-3xl">
-        <Block n="1" title="The deliverable" desc="A link to your actual work. Google Doc, Figma, GitHub, Notion, Loom — anything publicly viewable.">
-          <input
-            type="url"
-            placeholder="https://docs.google.com/..."
-            value={deliverableUrl}
-            onChange={(e) => setDeliverableUrl(e.target.value)}
-            className="w-full h-12 px-4 rounded-lg bg-ink-900/60 border border-white/[0.08]
-              font-mono text-[13px] text-bone placeholder-bone-ghost
-              focus:outline-none focus:border-gold/50 transition"
-          />
-          <Status ok={validDeliverable} label={validDeliverable ? 'Link captured' : 'Add a viewable link'} />
+      {/* Progress strip */}
+      <div className="mb-7 grid grid-cols-3 gap-3">
+        <ProgressStep n="1" label="Deliverable" complete={validDeliverable} />
+        <ProgressStep n="2" label="Reflection" complete={validReflection} />
+        <ProgressStep n="3" label="Process trail" complete={trailCount > 0} />
+      </div>
+
+      <div className="space-y-5">
+        {/* Part 1 */}
+        <Block
+          n="1"
+          title="The deliverable"
+          desc="A link to your actual work. Google Doc, Figma, GitHub, Notion, Loom — anything publicly viewable."
+          icon={<IconFile size={14} />}
+          complete={validDeliverable}
+        >
+          <Field label="Public link to your work" hint={validDeliverable ? '✓ captured' : 'Required'}>
+            <MonoInput
+              type="url"
+              placeholder="https://docs.google.com/..."
+              value={deliverableUrl}
+              onChange={(e) => setDeliverableUrl(e.target.value)}
+            />
+          </Field>
         </Block>
 
-        <Block n="2" title="The reflection" desc="500–1,000 words. Specific. What did you delegate to AI? What did you reject? What would you change? Generic reflections score near zero.">
-          <textarea
-            rows={10}
-            placeholder="I decided to delegate the first draft of... but I rejected its framing on... because..."
-            value={reflection}
-            onChange={(e) => setReflection(e.target.value)}
-            className="w-full p-4 rounded-lg bg-ink-900/60 border border-white/[0.08]
-              font-body text-[14px] text-bone placeholder-bone-ghost leading-[1.65]
-              focus:outline-none focus:border-gold/50 transition resize-y"
-          />
-          <div className="flex items-center justify-between mt-2">
-            <Status ok={validReflection} label={validReflection ? `${wc} words — sufficient` : `${wc} words — at least 50 needed`} />
-            <span className="font-mono text-[10px] tracking-wide2 text-bone-ghost tabular">{wc} words</span>
+        {/* Part 2 */}
+        <Block
+          n="2"
+          title="The reflection"
+          desc="500–1,000 words. Specific. What did you delegate to AI? What did you reject? What would you change? Generic reflections score near zero."
+          icon={<IconSparkles size={14} />}
+          complete={validReflection}
+        >
+          <Field label="Your reflection" hint={
+            <span className={`tabular ${validReflection ? 'text-signal-green' : 'text-bone-ghost'}`}>
+              {wc} / 500 words
+            </span>
+          }>
+            <Textarea
+              rows={10}
+              placeholder="I decided to delegate the first draft of... but rejected its framing on... because..."
+              value={reflection}
+              onChange={(e) => setReflection(e.target.value)}
+            />
+          </Field>
+          {/* Word count visual */}
+          <div className="mt-3 h-1 rounded-full bg-white/[0.05] overflow-hidden">
+            <motion.div
+              animate={{ width: `${Math.min(100, (wc / 500) * 100)}%` }}
+              className={`h-full ${validReflection ? 'bg-signal-green' : 'bg-gold/60'}`}
+              transition={{ duration: 0.3 }}
+            />
           </div>
         </Block>
 
-        <Block n="3" title="The process trail" desc="Up to 10 screenshots or notes showing how the work evolved. Paste filenames, URLs, or descriptions. This is your anti-gaming evidence.">
+        {/* Part 3 */}
+        <Block
+          n="3"
+          title="The process trail"
+          desc="Up to 10 screenshots or notes showing how the work evolved. Paste filenames, URLs, or descriptions. This is your anti-gaming evidence."
+          icon={<IconAward size={14} />}
+          complete={trailCount > 0}
+        >
           <div className="space-y-2">
             {processTrail.map((t, i) => (
               <div key={i} className="flex gap-2 items-center">
                 <span className="font-mono text-[10px] tracking-wide2 text-bone-ghost w-8 tabular">{String(i + 1).padStart(2, '0')}</span>
-                <input
+                <MonoInput
                   type="text"
                   placeholder="screenshot-1.png  /  https://...  /  prompt rev 3"
                   value={t}
                   onChange={(e) => updateTrail(i, e.target.value)}
-                  className="flex-1 h-10 px-3 rounded-md bg-ink-900/60 border border-white/[0.08]
-                    font-mono text-[12px] text-bone placeholder-bone-ghost
-                    focus:outline-none focus:border-gold/40 transition"
+                  className="!h-10 flex-1"
                 />
                 {processTrail.length > 1 && (
                   <button
                     onClick={() => removeTrail(i)}
-                    className="font-mono text-[10px] text-bone-ghost hover:text-signal-red transition px-2"
+                    className="h-10 w-10 rounded-md text-bone-ghost hover:text-signal-red hover:bg-signal-red-dim transition flex items-center justify-center flex-shrink-0"
                   >
-                    ✕
+                    <IconClose size={12} />
                   </button>
                 )}
               </div>
@@ -128,58 +181,75 @@ export default function SubmitPage() {
             {processTrail.length < 10 && (
               <button
                 onClick={addTrail}
-                className="font-mono text-[10px] tracking-wide3 text-gold hover:text-gold-glow transition mt-2"
+                className="inline-flex items-center gap-1.5 font-mono text-[10.5px] tracking-wide3 text-gold hover:text-gold-glow transition mt-2"
               >
-                + ADD ROW
+                <IconPlus size={11} /> ADD ROW
               </button>
             )}
           </div>
-          <Status ok={trailCount > 0} label={`${trailCount} item${trailCount === 1 ? '' : 's'}`} />
         </Block>
+      </div>
 
-        <div className="border-t border-white/[0.05] pt-7">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="font-mono text-[10px] tracking-wide3 text-bone-ghost">
-              SCORING · INSTANT · LOCKED UNTIL DEADLINE
-            </div>
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={submit}
-              disabled={!canSubmit}
-              className={`h-12 px-7 rounded-full font-body font-semibold text-[14px] transition
-                ${canSubmit
-                  ? 'bg-gold text-ink hover:shadow-[0_0_40px_rgba(255,197,61,0.4)]'
-                  : 'bg-bone/[0.04] border border-white/[0.08] text-bone-ghost cursor-not-allowed'}`}
-            >
-              {submitting ? 'SEALING · SCORING…' : 'Submit & seal →'}
-            </motion.button>
+      {/* Sticky submit */}
+      <div className="sticky bottom-4 z-20 mt-8">
+        <div className="flex items-center justify-between gap-3 px-5 py-3
+          rounded-2xl border border-white/[0.08] bg-ink-800/95 backdrop-blur-md shadow-xl">
+          <div className="font-mono text-[10px] tracking-wide3 text-bone-ghost">
+            {!canSubmit ? 'COMPLETE ALL 3 PARTS · 50+ WORD REFLECTION' : '✓ READY TO SEAL'}
           </div>
-          {error && <div className="mt-4 font-mono text-[10px] text-signal-red">{error}</div>}
+          <Button
+            onClick={submit}
+            disabled={!canSubmit}
+            iconRight={<IconArrowRight size={13} />}
+          >
+            {submitting ? 'SEALING · SCORING…' : 'Submit & seal'}
+          </Button>
         </div>
+        {error && <div className="mt-2 font-mono text-[10px] text-signal-red text-center">{error}</div>}
       </div>
     </PageShell>
   )
 }
 
-function Block({ n, title, desc, children }) {
+function Block({ n, title, desc, icon, complete, children }) {
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-ink-900/40 p-6 md:p-7">
-      <div className="flex items-center gap-3 mb-2">
-        <span className="font-mono text-[10px] tracking-wide3 text-gold">PART {n}</span>
-        <span className="h-px flex-1 bg-white/[0.06]" />
+    <Panel padded={false}>
+      <div className="p-5 md:p-6">
+        <div className="flex items-start gap-3 mb-4">
+          <span className={`h-8 w-8 rounded-md flex items-center justify-center flex-shrink-0
+            ${complete ? 'border border-signal-green/40 bg-signal-green-dim text-signal-green'
+                       : 'border border-gold/30 bg-gold/[0.06] text-gold'}`}>
+            {complete ? <IconCheck size={14} /> : icon}
+          </span>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <span className={`font-mono text-[10px] tracking-wide3 ${complete ? 'text-signal-green' : 'text-gold'}`}>
+                PART {n}
+              </span>
+            </div>
+            <div className="font-head font-bold text-[18px] text-bone leading-tight">{title}</div>
+            <p className="mt-1.5 font-body text-[13px] text-bone-dim leading-[1.6]">{desc}</p>
+          </div>
+        </div>
+        {children}
       </div>
-      <div className="font-head font-bold text-[20px] text-bone mb-2">{title}</div>
-      <p className="font-body text-[13.5px] text-bone-dim leading-[1.65] mb-5">{desc}</p>
-      {children}
-    </div>
+    </Panel>
   )
 }
 
-function Status({ ok, label }) {
+function ProgressStep({ n, label, complete }) {
   return (
-    <div className={`mt-3 inline-flex items-center gap-2 font-mono text-[10px] tracking-wide3 ${ok ? 'text-signal-green' : 'text-bone-ghost'}`}>
-      <span className={`h-1.5 w-1.5 rounded-full ${ok ? 'bg-signal-green' : 'bg-bone-ghost/50'}`} />
-      {label}
+    <div className={`flex items-center gap-2.5 px-3 py-2 rounded-lg border transition
+      ${complete
+        ? 'border-signal-green/30 bg-signal-green-dim'
+        : 'border-white/[0.06] bg-ink-800/40'}`}>
+      <span className={`h-5 w-5 rounded-md flex items-center justify-center font-mono text-[9px]
+        ${complete ? 'bg-signal-green text-ink' : 'border border-white/[0.10] text-bone-ghost'}`}>
+        {complete ? <IconCheck size={10} /> : n}
+      </span>
+      <span className={`font-mono text-[10px] tracking-wide3 ${complete ? 'text-signal-green' : 'text-bone-dim'}`}>
+        {label.toUpperCase()}
+      </span>
     </div>
   )
 }

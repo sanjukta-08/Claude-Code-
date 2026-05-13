@@ -1,142 +1,249 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useChallenges, useSubmissions } from '../../lib/useData'
-import { PageShell } from '../../components/app/Section'
-import Countdown from '../../components/app/Countdown'
-import { shortDate } from '../../lib/format'
 import { db } from '../../lib/db'
+import { isExpired, formatRelative } from '../../lib/format'
+import PageShell from '../../ui/PageShell'
+import PageHeader from '../../ui/PageHeader'
+import { Panel, PanelHeader } from '../../ui/Panel'
+import Stat from '../../ui/Stat'
+import Pill from '../../ui/Pill'
+import Avatar from '../../ui/Avatar'
+import Button from '../../ui/Button'
+import EmptyState from '../../ui/EmptyState'
+import Countdown from '../../components/app/Countdown'
+import { IconPlus, IconArrowRight, IconAward, IconClock, IconSparkles } from '../../ui/Icons'
 
 export default function AdminDashboardPage() {
   const challenges = useChallenges()
-  const submissions = useSubmissions()
+  const allSubmissions = useSubmissions()
 
   const live = challenges.filter((c) => c.status === 'live')
   const closed = challenges.filter((c) => c.status === 'closed')
   const awarded = challenges.filter((c) => c.status === 'awarded')
 
+  // Sparkline data — mock 7-day series for visual flavor
+  const spark = (seed) => Array.from({ length: 8 }, (_, i) => Math.max(1, Math.round(seed * (0.6 + Math.sin(i * 0.9 + seed) * 0.25 + i * 0.05))))
+
+  // Recent submissions (newest first)
+  const recentSubs = [...allSubmissions].sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt)).slice(0, 6)
+
+  // Live challenges needing attention (any with submissions and < 24h left)
+  const attention = live.filter((c) => {
+    const ms = new Date(c.deadline).getTime() - Date.now()
+    return ms > 0 && ms < 1000 * 60 * 60 * 24 * 2
+  })
+
   return (
     <PageShell>
-      <div className="flex items-start justify-between gap-4 flex-wrap mb-8">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <span className="h-px w-8 bg-gold/60" />
-            <span className="font-mono text-[10px] tracking-wide3 text-gold">ADMIN CONSOLE</span>
-          </div>
-          <h1 className="font-head font-extrabold tracking-tighter text-[36px] md:text-[48px] leading-[1.05] text-bone">
-            Welcome back.
-          </h1>
-          <p className="mt-3 font-body text-[14.5px] text-bone-dim max-w-2xl">
-            Post challenges, watch submissions roll in, pick from the leaderboard. The hiring stack inverted.
-          </p>
-        </div>
-        <Link
-          to="/admin/post"
-          className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-gold text-ink font-body font-semibold text-[13.5px] hover:shadow-[0_0_40px_rgba(255,197,61,0.4)] transition"
-        >
-          + Post a JD
-        </Link>
-      </div>
+      <PageHeader
+        kicker="Admin · Overview"
+        title="Welcome back."
+        sub="Post challenges, watch submissions land, pick from the leaderboard. The hiring stack inverted."
+        right={
+          <Button to="/admin/post" icon={<IconPlus size={14} />}>
+            Post a JD
+          </Button>
+        }
+      />
 
-      {/* Top-line stats */}
+      {/* KPI strip */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
-        <Stat label="LIVE CHALLENGES" value={live.length} accent />
-        <Stat label="SUBMISSIONS · TOTAL" value={submissions.length} />
-        <Stat label="CLOSED · AWAITING SHORTLIST" value={closed.length} />
-        <Stat label="AWARDED · THIS QUARTER" value={awarded.length} />
+        <Stat label="Live challenges"      value={live.length}              accent  delta={live.length - 3}    spark={spark(live.length + 2)} />
+        <Stat label="Submissions · total"  value={allSubmissions.length}    delta={3} spark={spark(allSubmissions.length / 2)} />
+        <Stat label="Awaiting shortlist"   value={closed.length}            delta={closed.length ? 1 : 0} spark={spark(closed.length + 1)} />
+        <Stat label="Awarded · quarter"    value={awarded.length}           spark={spark(awarded.length + 1)} />
       </div>
 
-      {/* Live challenges */}
-      <Section title="Live challenges" kicker="01 · CURRENTLY OPEN">
-        {live.length === 0 ? (
-          <EmptyState
-            title="No challenges live yet."
-            sub="Post your first JD to get started — your shortlist arrives in 72 hours."
-            cta={{ to: '/admin/post', label: 'Post a JD' }}
-          />
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            {live.map((c) => (
-              <AdminChallengeRow key={c.id} c={c} />
-            ))}
-          </div>
-        )}
-      </Section>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-5">
+        {/* Attention */}
+        <div className="lg:col-span-2 space-y-5">
+          <Panel padded={false}>
+            <div className="flex items-center justify-between px-5 md:px-6 pt-5 mb-3">
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-[10px] tracking-wide3 text-gold">NEEDS YOUR ATTENTION</span>
+              </div>
+              <Link to="/admin/challenges" className="font-mono text-[10px] tracking-wide3 text-bone-ghost hover:text-gold transition flex items-center gap-1.5">
+                ALL <IconArrowRight size={11} />
+              </Link>
+            </div>
+            {attention.length === 0 && closed.length === 0 ? (
+              <div className="p-5 md:p-6 pt-0">
+                <div className="rounded-lg border border-white/[0.04] bg-ink-800/40 px-5 py-8 text-center">
+                  <div className="font-head font-bold text-[15px] text-bone mb-1">All clear.</div>
+                  <div className="font-body text-[12.5px] text-bone-dim">No challenges need attention right now.</div>
+                </div>
+              </div>
+            ) : (
+              <div className="divide-y divide-white/[0.04]">
+                {closed.map((c) => (
+                  <AttentionRow
+                    key={c.id}
+                    c={c}
+                    kind="closed"
+                    subs={db.listSubmissions({ challengeId: c.id }).length}
+                  />
+                ))}
+                {attention.map((c) => (
+                  <AttentionRow
+                    key={c.id}
+                    c={c}
+                    kind="ending"
+                    subs={db.listSubmissions({ challengeId: c.id }).length}
+                  />
+                ))}
+              </div>
+            )}
+          </Panel>
 
-      <Section title="Closed — awaiting your shortlist" kicker="02 · LEADERBOARD UNLOCKED">
-        {closed.length === 0 ? (
-          <EmptyState title="Nothing closed yet." sub="Closed challenges show up here with full leaderboards to review." />
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            {closed.map((c) => (
-              <AdminChallengeRow key={c.id} c={c} highlight />
-            ))}
-          </div>
-        )}
-      </Section>
+          {/* Live challenges grid */}
+          <Panel padded={false}>
+            <PanelHeader
+              kicker="01"
+              title="Live challenges"
+              className="px-5 md:px-6 pt-5"
+              action={
+                <Link to="/admin/challenges" className="font-mono text-[10px] tracking-wide3 text-bone-ghost hover:text-gold transition flex items-center gap-1.5">
+                  ALL <IconArrowRight size={11} />
+                </Link>
+              }
+            />
+            {live.length === 0 ? (
+              <div className="p-5 md:p-6 pt-0">
+                <EmptyState
+                  icon={<IconPlus size={20} />}
+                  title="No challenges live yet."
+                  sub="Post your first JD to get started — your shortlist arrives in 72 hours."
+                  cta={{ to: '/admin/post', label: 'Post your first JD' }}
+                />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/[0.04]">
+                {live.map((c) => (
+                  <LiveChallengeCard
+                    key={c.id}
+                    c={c}
+                    subs={db.listSubmissions({ challengeId: c.id }).length}
+                  />
+                ))}
+              </div>
+            )}
+          </Panel>
+        </div>
+
+        {/* Recent feed */}
+        <div className="space-y-5">
+          <Panel padded={false}>
+            <div className="flex items-center justify-between px-5 pt-5 mb-3">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-signal-green opacity-50 animate-ping" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-signal-green" />
+                </span>
+                <span className="font-mono text-[10px] tracking-wide3 text-bone-dim">RECENT SUBMISSIONS</span>
+              </div>
+              <span className="font-mono text-[9px] tracking-wide3 text-bone-ghost">LIVE</span>
+            </div>
+            <div className="divide-y divide-white/[0.04]">
+              {recentSubs.map((s) => {
+                const ch = db.getChallenge(s.challengeId)
+                const c = db.getCandidate(s.candidateId)
+                if (!ch || !c) return null
+                return (
+                  <Link
+                    key={s.id}
+                    to={`/admin/challenges/${ch.id}`}
+                    className="group flex items-center gap-3 px-5 py-3 hover:bg-gold/[0.02] transition-colors"
+                  >
+                    <Avatar name={c.name} size="sm" tone="gold" />
+                    <div className="flex-1 min-w-0">
+                      <div className="font-body text-[13px] text-bone truncate group-hover:text-gold transition">
+                        {c.name}
+                      </div>
+                      <div className="font-mono text-[10px] tracking-wide2 text-bone-ghost truncate">
+                        {ch.company.name} · {ch.role}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-head font-bold text-[14px] text-bone tabular">{s.scores.total}</div>
+                      <div className="font-mono text-[9.5px] tracking-wide2 text-bone-ghost tabular">
+                        {formatRelative(s.submittedAt)}
+                      </div>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          </Panel>
+
+          {/* Quick actions */}
+          <Panel>
+            <div className="font-mono text-[10px] tracking-wide3 text-gold mb-4">QUICK ACTIONS</div>
+            <div className="space-y-2">
+              <QuickAction to="/admin/post" icon={<IconPlus size={14} />} label="Post a JD" hint="From paste to live in 4 min" />
+              <QuickAction to="/admin/talent-pool" icon={<IconAward size={14} />} label="Browse talent pool" hint="Pre-scored candidates" />
+              <QuickAction to="/admin/challenges" icon={<IconClock size={14} />} label="Review leaderboards" hint={`${closed.length} awaiting`} />
+            </div>
+          </Panel>
+        </div>
+      </div>
     </PageShell>
   )
 }
 
-function Section({ title, kicker, children }) {
-  return (
-    <section className="mb-12">
-      <div className="flex items-center gap-3 mb-3">
-        <span className="h-px w-6 bg-gold/60" />
-        <span className="font-mono text-[10px] tracking-wide3 text-gold">{kicker}</span>
-      </div>
-      <h2 className="font-head font-bold tracking-tighter text-[22px] md:text-[26px] text-bone mb-5">{title}</h2>
-      {children}
-    </section>
-  )
-}
-
-function Stat({ label, value, accent }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="rounded-xl border border-white/[0.06] bg-ink-900/40 p-5"
-    >
-      <div className="font-mono text-[9px] tracking-wide3 text-bone-ghost">{label}</div>
-      <div className={`mt-2 font-head font-extrabold tracking-tightest text-[32px] tabular leading-none ${accent ? 'text-gold' : 'text-bone'}`}>
-        {value}
-      </div>
-    </motion.div>
-  )
-}
-
-function AdminChallengeRow({ c, highlight = false }) {
-  const subCount = db.listSubmissions({ challengeId: c.id }).length
-
+function AttentionRow({ c, kind, subs }) {
   return (
     <Link
       to={`/admin/challenges/${c.id}`}
-      className={`group block rounded-xl border p-5 transition-all duration-300
-        ${highlight
-          ? 'border-gold/30 bg-gold/[0.03] hover:border-gold/60'
-          : 'border-white/[0.06] bg-ink-900/40 hover:border-gold/30'}`}
+      className="group flex items-center gap-4 px-5 md:px-6 py-4 hover:bg-gold/[0.025] transition-colors"
     >
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-md border border-white/[0.08] bg-gold/[0.06] flex items-center justify-center font-head font-bold text-gold">
-            {c.company.logo}
-          </div>
+      <Avatar logo={c.company.logo} size="md" tone="gold" />
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-0.5">
+          <span className="font-head font-bold text-[14px] text-bone truncate">{c.role}</span>
+          <Pill tone={kind === 'closed' ? 'closed' : 'live'} dot>
+            {kind === 'closed' ? 'LEADERBOARD READY' : 'CLOSING SOON'}
+          </Pill>
+        </div>
+        <div className="font-mono text-[10px] tracking-wide2 text-bone-ghost truncate">
+          {c.company.name} · {c.id} · {subs} submission{subs === 1 ? '' : 's'}
+        </div>
+      </div>
+      <div className="hidden md:flex flex-col items-end gap-1">
+        {c.status === 'closed' ? (
+          <span className="font-mono text-[10px] tracking-wide3 text-gold">PICK TOP N →</span>
+        ) : (
+          <Countdown deadline={c.deadline} className="text-[12px]" />
+        )}
+      </div>
+      <IconArrowRight size={14} className="text-bone-ghost group-hover:text-gold transition" />
+    </Link>
+  )
+}
+
+function LiveChallengeCard({ c, subs }) {
+  return (
+    <Link
+      to={`/admin/challenges/${c.id}`}
+      className="group block p-5 bg-ink-700/30 hover:bg-gold/[0.025] transition-colors"
+    >
+      <div className="flex items-start justify-between gap-3 mb-3">
+        <div className="flex items-center gap-2.5">
+          <Avatar logo={c.company.logo} size="sm" tone="gold" />
           <div>
-            <div className="font-head font-bold text-[15px] text-bone">{c.role}</div>
-            <div className="font-mono text-[10px] tracking-wide2 text-bone-ghost">{c.company.name} · {c.id}</div>
+            <div className="font-head font-bold text-[13.5px] text-bone leading-tight">{c.company.name}</div>
+            <div className="font-mono text-[9.5px] tracking-wide2 text-bone-ghost">{c.id}</div>
           </div>
         </div>
-        <span className={`font-mono text-[9px] tracking-wide3 px-2 py-1 rounded border
-          ${c.status === 'live' ? 'border-signal-green/40 bg-signal-green/[0.08] text-signal-green'
-            : 'border-gold/40 bg-gold/[0.06] text-gold'}`}>
-          {c.status.toUpperCase()}
-        </span>
+        <Pill tone={c.tier === 'premium' ? 'premium' : c.tier === 'standard' ? 'standard' : 'free'}>
+          {c.tier}
+        </Pill>
       </div>
-      <div className="grid grid-cols-3 gap-3 pt-3 border-t border-white/[0.04]">
-        <Mini label="DEADLINE" value={c.status === 'live' ? <Countdown deadline={c.deadline} /> : shortDate(c.deadline)} />
-        <Mini label="SUBMISSIONS" value={subCount} accent={c.status === 'closed'} />
-        <Mini label="TOP N" value={c.topN} />
+      <div className="font-head font-bold text-[15.5px] text-bone leading-snug mb-3 truncate">{c.role}</div>
+      <div className="grid grid-cols-3 gap-2 pt-3 border-t border-white/[0.04]">
+        <Mini label="ENDS" value={<Countdown deadline={c.deadline} className="text-[10.5px]" />} />
+        <Mini label="SUBS" value={subs} accent />
+        <Mini label="TOP" value={c.topN} />
       </div>
     </Link>
   )
@@ -146,21 +253,25 @@ function Mini({ label, value, accent }) {
   return (
     <div>
       <div className="font-mono text-[8.5px] tracking-wide3 text-bone-ghost">{label}</div>
-      <div className={`mt-1 font-mono text-[11.5px] tabular ${accent ? 'text-gold' : 'text-bone'}`}>{value}</div>
+      <div className={`mt-0.5 font-mono text-[11px] tabular ${accent ? 'text-gold' : 'text-bone'}`}>{value}</div>
     </div>
   )
 }
 
-function EmptyState({ title, sub, cta }) {
+function QuickAction({ to, icon, label, hint }) {
   return (
-    <div className="rounded-xl border border-dashed border-white/[0.08] bg-ink-900/20 p-8 text-center">
-      <div className="font-head font-bold text-[18px] text-bone mb-2">{title}</div>
-      {sub && <div className="font-body text-[13.5px] text-bone-dim mb-5">{sub}</div>}
-      {cta && (
-        <Link to={cta.to} className="inline-flex items-center h-10 px-5 rounded-full bg-gold text-ink font-body font-semibold text-[13px]">
-          {cta.label} →
-        </Link>
-      )}
-    </div>
+    <Link
+      to={to}
+      className="group flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-bone/[0.05] transition-colors"
+    >
+      <span className="h-8 w-8 rounded-md border border-white/[0.08] bg-bone/[0.03] flex items-center justify-center text-gold group-hover:border-gold/40 transition">
+        {icon}
+      </span>
+      <div className="flex-1 min-w-0">
+        <div className="font-body text-[13px] text-bone">{label}</div>
+        <div className="font-mono text-[9.5px] tracking-wide2 text-bone-ghost">{hint}</div>
+      </div>
+      <IconArrowRight size={12} className="text-bone-ghost group-hover:text-gold transition" />
+    </Link>
   )
 }

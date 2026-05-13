@@ -9,8 +9,16 @@
 }
 
 html, body {
-  background: var(--ink);
-  color: #E8EAF2;
+  background: #0A0E1A;
+  color: #F5F7FF;
+}
+
+/* App body in app/admin shells gets a slightly different bg */
+.app-bg {
+  background:
+    radial-gradient(ellipse 800px 400px at 0% 0%, rgba(255,197,61,0.025), transparent 60%),
+    radial-gradient(ellipse 600px 400px at 100% 0%, rgba(91,156,255,0.025), transparent 60%),
+    #0A0E1A;
 }
 
 body {
