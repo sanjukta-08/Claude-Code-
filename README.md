@@ -27,9 +27,37 @@ Open http://localhost:5173.
 | `signal-blue` | `#5B9CFF` |
 
 ## Routes
-- `/` — home (full marketing site)
-- `/employer` — deep-link page for hiring managers
-- `/candidate` — deep-link page for candidates
+
+### Marketing
+- `/` — home
+- `/employer` — for hiring managers
+- `/candidate` — for candidates
+- `/signin` — enter the live platform
+
+### Candidate app (after signin as candidate)
+- `/app/challenges` — challenge board
+- `/app/challenges/:id` — full brief + rubric
+- `/app/challenges/:id/submit` — three-part submission form (deliverable, reflection, process trail)
+- `/app/submissions/:id` — your AIQ score result with dimension breakdown + feedback
+- `/app/me` — your AIQ vault — all challenges, scores, dimension averages
+
+### Admin app (after signin as admin)
+- `/admin` — dashboard
+- `/admin/post` — paste a JD → AI generates a brief → sign & publish
+- `/admin/challenges` — all challenges, filterable
+- `/admin/challenges/:id` — submissions counter (live) / unlocked leaderboard (closed) / shortlist
+- `/admin/talent-pool` — pre-scored candidates across all past challenges
+
+## Try the full flow (5 minutes)
+1. `npm run dev` → http://localhost:5173
+2. Click **Enter the platform** → choose **Candidate**
+3. Pick a challenge → click **Register & start** → fill the three parts → **Submit & seal**
+4. Watch your AIQ score animate in. Visit `/app/me` to see your vault.
+5. Sign out → sign back in as **Admin**
+6. Open any closed challenge to see the leaderboard + pick a shortlist
+7. Or click **+ Post a JD** to run the JD→Challenge generator yourself
+
+All data lives in your browser (`localStorage`). To reset: open DevTools → Application → Local Storage → delete `proof.v1`.
 
 ## Home sections
 1. **Nav** — sticky, blurred-on-scroll, live challenge counter, router links

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { useTypewriter } from '../lib/useTypewriter'
 
 const PAIRS = [
@@ -171,10 +172,32 @@ export default function Hero() {
           className="mt-7 max-w-xl font-body text-[15.5px] md:text-[17px]
             leading-[1.6] text-bone-dim"
         >
-          PROOF turns any JD into a real-world challenge candidates ship in 72 hours.
+          PROOF turns any JD into a 72-hour challenge candidates ship.
           The submission <em className="not-italic text-bone">is</em> the signal —
-          scored, ranked, signed. The resume is the backup document, not the primary one.
+          scored across five dimensions, ranked, signed. The platform is live below.
+          Try both sides yourself.
         </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.05, duration: 0.7, ease }}
+          className="mt-7 flex flex-wrap items-center gap-3"
+        >
+          <Link
+            to="/signin"
+            className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-gold text-ink
+              font-body font-semibold text-[14px] hover:shadow-[0_0_40px_rgba(255,197,61,0.4)] transition-shadow"
+          >
+            Enter the platform
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M3 7h8m0 0L7 3m4 4l-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Link>
+          <span className="font-mono text-[10px] tracking-wide3 text-bone-ghost">
+            CANDIDATES · ADMINS · LIVE DATA · NO SIGNUP NEEDED
+          </span>
+        </motion.div>
 
         {/* OPERATING THEATRE */}
         <motion.div

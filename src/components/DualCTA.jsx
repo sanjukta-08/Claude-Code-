@@ -54,12 +54,12 @@ export default function DualCTA() {
             polarity="L"
             hovered={hovered}
             setHovered={setHovered}
-            to="/employer"
+            to="/signin"
             tag="01 · NORTH POLE"
             kicker="YOU'RE HIRING"
-            title="Post your first challenge."
-            body="Free for your first hire. JD in, scored leaderboard out. 72 hours from paste to shortlist."
-            cta="Post a challenge"
+            title="Open the admin console."
+            body="Paste a JD, watch it become a challenge, sign &amp; publish. See the leaderboard when it unlocks. Pick the Top N."
+            cta="Open admin"
             tone="cool"
             tsLabel="EMPLOYER · SIGNED"
           />
@@ -67,12 +67,12 @@ export default function DualCTA() {
             polarity="R"
             hovered={hovered}
             setHovered={setHovered}
-            to="/candidate"
+            to="/signin"
             tag="02 · SOUTH POLE"
             kicker="YOU'RE SHIPPING"
-            title="Earn your first score."
-            body="Pick a live challenge. Submit in 72 hours. Walk out with a credential that says exactly what you can do."
-            cta="Take a challenge"
+            title="Take a live challenge."
+            body="Browse the board. Pick a brief. Ship in 72 hours. Get scored across five dimensions. Earn the credential."
+            cta="Enter the app"
             tone="warm"
             tsLabel="CANDIDATE · SIGNED"
           />
