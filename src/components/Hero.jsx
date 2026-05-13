@@ -1,259 +1,366 @@
-import { useEffect, useMemo, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useTypewriter } from '../lib/useTypewriter'
-import Button from '../ui/Button'
-import Pill from '../ui/Pill'
-import Avatar from '../ui/Avatar'
-import { IconArrowRight, IconClock, IconAward, IconCheck } from '../ui/Icons'
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion'
 
 const ease = [0.22, 1, 0.36, 1]
 
-const SAMPLE_JD = `SENIOR PRODUCT MANAGER · 5+ yrs · MBA preferred`
-const SAMPLE_BRIEF = `BRIEF · 72H · ACME
-
-Acme ships its first AI feature
-Friday. Legal flagged 4 risks.
-The CEO wants velocity.
-
-— 1-page strategy memo
-— Risk register, defended
-— The decision you'd ship`
+const TICKER_ITEMS = [
+  { role: 'AI Product Manager',     company: 'ADNOC',          score: 781, rank: '2 / 87' },
+  { role: 'Senior Backend Engineer',company: 'Nova',           score: 794, rank: '1 / 64' },
+  { role: 'Senior Product Designer',company: 'Tabby',          score: 762, rank: '3 / 52' },
+  { role: 'Head of Operations',     company: 'Careem',         score: 758, rank: '2 / 41' },
+  { role: 'AI Strategy Lead',       company: 'Mubadala',       score: 748, rank: '4 / 118' },
+  { role: 'ML Platform PM',         company: 'e& Group',       score: 736, rank: '1 / 29' },
+]
 
 export default function Hero() {
-  return (
-    <section id="top" className="relative pt-24 md:pt-28 pb-20 md:pb-28 overflow-hidden">
-      {/* Ambient */}
-      <div className="absolute inset-0 -z-10 pointer-events-none">
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[90%] h-[700px]"
-          style={{ background: 'radial-gradient(ellipse at top, rgba(255,197,61,0.07) 0%, transparent 60%)' }}
-        />
-      </div>
+  // mouse parallax
+  const containerRef = useRef(null)
+  const mx = useMotionValue(0)
+  const my = useMotionValue(0)
+  const px = useSpring(mx, { stiffness: 60, damping: 18 })
+  const py = useSpring(my, { stiffness: 60, damping: 18 })
+  const parallaxL = useTransform(px, (v) => v * -6)
+  const parallaxR = useTransform(px, (v) => v * 8)
+  const parallaxY = useTransform(py, (v) => v * 4)
 
-      <div className="mx-auto max-w-[1280px] px-5 md:px-10">
-        {/* Headline + CTA — denser, more product-led */}
-        <div className="max-w-3xl">
+  const onMove = (e) => {
+    const r = containerRef.current?.getBoundingClientRect()
+    if (!r) return
+    mx.set(((e.clientX - r.left) / r.width - 0.5))
+    my.set(((e.clientY - r.top) / r.height - 0.5))
+  }
+
+  return (
+    <section
+      ref={containerRef}
+      onMouseMove={onMove}
+      id="top"
+      className="relative pt-24 md:pt-28 pb-24 md:pb-32 overflow-hidden paper-grain"
+    >
+      {/* Floating particles — paper dust */}
+      <Particles />
+
+      {/* Ruler line at top */}
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 1.4, ease, delay: 0.2 }}
+        style={{ transformOrigin: 'left' }}
+        className="absolute top-14 left-0 right-0 h-px bg-crimson/40"
+      />
+
+      <div className="relative mx-auto max-w-[1280px] px-5 md:px-10 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-16 items-center">
+        {/* LEFT — headline */}
+        <motion.div style={{ x: parallaxL, y: parallaxY }} className="relative z-10">
+          {/* Eyebrow / dateline */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease }}
+            transition={{ duration: 0.6, delay: 0.4, ease }}
+            className="flex items-center gap-3 mb-7"
           >
-            <Pill tone="gold" dot className="mb-6">LIVE · ALPHA · GCC + INDIA</Pill>
+            <span className="font-mono text-[10px] tracking-wide3 text-crimson font-semibold">VOL. 1</span>
+            <span className="h-px flex-grow max-w-[60px] bg-noir/15" />
+            <span className="font-mono text-[10px] tracking-wide3 text-coffee">EST. 2026 · GCC + INDIA</span>
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.08, ease }}
-            className="font-head font-extrabold tracking-tightest leading-[1.0]
-              text-[40px] sm:text-[52px] md:text-[64px] text-bone"
-          >
-            The hiring stack,<br />
-            <span className="text-gold">inverted.</span>
-          </motion.h1>
+          <h1 className="font-serif font-light text-noir leading-[0.95] tracking-tighter">
+            {/* Line 1 */}
+            <span className="block overflow-hidden">
+              <motion.span
+                initial={{ y: '110%' }}
+                animate={{ y: 0 }}
+                transition={{ duration: 1.0, delay: 0.55, ease }}
+                className="block text-[44px] sm:text-[60px] md:text-[78px] lg:text-[88px]"
+                style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
+              >
+                Real work.
+              </motion.span>
+            </span>
+            {/* Line 2 with italic accent + scribble underline */}
+            <span className="block overflow-hidden">
+              <motion.span
+                initial={{ y: '110%' }}
+                animate={{ y: 0 }}
+                transition={{ duration: 1.0, delay: 0.72, ease }}
+                className="block text-[44px] sm:text-[60px] md:text-[78px] lg:text-[88px]"
+              >
+                <em className="italic text-crimson font-light scribble-under" style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}>
+                  Scored.
+                  <ScribbleSVG />
+                </em>{' '}
+                <em className="italic text-crimson font-light" style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}>
+                  Signed.
+                </em>
+              </motion.span>
+            </span>
+          </h1>
 
+          {/* Subhead */}
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.18, ease }}
-            className="mt-5 max-w-xl font-body text-[15.5px] md:text-[17px] leading-[1.65] text-bone-dim"
+            transition={{ duration: 0.8, delay: 1.0, ease }}
+            className="mt-7 max-w-xl font-sans text-[15px] md:text-[17px] leading-[1.65] text-coffee"
           >
-            Paste a job description. PROOF turns it into a 72-hour real-work challenge.
-            Candidates ship. Submissions get scored across five dimensions. You hire
-            from a ranked leaderboard, not a stack of résumés.
+            PROOF replaces the résumé with a <span className="text-noir font-medium">72-hour real-work challenge</span>.
+            AI parses your JD into a brief candidates can ship. Submissions get scored across five
+            dimensions. Hire from a ranked leaderboard — not a stack of claims.
           </motion.p>
 
+          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.28, ease }}
-            className="mt-8 flex flex-wrap items-center gap-3"
+            transition={{ duration: 0.8, delay: 1.15, ease }}
+            className="mt-9 flex flex-wrap items-center gap-3"
           >
-            <Button to="/signin" size="lg" iconRight={<IconArrowRight size={14} />}>
+            <Link
+              to="/signin"
+              className="group inline-flex items-center gap-2.5 h-12 px-6 rounded-full
+                bg-noir text-paper font-sans font-medium text-[14px]
+                hover:bg-crimson transition-colors duration-300"
+            >
               Enter the platform
-            </Button>
-            <Button to="#how" variant="outline" size="lg">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="group-hover:translate-x-0.5 transition">
+                <path d="M3 7h8m0 0L7 3m4 4l-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+            <Link
+              to="/#how"
+              className="inline-flex items-center gap-2 h-12 px-5 rounded-full
+                border border-noir/15 text-noir font-sans font-medium text-[14px]
+                hover:border-crimson/40 hover:text-crimson transition-colors"
+            >
               See how it works
-            </Button>
+            </Link>
           </motion.div>
 
-          {/* Sub-metrics */}
+          {/* Mini-tags */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-2 text-bone-ghost font-mono text-[10.5px] tracking-wide3"
+            transition={{ duration: 0.8, delay: 1.4 }}
+            className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[10.5px] tracking-wide3 text-coffee"
           >
-            <span className="inline-flex items-center gap-1.5"><IconCheck size={11} className="text-gold" /> NO RESUME</span>
-            <span className="inline-flex items-center gap-1.5"><IconCheck size={11} className="text-gold" /> NO COVER LETTER</span>
-            <span className="inline-flex items-center gap-1.5"><IconCheck size={11} className="text-gold" /> 72H BRIEF → SHORTLIST</span>
-            <span className="inline-flex items-center gap-1.5"><IconCheck size={11} className="text-gold" /> SCORED · SIGNED · YOURS</span>
+            <Check>NO RÉSUMÉS</Check>
+            <Check>NO COVER LETTERS</Check>
+            <Check>72H · BRIEF → SHORTLIST</Check>
+            <Check>EVIDENCE, NOT CLAIMS</Check>
           </motion.div>
-        </div>
+        </motion.div>
 
-        {/* Product preview — live mock of the actual platform */}
+        {/* RIGHT — wax-seal + flip ticker */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.4, ease }}
-          className="mt-16 md:mt-20"
+          style={{ x: parallaxR, y: parallaxY }}
+          className="relative z-10 flex flex-col items-center lg:items-end gap-8"
         >
-          <ProductPreview />
+          <WaxSeal />
+          <FlipTicker />
         </motion.div>
       </div>
     </section>
   )
 }
 
-/* PRODUCT PREVIEW — a 2-up "live screenshot" of the actual platform */
-function ProductPreview() {
+/* ===== WAX SEAL ===== */
+
+function WaxSeal() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-4">
-      <AdminPreview />
-      <CandidatePreview />
-    </div>
+    <motion.div
+      initial={{ y: -120, opacity: 0, rotate: -25, scale: 0.6 }}
+      animate={{ y: 0, opacity: 1, rotate: -8, scale: 1 }}
+      transition={{
+        duration: 0.9,
+        delay: 1.5,
+        type: 'spring',
+        stiffness: 160,
+        damping: 14,
+      }}
+      className="relative wobble-slow"
+    >
+      {/* Drip trail */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.8, duration: 0.4 }}
+        className="absolute top-[-30px] left-1/2 -translate-x-1/2"
+      >
+        <svg width="14" height="34" viewBox="0 0 14 34">
+          <path
+            d="M7 0 C 5 8, 9 14, 7 22 C 5 28, 8 32, 7 34"
+            stroke="#9B2424"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.4"
+          />
+        </svg>
+      </motion.div>
+
+      <div className="relative w-[180px] h-[180px] md:w-[200px] md:h-[200px] rounded-full wax-seal flex items-center justify-center">
+        {/* Inner ring */}
+        <div className="absolute inset-3 rounded-full border-2 border-paper/30" />
+        <div className="absolute inset-5 rounded-full border border-paper/20" />
+
+        {/* Center content */}
+        <div className="text-center text-paper relative">
+          <div className="font-mono text-[8.5px] tracking-wide4 opacity-80 mb-1">SIGNED · SEALED</div>
+          <div className="font-serif italic text-[32px] leading-none" style={{ fontVariationSettings: '"opsz" 144' }}>
+            PROOF
+          </div>
+          <div className="font-mono text-[8.5px] tracking-wide4 opacity-80 mt-1">VOL · I</div>
+        </div>
+
+        {/* Outer scallop dots */}
+        {Array.from({ length: 16 }).map((_, i) => {
+          const angle = (i / 16) * Math.PI * 2
+          const r = 96
+          const x = Math.cos(angle) * r
+          const y = Math.sin(angle) * r
+          return (
+            <span
+              key={i}
+              className="absolute h-1 w-1 rounded-full bg-paper/40"
+              style={{ left: `calc(50% + ${x}px)`, top: `calc(50% + ${y}px)` }}
+            />
+          )
+        })}
+      </div>
+
+      {/* Caption */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.2, duration: 0.5 }}
+        className="mt-4 text-center"
+      >
+        <div className="font-mono text-[9.5px] tracking-wide3 text-coffee">CERT · ADI SHARMA · 781 · ADNOC</div>
+      </motion.div>
+    </motion.div>
   )
 }
 
-function AdminPreview() {
+/* ===== FLIP TICKER ===== */
+
+function FlipTicker() {
+  const [i, setI] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setI((n) => (n + 1) % TICKER_ITEMS.length), 2200)
+    return () => clearInterval(t)
+  }, [])
+  const item = TICKER_ITEMS[i]
+
   return (
-    <div className="relative rounded-2xl border border-white/[0.08] bg-ink-700/40 overflow-hidden shadow-2xl">
-      {/* Mock window chrome */}
-      <div className="flex items-center gap-2 px-4 h-9 border-b border-white/[0.05] bg-ink-800/60">
-        <span className="h-2 w-2 rounded-full bg-bone-ghost/40" />
-        <span className="h-2 w-2 rounded-full bg-bone-ghost/40" />
-        <span className="h-2 w-2 rounded-full bg-bone-ghost/40" />
-        <div className="ml-3 flex-1 max-w-xs h-5 rounded bg-ink-900/80 border border-white/[0.04] flex items-center px-2 font-mono text-[9px] text-bone-ghost">
-          proof.app/admin/challenges/CH-0142
-        </div>
-        <Pill tone="blue" size="xs">ADMIN</Pill>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 2.0, duration: 0.7, ease }}
+      className="relative w-full max-w-[320px] rounded-lg border border-noir/10 bg-cream shadow-paper overflow-hidden"
+    >
+      {/* tape on top */}
+      <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-16 h-3 rounded-sm bg-noir/8" style={{ backdropFilter: 'blur(2px)' }} />
+
+      <div className="px-4 pt-5 pb-3 border-b border-noir/8 flex items-center justify-between">
+        <span className="font-mono text-[9px] tracking-wide3 text-coffee">CERTIFICATES · LIVE</span>
+        <span className="relative flex h-1.5 w-1.5">
+          <span className="absolute inline-flex h-full w-full rounded-full bg-crimson opacity-60 animate-ping" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-crimson" />
+        </span>
       </div>
 
-      <div className="p-5">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-4">
-          <Avatar logo="A" size="md" tone="gold" />
-          <div className="min-w-0">
-            <div className="font-mono text-[9.5px] tracking-wide2 text-bone-ghost">ADNOC · CH-0142</div>
-            <div className="font-head font-bold text-[15px] text-bone">AI Product Manager</div>
-          </div>
-          <div className="ml-auto flex items-center gap-2">
-            <Pill tone="closed">CLOSED</Pill>
-            <Pill tone="standard">STANDARD</Pill>
-          </div>
-        </div>
-
-        <div className="font-mono text-[9.5px] tracking-wide3 text-gold mb-2">LEADERBOARD · UNLOCKED</div>
-
-        {/* Mock leaderboard rows */}
-        <div className="rounded-lg border border-white/[0.06] bg-ink-800/40 divide-y divide-white/[0.04]">
-          <LbRow rank={1} name="Ravi Menon" role="Founder · stealth" score={794} highlight />
-          <LbRow rank={2} name="Adi Sharma" role="Product Manager · Acme" score={781} highlight />
-          <LbRow rank={3} name="Joel Mathew" role="PM · Tabby" score={768} highlight />
-          <LbRow rank={4} name="Sara Al-Hosani" role="Product · Mubadala" score={748} />
-          <LbRow rank={5} name="Layla Saleh" role="Senior PM · Souq" score={729} />
-        </div>
-
-        <div className="mt-3 flex items-center justify-between font-mono text-[9.5px] tracking-wide3 text-bone-ghost">
-          <span><span className="text-gold">3 / 10</span> SHORTLISTED · SEND INVITES →</span>
-          <span>87 SUBMISSIONS</span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function CandidatePreview() {
-  return (
-    <div className="relative rounded-2xl border border-gold/30 bg-gradient-to-br from-gold/[0.04] to-transparent overflow-hidden shadow-2xl">
-      {/* Mock chrome */}
-      <div className="flex items-center gap-2 px-4 h-9 border-b border-white/[0.05] bg-ink-800/60">
-        <span className="h-2 w-2 rounded-full bg-bone-ghost/40" />
-        <span className="h-2 w-2 rounded-full bg-bone-ghost/40" />
-        <span className="h-2 w-2 rounded-full bg-bone-ghost/40" />
-        <div className="ml-3 flex-1 max-w-xs h-5 rounded bg-ink-900/80 border border-white/[0.04] flex items-center px-2 font-mono text-[9px] text-bone-ghost">
-          proof.app/app/submissions/SUB-0001
-        </div>
-        <Pill tone="gold" size="xs">SCORE</Pill>
-      </div>
-
-      <div className="p-5">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-4">
-          <Avatar logo="A" size="md" tone="gold" />
-          <div className="min-w-0">
-            <div className="font-mono text-[9.5px] tracking-wide2 text-bone-ghost">ADNOC · CH-0142</div>
-            <div className="font-head font-bold text-[14px] text-bone">AI Product Manager</div>
-          </div>
-        </div>
-
-        <div className="font-mono text-[9.5px] tracking-wide3 text-gold mb-2">YOUR AIQ SCORE</div>
-
-        <div className="flex items-end gap-1 mb-4">
-          <div className="font-head font-extrabold tracking-tightest text-[72px] leading-[0.95] text-bone tabular">
-            781
-          </div>
-          <span className="font-mono text-[14px] text-gold mb-3">/1000</span>
-        </div>
-
-        <div className="flex flex-wrap gap-2 mb-5">
-          <Pill tone="gold">RANK 2 / 87 · TOP 98%</Pill>
-          <Pill tone="green" dot>GUARANTEED INTERVIEW</Pill>
-        </div>
-
-        {/* Dimension bars mini */}
-        <div className="space-y-2.5">
-          <DimRowMini code="D1" name="Delegation"  score={168} />
-          <DimRowMini code="D2" name="Discernment" score={178} />
-          <DimRowMini code="D3" name="Diligence"   score={156} />
-          <DimRowMini code="D4" name="Deployment"  score={160} />
-          <DimRowMini code="D5" name="Direction"   score={119} />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function LbRow({ rank, name, role, score, highlight }) {
-  const initials = name.split(' ').map((s) => s[0]).slice(0, 2).join('')
-  return (
-    <div className={`grid grid-cols-[24px_1fr_60px] gap-3 items-center px-3 py-2.5
-      ${highlight ? 'bg-gold/[0.04]' : ''}`}>
-      <span className={`font-mono text-[10px] tracking-wide2 tabular ${rank <= 3 ? 'text-gold' : 'text-bone-dim'}`}>
-        #{rank}
-      </span>
-      <div className="flex items-center gap-2 min-w-0">
-        <div className={`h-7 w-7 rounded-md flex items-center justify-center font-head font-bold text-[10px] flex-shrink-0
-          ${rank <= 3 ? 'border border-gold/30 bg-gold/[0.06] text-gold' : 'border border-white/[0.08] bg-bone/[0.04] text-bone-dim'}`}>
-          {initials}
-        </div>
-        <div className="min-w-0">
-          <div className="font-body text-[11.5px] text-bone truncate">{name}</div>
-          <div className="font-mono text-[9px] tracking-wide2 text-bone-ghost truncate">{role}</div>
-        </div>
-      </div>
-      <div className="text-right font-head font-bold text-[13px] text-bone tabular">{score}</div>
-    </div>
-  )
-}
-
-function DimRowMini({ code, name, score }) {
-  const pct = (score / 200) * 100
-  return (
-    <div className="flex items-center gap-3">
-      <span className="font-mono text-[9px] tracking-wide2 text-gold w-5">{code}</span>
-      <span className="font-body text-[11px] text-bone-dim w-20 truncate">{name}</span>
-      <div className="flex-1 h-1.5 rounded-full bg-white/[0.05] overflow-hidden">
+      <AnimatePresence mode="popLayout">
         <motion.div
-          initial={{ width: 0 }}
-          whileInView={{ width: `${pct}%` }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.2, delay: 0.4, ease }}
-          className="h-full bg-gold"
-        />
+          key={item.role + item.score}
+          initial={{ y: 30, opacity: 0, filter: 'blur(4px)' }}
+          animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+          exit={{ y: -30, opacity: 0, filter: 'blur(4px)' }}
+          transition={{ duration: 0.45, ease }}
+          className="p-5"
+        >
+          <div className="font-mono text-[9.5px] tracking-wide3 text-coffee mb-2">{item.company.toUpperCase()}</div>
+          <div className="font-serif text-[20px] text-noir leading-tight mb-3" style={{ fontVariationSettings: '"opsz" 60' }}>
+            {item.role}
+          </div>
+          <div className="flex items-end justify-between pt-3 border-t border-noir/8">
+            <div>
+              <div className="font-mono text-[9px] tracking-wide3 text-coffee">RANK</div>
+              <div className="font-serif italic text-[18px] text-noir tabular leading-none mt-1">#{item.rank}</div>
+            </div>
+            <div className="text-right">
+              <div className="font-mono text-[9px] tracking-wide3 text-crimson">AIQ</div>
+              <div className="font-serif italic text-[36px] text-crimson tabular leading-none mt-1" style={{ fontVariationSettings: '"opsz" 144' }}>
+                {item.score}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Stamp */}
+      <div className="absolute top-12 right-4 -rotate-12 border-2 border-crimson/60 px-2 py-0.5 rounded">
+        <span className="font-mono text-[8.5px] tracking-wide4 text-crimson font-bold">VERIFIED</span>
       </div>
-      <span className="font-mono text-[10px] tracking-wide2 text-bone tabular w-8 text-right">{score}</span>
+    </motion.div>
+  )
+}
+
+/* ===== PARTICLES (paper dust drifting up) ===== */
+
+function Particles() {
+  const dots = useMemo(() => Array.from({ length: 16 }).map((_, i) => ({
+    id: i,
+    left: Math.random() * 100,
+    bottom: -10 - Math.random() * 30,
+    size: 1 + Math.random() * 2,
+    delay: Math.random() * 16,
+    duration: 14 + Math.random() * 10,
+  })), [])
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {dots.map((d) => (
+        <span
+          key={d.id}
+          className="absolute rounded-full bg-noir/20 animate-drift-up"
+          style={{
+            left: `${d.left}%`,
+            bottom: `${d.bottom}%`,
+            width: d.size,
+            height: d.size,
+            animationDelay: `${d.delay}s`,
+            animationDuration: `${d.duration}s`,
+          }}
+        />
+      ))}
     </div>
+  )
+}
+
+function Check({ children }) {
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <svg width="11" height="11" viewBox="0 0 14 14" className="text-crimson">
+        <path d="M3 7l3 3 5-7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      </svg>
+      {children}
+    </span>
+  )
+}
+
+function ScribbleSVG() {
+  return (
+    <svg viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden>
+      <motion.path
+        d="M2 6 C 30 2, 60 10, 100 5 S 160 8, 198 4"
+        stroke="#C53030"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        fill="none"
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ pathLength: 1, opacity: 0.85 }}
+        transition={{ duration: 1.2, delay: 1.3, ease }}
+      />
+    </svg>
   )
 }

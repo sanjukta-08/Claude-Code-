@@ -76,13 +76,13 @@ const TIERS = [
 
 export default function EmployerPage() {
   return (
-    <>
+    <div className="app-bg -mt-14 pt-14">
       <EmployerHero />
       <EmployerFlow />
       <EmployerProof />
       <EmployerPricing />
       <EmployerCTA />
-    </>
+    </div>
   )
 }
 

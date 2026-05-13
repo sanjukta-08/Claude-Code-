@@ -24,7 +24,7 @@ export default function Layout() {
   }, [location.pathname, location.hash])
 
   return (
-    <main className="relative bg-ink-800 text-bone min-h-screen overflow-x-hidden">
+    <main className="relative paper-bg text-noir min-h-screen overflow-x-hidden">
       <Nav />
       <Outlet />
       <Footer />

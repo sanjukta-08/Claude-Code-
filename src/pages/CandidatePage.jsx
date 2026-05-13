@@ -36,13 +36,13 @@ const OPEN_CHALLENGES = [
 
 export default function CandidatePage() {
   return (
-    <>
+    <div className="app-bg -mt-14 pt-14">
       <CandidateHero />
       <CandidateFlow />
       <CandidateProfile />
       <CandidateOpen />
       <CandidateCTA />
-    </>
+    </div>
   )
 }
 
