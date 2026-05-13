@@ -23,7 +23,7 @@ export default function Drawer({ open, onClose, title, kicker, children, width =
             exit={{ opacity: 0 }}
             transition={{ duration: 0.22 }}
             onClick={onClose}
-            className="fixed inset-0 z-40 bg-noir/40 backdrop-blur-[2px]"
+            className="fixed inset-0 z-40 bg-ink/30 backdrop-blur-[2px]"
           />
           <motion.aside
             initial={{ x: width + 40, opacity: 0.4 }}
@@ -32,19 +32,19 @@ export default function Drawer({ open, onClose, title, kicker, children, width =
             transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
             style={{ width }}
             className="fixed top-0 right-0 bottom-0 z-50 max-w-[100vw]
-              bg-paper border-l border-noir/12 shadow-paper-lg flex flex-col"
+              bg-canvas border-l border-line shadow-elev flex flex-col"
           >
-            <header className="flex items-center justify-between gap-4 px-5 h-14 border-b border-noir/8">
+            <header className="flex items-center justify-between gap-4 px-5 h-14 border-b border-line">
               <div className="min-w-0">
                 {kicker && (
-                  <div className="font-mono text-[9px] tracking-wide3 text-crimson font-semibold mb-0.5">{kicker}</div>
+                  <div className="font-mono text-[9px] tracking-wide2 text-orange font-medium mb-0.5 uppercase">{kicker}</div>
                 )}
-                <div className="font-serif text-[16px] text-noir truncate" style={{ fontVariationSettings: '"opsz" 60' }}>{title}</div>
+                <div className="font-sans font-bold text-[14px] text-ink truncate">{title}</div>
               </div>
               <button
                 onClick={onClose}
                 aria-label="Close"
-                className="flex-shrink-0 h-8 w-8 rounded-md border border-noir/12 hover:border-crimson/40 text-coffee hover:text-crimson transition flex items-center justify-center"
+                className="flex-shrink-0 h-8 w-8 rounded-sm border border-line hover:border-orange text-ink-dim hover:text-orange transition flex items-center justify-center"
               >
                 <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
               </button>

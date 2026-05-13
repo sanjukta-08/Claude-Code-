@@ -1,9 +1,9 @@
 export default function DataTable({ columns, rows, onRowClick, empty, footer, className = '' }) {
   const tpl = columns.map((c) => c.width || '1fr').join(' ')
   return (
-    <div className={`rounded-xl border border-noir/10 bg-paper overflow-hidden ${className}`}>
+    <div className={`rounded-md border border-line bg-canvas overflow-hidden ${className}`}>
       <div
-        className="grid gap-4 px-5 py-3 border-b border-noir/8 font-mono text-[9px] tracking-wide3 text-coffee"
+        className="grid gap-4 px-5 py-3 border-b border-line font-mono text-[9px] tracking-wide2 text-ink-ghost"
         style={{ gridTemplateColumns: tpl }}
       >
         {columns.map((c) => (
@@ -11,7 +11,7 @@ export default function DataTable({ columns, rows, onRowClick, empty, footer, cl
         ))}
       </div>
       {rows.length === 0 ? (
-        <div className="px-5 py-12 text-center font-mono text-[10px] tracking-wide3 text-coffee-dim">
+        <div className="px-5 py-12 text-center font-mono text-[10px] tracking-wide2 text-ink-ghost">
           {empty || 'NO ROWS'}
         </div>
       ) : (
@@ -20,9 +20,9 @@ export default function DataTable({ columns, rows, onRowClick, empty, footer, cl
             key={row.id || i}
             onClick={onRowClick ? () => onRowClick(row) : undefined}
             className={`grid gap-4 px-5 py-3.5 items-center transition-colors
-              ${onRowClick ? 'cursor-pointer hover:bg-crimson/[0.03]' : ''}
-              ${i > 0 ? 'border-t border-noir/6' : ''}
-              ${row._highlight ? 'bg-crimson/[0.03]' : ''}`}
+              ${onRowClick ? 'cursor-pointer hover:bg-bg' : ''}
+              ${i > 0 ? 'border-t border-line/70' : ''}
+              ${row._highlight ? 'bg-orange/[0.04]' : ''}`}
             style={{ gridTemplateColumns: tpl }}
           >
             {columns.map((c) => (
@@ -34,7 +34,7 @@ export default function DataTable({ columns, rows, onRowClick, empty, footer, cl
         ))
       )}
       {footer && (
-        <div className="px-5 py-3 border-t border-noir/8 bg-cream font-mono text-[10px] tracking-wide3 text-coffee">
+        <div className="px-5 py-3 border-t border-line bg-bg font-mono text-[10px] tracking-wide2 text-ink-ghost">
           {footer}
         </div>
       )}

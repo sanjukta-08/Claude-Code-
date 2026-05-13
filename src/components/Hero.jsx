@@ -1,366 +1,326 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const ease = [0.22, 1, 0.36, 1]
 
-const TICKER_ITEMS = [
-  { role: 'AI Product Manager',     company: 'ADNOC',          score: 781, rank: '2 / 87' },
-  { role: 'Senior Backend Engineer',company: 'Nova',           score: 794, rank: '1 / 64' },
-  { role: 'Senior Product Designer',company: 'Tabby',          score: 762, rank: '3 / 52' },
-  { role: 'Head of Operations',     company: 'Careem',         score: 758, rank: '2 / 41' },
-  { role: 'AI Strategy Lead',       company: 'Mubadala',       score: 748, rank: '4 / 118' },
-  { role: 'ML Platform PM',         company: 'e& Group',       score: 736, rank: '1 / 29' },
+const JD_FEED = [
+  {
+    company: 'northbound-capital',
+    role: 'Applied AI Engineer · Finance',
+    salary: '$50–70k',
+    seniority: 'IC3',
+    skills: ['RAG', 'evals'],
+    user: 'alex',
+    cohort: 'weekend 14',
+    age: '2h ago',
+  },
+  {
+    company: 'adnoc-labs',
+    role: 'Senior Product Manager · AI',
+    salary: '$80–110k',
+    seniority: 'IC4',
+    skills: ['strategy', 'rubrics'],
+    user: 'sara',
+    cohort: 'weekend 14',
+    age: '4h ago',
+  },
+  {
+    company: 'tabby-growth',
+    role: 'Senior Product Designer',
+    salary: '$60–85k',
+    seniority: 'IC3',
+    skills: ['systems', 'figma'],
+    user: 'mei',
+    cohort: 'weekend 14',
+    age: '5h ago',
+  },
+  {
+    company: 'careem-ops',
+    role: 'Head of Operations',
+    salary: '$110–150k',
+    seniority: 'M2',
+    skills: ['runbook', 'RCA'],
+    user: 'daniel',
+    cohort: 'weekend 14',
+    age: '6h ago',
+  },
 ]
 
 export default function Hero() {
-  // mouse parallax
-  const containerRef = useRef(null)
-  const mx = useMotionValue(0)
-  const my = useMotionValue(0)
-  const px = useSpring(mx, { stiffness: 60, damping: 18 })
-  const py = useSpring(my, { stiffness: 60, damping: 18 })
-  const parallaxL = useTransform(px, (v) => v * -6)
-  const parallaxR = useTransform(px, (v) => v * 8)
-  const parallaxY = useTransform(py, (v) => v * 4)
-
-  const onMove = (e) => {
-    const r = containerRef.current?.getBoundingClientRect()
-    if (!r) return
-    mx.set(((e.clientX - r.left) / r.width - 0.5))
-    my.set(((e.clientY - r.top) / r.height - 0.5))
-  }
-
   return (
-    <section
-      ref={containerRef}
-      onMouseMove={onMove}
-      id="top"
-      className="relative pt-24 md:pt-28 pb-24 md:pb-32 overflow-hidden paper-grain"
-    >
-      {/* Floating particles — paper dust */}
-      <Particles />
+    <section id="top" className="relative pt-28 md:pt-32 pb-20 md:pb-28 overflow-hidden">
+      {/* Soft dot grid ambience */}
+      <div className="absolute inset-0 -z-10 opacity-50 pointer-events-none dot-grid" />
 
-      {/* Ruler line at top */}
-      <motion.div
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 1.4, ease, delay: 0.2 }}
-        style={{ transformOrigin: 'left' }}
-        className="absolute top-14 left-0 right-0 h-px bg-crimson/40"
-      />
+      <div className="relative mx-auto max-w-[1280px] px-5 md:px-10 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-20 items-center">
+        {/* LEFT — live preview card */}
+        <LivePreview />
 
-      <div className="relative mx-auto max-w-[1280px] px-5 md:px-10 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-16 items-center">
-        {/* LEFT — headline */}
-        <motion.div style={{ x: parallaxL, y: parallaxY }} className="relative z-10">
-          {/* Eyebrow / dateline */}
+        {/* RIGHT — headline + CTA */}
+        <div>
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4, ease }}
-            className="flex items-center gap-3 mb-7"
+            transition={{ duration: 0.4 }}
+            className="mb-7"
           >
-            <span className="font-mono text-[10px] tracking-wide3 text-crimson font-semibold">VOL. 1</span>
-            <span className="h-px flex-grow max-w-[60px] bg-noir/15" />
-            <span className="font-mono text-[10px] tracking-wide3 text-coffee">EST. 2026 · GCC + INDIA</span>
+            <span className="inline-flex items-center gap-2">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-orange opacity-50 animate-ping" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-orange" />
+              </span>
+            </span>
           </motion.div>
 
-          <h1 className="font-serif font-light text-noir leading-[0.95] tracking-tighter">
-            {/* Line 1 */}
-            <span className="block overflow-hidden">
-              <motion.span
-                initial={{ y: '110%' }}
-                animate={{ y: 0 }}
-                transition={{ duration: 1.0, delay: 0.55, ease }}
-                className="block text-[44px] sm:text-[60px] md:text-[78px] lg:text-[88px]"
-                style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
-              >
-                Real work.
-              </motion.span>
-            </span>
-            {/* Line 2 with italic accent + scribble underline */}
-            <span className="block overflow-hidden">
-              <motion.span
-                initial={{ y: '110%' }}
-                animate={{ y: 0 }}
-                transition={{ duration: 1.0, delay: 0.72, ease }}
-                className="block text-[44px] sm:text-[60px] md:text-[78px] lg:text-[88px]"
-              >
-                <em className="italic text-crimson font-light scribble-under" style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}>
-                  Scored.
-                  <ScribbleSVG />
-                </em>{' '}
-                <em className="italic text-crimson font-light" style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}>
-                  Signed.
-                </em>
-              </motion.span>
-            </span>
-          </h1>
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.05, ease }}
+            className="font-sans font-black tracking-tighter leading-[0.95]
+              text-[44px] sm:text-[60px] md:text-[68px] lg:text-[76px] text-ink"
+          >
+            Finish a<br/>
+            challenge.<br/>
+            <span className="text-orange">
+              <CountWord />
+            </span>{' '}
+            jobs.
+          </motion.h1>
 
-          {/* Subhead */}
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.0, ease }}
-            className="mt-7 max-w-xl font-sans text-[15px] md:text-[17px] leading-[1.65] text-coffee"
+            transition={{ duration: 0.8, delay: 0.2, ease }}
+            className="mt-7 max-w-lg font-sans text-[15.5px] md:text-[17px] leading-[1.55] text-ink-dim"
           >
-            PROOF replaces the résumé with a <span className="text-noir font-medium">72-hour real-work challenge</span>.
-            AI parses your JD into a brief candidates can ship. Submissions get scored across five
-            dimensions. Hire from a ranked leaderboard — not a stack of claims.
+            Every Proof challenge is reverse-engineered from a real job description.
+            Ship it, your <span className="text-ink font-semibold">AIQ + Proof</span> score moves,
+            and the open roles you just qualified for appear. No CV. No applying.
           </motion.p>
 
-          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.15, ease }}
-            className="mt-9 flex flex-wrap items-center gap-3"
+            transition={{ duration: 0.8, delay: 0.32, ease }}
+            className="mt-10 max-w-md"
           >
-            <Link
-              to="/signin"
-              className="group inline-flex items-center gap-2.5 h-12 px-6 rounded-full
-                bg-noir text-paper font-sans font-medium text-[14px]
-                hover:bg-crimson transition-colors duration-300"
-            >
-              Enter the platform
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="group-hover:translate-x-0.5 transition">
-                <path d="M3 7h8m0 0L7 3m4 4l-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
-            <Link
-              to="/#how"
-              className="inline-flex items-center gap-2 h-12 px-5 rounded-full
-                border border-noir/15 text-noir font-sans font-medium text-[14px]
-                hover:border-crimson/40 hover:text-crimson transition-colors"
-            >
-              See how it works
-            </Link>
+            <EmailJoin />
+            <div className="mt-4 font-mono text-[11px] tracking-wide2 text-ink-dim">
+              <span className="text-orange">Builders, employers &amp; universities</span>
+              <span className="text-ink-ghost"> · early access</span>
+            </div>
           </motion.div>
 
-          {/* Mini-tags */}
+          {/* Secondary actions row */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.4 }}
-            className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[10.5px] tracking-wide3 text-coffee"
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-2 text-ink-ghost font-mono text-[11px] tracking-wide2"
           >
-            <Check>NO RÉSUMÉS</Check>
-            <Check>NO COVER LETTERS</Check>
-            <Check>72H · BRIEF → SHORTLIST</Check>
-            <Check>EVIDENCE, NOT CLAIMS</Check>
+            <Link to="/signin" className="link-underline hover:text-ink transition-colors">→ enter the platform</Link>
+            <Link to="/#how" className="link-underline hover:text-ink transition-colors">→ how it works</Link>
+            <Link to="/#pricing" className="link-underline hover:text-ink transition-colors">→ pricing</Link>
           </motion.div>
-        </motion.div>
-
-        {/* RIGHT — wax-seal + flip ticker */}
-        <motion.div
-          style={{ x: parallaxR, y: parallaxY }}
-          className="relative z-10 flex flex-col items-center lg:items-end gap-8"
-        >
-          <WaxSeal />
-          <FlipTicker />
-        </motion.div>
+        </div>
       </div>
     </section>
   )
 }
 
-/* ===== WAX SEAL ===== */
+/* ===== LIVE PREVIEW CARD — wireframe grid + JD ticker ===== */
 
-function WaxSeal() {
-  return (
-    <motion.div
-      initial={{ y: -120, opacity: 0, rotate: -25, scale: 0.6 }}
-      animate={{ y: 0, opacity: 1, rotate: -8, scale: 1 }}
-      transition={{
-        duration: 0.9,
-        delay: 1.5,
-        type: 'spring',
-        stiffness: 160,
-        damping: 14,
-      }}
-      className="relative wobble-slow"
-    >
-      {/* Drip trail */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.8, duration: 0.4 }}
-        className="absolute top-[-30px] left-1/2 -translate-x-1/2"
-      >
-        <svg width="14" height="34" viewBox="0 0 14 34">
-          <path
-            d="M7 0 C 5 8, 9 14, 7 22 C 5 28, 8 32, 7 34"
-            stroke="#9B2424"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            fill="none"
-            opacity="0.4"
-          />
-        </svg>
-      </motion.div>
-
-      <div className="relative w-[180px] h-[180px] md:w-[200px] md:h-[200px] rounded-full wax-seal flex items-center justify-center">
-        {/* Inner ring */}
-        <div className="absolute inset-3 rounded-full border-2 border-paper/30" />
-        <div className="absolute inset-5 rounded-full border border-paper/20" />
-
-        {/* Center content */}
-        <div className="text-center text-paper relative">
-          <div className="font-mono text-[8.5px] tracking-wide4 opacity-80 mb-1">SIGNED · SEALED</div>
-          <div className="font-serif italic text-[32px] leading-none" style={{ fontVariationSettings: '"opsz" 144' }}>
-            PROOF
-          </div>
-          <div className="font-mono text-[8.5px] tracking-wide4 opacity-80 mt-1">VOL · I</div>
-        </div>
-
-        {/* Outer scallop dots */}
-        {Array.from({ length: 16 }).map((_, i) => {
-          const angle = (i / 16) * Math.PI * 2
-          const r = 96
-          const x = Math.cos(angle) * r
-          const y = Math.sin(angle) * r
-          return (
-            <span
-              key={i}
-              className="absolute h-1 w-1 rounded-full bg-paper/40"
-              style={{ left: `calc(50% + ${x}px)`, top: `calc(50% + ${y}px)` }}
-            />
-          )
-        })}
-      </div>
-
-      {/* Caption */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.2, duration: 0.5 }}
-        className="mt-4 text-center"
-      >
-        <div className="font-mono text-[9.5px] tracking-wide3 text-coffee">CERT · ADI SHARMA · 781 · ADNOC</div>
-      </motion.div>
-    </motion.div>
-  )
-}
-
-/* ===== FLIP TICKER ===== */
-
-function FlipTicker() {
+function LivePreview() {
   const [i, setI] = useState(0)
   useEffect(() => {
-    const t = setInterval(() => setI((n) => (n + 1) % TICKER_ITEMS.length), 2200)
+    const t = setInterval(() => setI((n) => (n + 1) % JD_FEED.length), 3000)
     return () => clearInterval(t)
   }, [])
-  const item = TICKER_ITEMS[i]
+  const item = JD_FEED[i]
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 2.0, duration: 0.7, ease }}
-      className="relative w-full max-w-[320px] rounded-lg border border-noir/10 bg-cream shadow-paper overflow-hidden"
+      transition={{ duration: 0.8, ease }}
+      className="relative"
     >
-      {/* tape on top */}
-      <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-16 h-3 rounded-sm bg-noir/8" style={{ backdropFilter: 'blur(2px)' }} />
+      {/* Card */}
+      <div className="relative aspect-[5/4] rounded-md border border-line bg-canvas overflow-hidden shadow-card">
+        {/* Wireframe grid background */}
+        <div className="absolute inset-0 wire-grid pointer-events-none" />
 
-      <div className="px-4 pt-5 pb-3 border-b border-noir/8 flex items-center justify-between">
-        <span className="font-mono text-[9px] tracking-wide3 text-coffee">CERTIFICATES · LIVE</span>
-        <span className="relative flex h-1.5 w-1.5">
-          <span className="absolute inline-flex h-full w-full rounded-full bg-crimson opacity-60 animate-ping" />
-          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-crimson" />
-        </span>
-      </div>
-
-      <AnimatePresence mode="popLayout">
-        <motion.div
-          key={item.role + item.score}
-          initial={{ y: 30, opacity: 0, filter: 'blur(4px)' }}
-          animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
-          exit={{ y: -30, opacity: 0, filter: 'blur(4px)' }}
-          transition={{ duration: 0.45, ease }}
-          className="p-5"
-        >
-          <div className="font-mono text-[9.5px] tracking-wide3 text-coffee mb-2">{item.company.toUpperCase()}</div>
-          <div className="font-serif text-[20px] text-noir leading-tight mb-3" style={{ fontVariationSettings: '"opsz" 60' }}>
-            {item.role}
+        {/* Top status bar */}
+        <div className="relative flex items-center justify-between px-5 pt-4 pb-3 border-b border-line/60">
+          <div className="flex items-center gap-2">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-orange opacity-60 animate-ping" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-orange" />
+            </span>
+            <span className="font-mono text-[10px] tracking-wide2 text-ink-dim">proof.io / live</span>
           </div>
-          <div className="flex items-end justify-between pt-3 border-t border-noir/8">
-            <div>
-              <div className="font-mono text-[9px] tracking-wide3 text-coffee">RANK</div>
-              <div className="font-serif italic text-[18px] text-noir tabular leading-none mt-1">#{item.rank}</div>
-            </div>
-            <div className="text-right">
-              <div className="font-mono text-[9px] tracking-wide3 text-crimson">AIQ</div>
-              <div className="font-serif italic text-[36px] text-crimson tabular leading-none mt-1" style={{ fontVariationSettings: '"opsz" 144' }}>
-                {item.score}
-              </div>
-            </div>
+          {/* Progress segments */}
+          <div className="flex items-center gap-1.5">
+            <span className="h-1 w-7 bg-orange rounded-sm" />
+            <span className="h-1 w-7 bg-line-strong rounded-sm" />
+            <span className="h-1 w-7 bg-line-strong rounded-sm" />
+            <span className="h-1 w-7 bg-line-strong rounded-sm" />
           </div>
-        </motion.div>
-      </AnimatePresence>
+        </div>
 
-      {/* Stamp */}
-      <div className="absolute top-12 right-4 -rotate-12 border-2 border-crimson/60 px-2 py-0.5 rounded">
-        <span className="font-mono text-[8.5px] tracking-wide4 text-crimson font-bold">VERIFIED</span>
+        {/* Tag */}
+        <div className="relative px-5 mt-5">
+          <motion.div
+            key={`tag-${i}`}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="font-mono text-[10px] tracking-wide3 text-orange"
+          >
+            [ NEW JD INGESTED ]
+          </motion.div>
+        </div>
+
+        {/* JD Card */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={item.role + i}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.45, ease }}
+            className="relative mx-5 mt-3 rounded-sm bg-canvas border border-line p-4 md:p-5"
+            style={{
+              background:
+                'radial-gradient(ellipse 240px 90px at 50% 50%, rgba(232,93,42,0.10), transparent 70%), #FFFFFF',
+            }}
+          >
+            <div className="font-mono text-[10px] tracking-wide2 text-ink-dim">
+              {item.company} · posted {item.age}
+            </div>
+            <div className="mt-1.5 font-sans font-bold text-[18px] md:text-[20px] text-ink leading-tight">
+              {item.role}
+            </div>
+            <div className="mt-1.5 font-mono text-[11px] tracking-wide2 text-ink-dim">
+              {item.salary} · remote-friendly · {item.seniority}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Skills */}
+        <div className="relative px-5 mt-5">
+          <div className="font-mono text-[10px] tracking-wide2 text-ink-ghost">→ skills extracted</div>
+          <div className="mt-2.5 flex items-center gap-2">
+            {item.skills.map((s, idx) => (
+              <motion.span
+                key={s}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.35, delay: 0.15 + idx * 0.08 }}
+                className={`inline-flex items-center px-2 py-0.5 rounded-sm border border-line bg-canvas
+                  font-mono text-[10.5px] tracking-wide2 text-ink
+                  ${idx === 0 ? 'shadow-orange-sm border-orange/40' : ''}`}
+              >
+                {s}
+              </motion.span>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom status bar */}
+        <div className="absolute bottom-0 inset-x-0 px-5 py-3 flex items-center justify-between border-t border-line/60 bg-canvas/80 backdrop-blur-sm">
+          <span className="font-mono text-[10px] tracking-wide2 text-ink-ghost flex items-center gap-1.5">
+            <span className="text-orange">→</span> ingesting JD
+            <span className="inline-flex">
+              <motion.span
+                animate={{ opacity: [0.2, 1, 0.2] }}
+                transition={{ duration: 1.2, repeat: Infinity }}
+                className="text-ink-dim"
+              >...</motion.span>
+            </span>
+          </span>
+          <span className="font-mono text-[10px] tracking-wide2 text-ink-ghost">
+            u / <span className="text-ink-dim">{item.user}</span> · {item.cohort}
+          </span>
+        </div>
       </div>
     </motion.div>
   )
 }
 
-/* ===== PARTICLES (paper dust drifting up) ===== */
+/* ===== COUNT WORD — "100" animates between values like a flap counter ===== */
 
-function Particles() {
-  const dots = useMemo(() => Array.from({ length: 16 }).map((_, i) => ({
-    id: i,
-    left: Math.random() * 100,
-    bottom: -10 - Math.random() * 30,
-    size: 1 + Math.random() * 2,
-    delay: Math.random() * 16,
-    duration: 14 + Math.random() * 10,
-  })), [])
+function CountWord() {
+  const numbers = [42, 87, 134, 100, 216, 178]
+  const [i, setI] = useState(3) // start at "100"
+  useEffect(() => {
+    let timer
+    const cycle = () => {
+      let step = 0
+      const totalSteps = 7
+      const tick = () => {
+        step++
+        setI(() => Math.floor(Math.random() * numbers.length))
+        if (step < totalSteps) {
+          timer = setTimeout(tick, 80 + step * 20)
+        } else {
+          setI(3) // settle on 100
+          timer = setTimeout(cycle, 4000)
+        }
+      }
+      timer = setTimeout(tick, 0)
+    }
+    timer = setTimeout(cycle, 2200)
+    return () => clearTimeout(timer)
+  }, [])
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {dots.map((d) => (
-        <span
-          key={d.id}
-          className="absolute rounded-full bg-noir/20 animate-drift-up"
-          style={{
-            left: `${d.left}%`,
-            bottom: `${d.bottom}%`,
-            width: d.size,
-            height: d.size,
-            animationDelay: `${d.delay}s`,
-            animationDuration: `${d.duration}s`,
-          }}
-        />
-      ))}
-    </div>
-  )
-}
-
-function Check({ children }) {
-  return (
-    <span className="inline-flex items-center gap-1.5">
-      <svg width="11" height="11" viewBox="0 0 14 14" className="text-crimson">
-        <path d="M3 7l3 3 5-7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      </svg>
-      {children}
+    <span className="inline-block tabular relative">
+      <AnimatePresence mode="popLayout">
+        <motion.span
+          key={numbers[i]}
+          initial={{ y: 18, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -18, opacity: 0 }}
+          transition={{ duration: 0.18 }}
+          className="inline-block"
+        >
+          {numbers[i]}
+        </motion.span>
+      </AnimatePresence>
     </span>
   )
 }
 
-function ScribbleSVG() {
+/* ===== EMAIL JOIN BAR ===== */
+
+function EmailJoin() {
+  const [email, setEmail] = useState('')
+  const [joined, setJoined] = useState(false)
+
+  const submit = (e) => {
+    e.preventDefault()
+    if (!email.includes('@')) return
+    setJoined(true)
+    setTimeout(() => setJoined(false), 2400)
+    setEmail('')
+  }
+
   return (
-    <svg viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden>
-      <motion.path
-        d="M2 6 C 30 2, 60 10, 100 5 S 160 8, 198 4"
-        stroke="#C53030"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        fill="none"
-        initial={{ pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 0.85 }}
-        transition={{ duration: 1.2, delay: 1.3, ease }}
+    <form onSubmit={submit} className="relative flex items-center border-b border-ink/40 focus-within:border-orange transition-colors">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="you@email.com"
+        className="flex-1 h-12 bg-transparent font-sans text-[15px] text-ink placeholder-ink-ghost outline-none"
       />
-    </svg>
+      <button
+        type="submit"
+        className="ml-3 font-sans font-semibold text-[14.5px] text-orange hover:text-orange-600 transition-colors"
+      >
+        {joined ? '✓ joined' : 'Join'}
+      </button>
+    </form>
   )
 }

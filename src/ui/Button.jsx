@@ -6,8 +6,8 @@ const Button = forwardRef(function Button(
   ref,
 ) {
   const cls = [
-    'inline-flex items-center justify-center gap-2 font-sans font-medium rounded-full whitespace-nowrap select-none',
-    'transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-crimson/30',
+    'inline-flex items-center justify-center gap-2 font-sans font-semibold rounded-md whitespace-nowrap select-none',
+    'transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-orange/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
     sizeCls[size],
     variantCls[variant],
     disabled ? 'opacity-40 cursor-not-allowed pointer-events-none' : '',
@@ -22,18 +22,19 @@ const Button = forwardRef(function Button(
 })
 
 const sizeCls = {
-  sm: 'h-8 px-3.5 text-[12px]',
+  sm: 'h-8 px-3.5 text-[12.5px]',
   md: 'h-10 px-4 text-[13px]',
   lg: 'h-12 px-6 text-[14px]',
 }
 
 const variantCls = {
-  primary:   'bg-noir text-paper hover:bg-crimson active:scale-[0.98]',
-  crimson:   'bg-crimson text-paper hover:bg-crimson-600 active:scale-[0.98]',
-  secondary: 'bg-paper text-noir border border-noir/15 hover:border-noir/40 active:scale-[0.98]',
-  ghost:     'text-coffee hover:text-noir hover:bg-noir/[0.04]',
-  outline:   'border border-noir/15 text-noir hover:border-crimson/50 hover:text-crimson active:scale-[0.98]',
-  danger:    'bg-crimson/[0.08] border border-crimson/30 text-crimson hover:bg-crimson/[0.14]',
+  primary:   'bg-ink text-bg hover:bg-orange active:scale-[0.98]',
+  crimson:   'bg-orange text-bg hover:bg-orange-600 active:scale-[0.98]',
+  violet:    'bg-orange text-bg hover:bg-orange-600 active:scale-[0.98]',
+  secondary: 'bg-canvas text-ink border border-line hover:border-line-strong active:scale-[0.98]',
+  ghost:     'text-ink-dim hover:text-ink hover:bg-ink/[0.04]',
+  outline:   'border border-line-strong text-ink hover:border-orange/50 hover:text-orange active:scale-[0.98]',
+  danger:    'bg-rose/[0.08] border border-rose/30 text-rose hover:bg-rose/[0.14]',
 }
 
 export default Button

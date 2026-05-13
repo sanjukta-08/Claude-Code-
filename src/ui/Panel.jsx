@@ -1,7 +1,7 @@
 export function Panel({ children, className = '', elev = 1, padded = true, ...props }) {
   return (
     <div
-      className={`relative rounded-xl border ${elevCls[elev]} ${padded ? 'p-5 md:p-6' : ''} ${className}`}
+      className={`relative rounded-md border ${elevCls[elev]} ${padded ? 'p-5 md:p-6' : ''} ${className}`}
       {...props}
     >
       {children}
@@ -10,10 +10,10 @@ export function Panel({ children, className = '', elev = 1, padded = true, ...pr
 }
 
 const elevCls = {
-  0: 'bg-transparent border-noir/8',
-  1: 'bg-paper border-noir/10',
-  2: 'bg-paper border-noir/10 shadow-paper',
-  3: 'bg-cream border-noir/12 shadow-paper-lg',
+  0: 'bg-transparent border-line',
+  1: 'bg-canvas border-line',
+  2: 'bg-canvas border-line shadow-card',
+  3: 'bg-canvas border-line-strong shadow-elev',
 }
 
 export function PanelHeader({ title, kicker, action, className = '' }) {
@@ -21,12 +21,9 @@ export function PanelHeader({ title, kicker, action, className = '' }) {
     <div className={`flex items-center justify-between gap-4 mb-4 ${className}`}>
       <div className="min-w-0">
         {kicker && (
-          <div className="flex items-center gap-2 mb-1">
-            <span className="h-px w-4 bg-crimson/60" />
-            <span className="font-mono text-[9.5px] tracking-wide3 text-crimson font-semibold">{kicker}</span>
-          </div>
+          <div className="font-mono text-[9.5px] tracking-wide2 text-orange font-medium uppercase mb-1">{kicker}</div>
         )}
-        <h3 className="font-serif font-light text-[18px] tracking-tight text-noir truncate" style={{ fontVariationSettings: '"opsz" 60' }}>
+        <h3 className="font-sans font-bold text-[15px] md:text-[16px] tracking-tight text-ink truncate">
           {title}
         </h3>
       </div>
@@ -36,5 +33,5 @@ export function PanelHeader({ title, kicker, action, className = '' }) {
 }
 
 export function Divider({ className = '' }) {
-  return <div className={`h-px bg-noir/8 ${className}`} />
+  return <div className={`h-px bg-line ${className}`} />
 }

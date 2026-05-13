@@ -63,28 +63,28 @@ function CandidateHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease }}
           className="inline-flex items-center gap-3 px-3 h-7 rounded-full
-            border border-crimson/[0.25] bg-crimson/[0.04]
-            font-mono text-[10px] tracking-wide3 text-crimson"
+            border border-orange/[0.25] bg-orange/[0.04]
+            font-mono text-[10px] tracking-wide3 text-orange"
         >
           <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-crimson opacity-60 animate-ping" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-crimson" />
+            <span className="absolute inline-flex h-full w-full rounded-full bg-orange opacity-60 animate-ping" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-orange" />
           </span>
           FOR CANDIDATES
-          <span className="text-crimson/40">·</span>
-          <span className="tabular text-crimson/70">{live.toLocaleString()} SIGNED</span>
+          <span className="text-orange/40">·</span>
+          <span className="tabular text-orange/70">{live.toLocaleString()} SIGNED</span>
         </motion.div>
 
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease }}
-          className="mt-7 font-serif font-light tracking-tighter leading-[0.96]
+          className="mt-7 font-sans font-bold tracking-tighter leading-[0.96]
             text-[44px] sm:text-[60px] md:text-[76px] lg:text-[90px]
-            text-noir max-w-[14ch]"
+            text-ink max-w-[14ch]"
         >
           Get hired for what you can{' '}
-          <span className="text-crimson">do.</span><br />
+          <span className="text-orange">do.</span><br />
           Not what you wrote.
         </motion.h1>
 
@@ -92,7 +92,7 @@ function CandidateHero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease }}
-          className="mt-7 max-w-xl font-sans text-[15.5px] md:text-[17px] leading-[1.65] text-coffee"
+          className="mt-7 max-w-xl font-sans text-[15.5px] md:text-[17px] leading-[1.65] text-ink-dim"
         >
           Take a 72-hour challenge from a real company. Build something real.
           Get scored on what you actually shipped. Earn a credential that doesn't
@@ -108,9 +108,9 @@ function CandidateHero() {
           <MagneticPrimary href="#open" tone="warm">Take a challenge</MagneticPrimary>
           <Link
             to="/"
-            className="font-sans text-[14px] text-coffee hover:text-noir transition inline-flex items-center gap-2"
+            className="font-sans text-[14px] text-ink-dim hover:text-ink transition inline-flex items-center gap-2"
           >
-            <span className="font-mono text-[10px] tracking-wide3 text-coffee-dim">←</span>
+            <span className="font-mono text-[10px] tracking-wide3 text-ink-ghost">←</span>
             Back to home
           </Link>
         </motion.div>
@@ -120,33 +120,33 @@ function CandidateHero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.6, ease }}
-          className="mt-14 md:mt-20 relative rounded-2xl border border-noir/8 bg-cream overflow-hidden  max-w-3xl"
+          className="mt-14 md:mt-20 relative rounded-2xl border border-line bg-bg overflow-hidden  max-w-3xl"
         >
           
           
           
           
 
-          <div className="flex items-center gap-3 px-5 h-10 border-b border-noir/8">
-            <span className="h-2 w-2 rounded-full bg-crimson" />
-            <span className="font-mono text-[9.5px] tracking-wide3 text-coffee">AIQ PROFILE · SAMPLE</span>
-            <span className="font-mono text-[9.5px] tracking-wide3 text-coffee-dim ml-auto">PUBLIC</span>
+          <div className="flex items-center gap-3 px-5 h-10 border-b border-line">
+            <span className="h-2 w-2 rounded-full bg-orange" />
+            <span className="font-mono text-[9.5px] tracking-wide3 text-ink-dim">AIQ PROFILE · SAMPLE</span>
+            <span className="font-mono text-[9.5px] tracking-wide3 text-ink-ghost ml-auto">PUBLIC</span>
           </div>
 
           <div className="p-5 md:p-7">
             <div className="flex items-start gap-4 mb-6">
-              <div className="h-12 w-12 rounded-full border border-crimson/40 bg-crimson/[0.06] flex items-center justify-center font-serif text-crimson">
+              <div className="h-12 w-12 rounded-full border border-orange/40 bg-orange/[0.06] flex items-center justify-center font-sans text-orange">
                 AS
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-serif text-[17px] text-noir">Adi Sharma</div>
-                <div className="font-mono text-[10px] tracking-wide2 text-coffee-dim mt-0.5">
+                <div className="font-sans text-[17px] text-ink">Adi Sharma</div>
+                <div className="font-mono text-[10px] tracking-wide2 text-ink-ghost mt-0.5">
                   AIQ · 742 / 1000 · TOP 9% (Q2 2026)
                 </div>
               </div>
               <div className="hidden sm:flex flex-col items-end">
-                <span className="font-mono text-[9px] tracking-wide3 text-coffee-dim">CHALLENGES</span>
-                <span className="font-serif text-[18px] tabular text-noir">7</span>
+                <span className="font-mono text-[9px] tracking-wide3 text-ink-ghost">CHALLENGES</span>
+                <span className="font-sans text-[18px] tabular text-ink">7</span>
               </div>
             </div>
 
@@ -172,19 +172,19 @@ function DimBar({ d }) {
   const pct = (d.score / 200) * 100
   return (
     <div className="group flex flex-col gap-1.5">
-      <div className="font-mono text-[8.5px] tracking-wide3 text-coffee-dim group-hover:text-crimson transition">
+      <div className="font-mono text-[8.5px] tracking-wide3 text-ink-ghost group-hover:text-orange transition">
         {d.code}
       </div>
-      <div className="relative h-1 bg-noir/[0.06] rounded overflow-hidden">
+      <div className="relative h-1 bg-bg rounded overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           whileInView={{ width: `${pct}%` }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.2, ease }}
-          className="absolute inset-y-0 left-0 bg-crimson"
+          className="absolute inset-y-0 left-0 bg-orange"
         />
       </div>
-      <div className="font-mono text-[10px] tracking-wide2 text-noir tabular">{d.score}</div>
+      <div className="font-mono text-[10px] tracking-wide2 text-ink tabular">{d.score}</div>
     </div>
   )
 }
@@ -194,22 +194,22 @@ function CandidateFlow() {
   const inView = useInView(ref, { once: true, amount: 0.2 })
 
   return (
-    <section ref={ref} className="py-24 md:py-36 border-t border-noir/8">
+    <section ref={ref} className="py-24 md:py-36 border-t border-line">
       <div className="mx-auto max-w-6xl px-5 md:px-10">
         <div className="flex items-center gap-3">
-          <span className="h-px w-8 bg-crimson/60" />
-          <span className="font-mono text-[10px] tracking-wide3 text-crimson">The flow</span>
+          <span className="h-px w-8 bg-orange/60" />
+          <span className="font-mono text-[10px] tracking-wide3 text-orange">The flow</span>
         </div>
 
         <motion.h2
           initial={{ opacity: 0, y: 14 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease }}
-          className="mt-5 max-w-3xl font-serif tracking-tighter
-            text-[32px] md:text-[48px] leading-[1.05] text-noir"
+          className="mt-5 max-w-3xl font-sans tracking-tighter
+            text-[32px] md:text-[48px] leading-[1.05] text-ink"
         >
           72 hours of work.<br />
-          A <span className="text-crimson">permanent</span> credential.
+          A <span className="text-orange">permanent</span> credential.
         </motion.h2>
 
         <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -219,22 +219,22 @@ function CandidateFlow() {
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.1 + i * 0.1, ease }}
-              className="group relative rounded-xl border border-noir/8 bg-cream p-6 md:p-7
-                hover:border-crimson/30 transition-all duration-500 overflow-hidden"
+              className="group relative rounded-xl border border-line bg-bg p-6 md:p-7
+                hover:border-orange/30 transition-all duration-500 overflow-hidden"
             >
               
               
               <div className="flex items-center gap-3 mb-5">
-                <span className="font-mono text-[10px] tracking-wide3 text-crimson">{f.n}</span>
-                <span className="h-px flex-1 bg-noir/[0.06]" />
+                <span className="font-mono text-[10px] tracking-wide3 text-orange">{f.n}</span>
+                <span className="h-px flex-1 bg-bg" />
               </div>
-              <h3 className="font-serif text-[24px] md:text-[28px] tracking-tight text-noir">
+              <h3 className="font-sans text-[24px] md:text-[28px] tracking-tight text-ink">
                 {f.title}
               </h3>
-              <p className="mt-3 font-sans text-[14px] leading-[1.65] text-coffee">
+              <p className="mt-3 font-sans text-[14px] leading-[1.65] text-ink-dim">
                 {f.body}
               </p>
-              <div className="mt-6 font-mono text-[9.5px] tracking-wide3 text-coffee-dim">{f.detail}</div>
+              <div className="mt-6 font-mono text-[9.5px] tracking-wide3 text-ink-ghost">{f.detail}</div>
             </motion.div>
           ))}
         </div>
@@ -247,24 +247,24 @@ function CandidateProfile() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, amount: 0.3 })
   return (
-    <section ref={ref} className="py-24 md:py-36 border-t border-noir/8">
+    <section ref={ref} className="py-24 md:py-36 border-t border-line">
       <div className="mx-auto max-w-6xl px-5 md:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-10 lg:gap-16 items-start">
           <div>
             <div className="flex items-center gap-3">
-              <span className="h-px w-8 bg-crimson/60" />
-              <span className="font-mono text-[10px] tracking-wide3 text-crimson">Your asset</span>
+              <span className="h-px w-8 bg-orange/60" />
+              <span className="font-mono text-[10px] tracking-wide3 text-orange">Your asset</span>
             </div>
             <motion.h2
               initial={{ opacity: 0, y: 14 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, ease }}
-              className="mt-5 font-serif tracking-tighter text-[30px] md:text-[42px] leading-[1.05] text-noir"
+              className="mt-5 font-sans tracking-tighter text-[30px] md:text-[42px] leading-[1.05] text-ink"
             >
-              The score belongs to <span className="text-crimson">you.</span><br />
+              The score belongs to <span className="text-orange">you.</span><br />
               Not to LinkedIn.
             </motion.h2>
-            <p className="mt-6 max-w-md font-sans text-[15px] text-coffee leading-[1.7]">
+            <p className="mt-6 max-w-md font-sans text-[15px] text-ink-dim leading-[1.7]">
               Every challenge you submit becomes part of your AIQ profile — a public,
               Google-indexed record of real work. Verifiable. Portable. Yours. The
               resume becomes the backup document.
@@ -290,16 +290,16 @@ function BigStat({ label, target, suffix = '', prefix = '', trigger, accent, dec
       initial={{ opacity: 0, y: 14 }}
       animate={trigger ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, ease }}
-      className="group relative rounded-xl border border-noir/8 bg-cream p-6 hover:border-crimson/30 transition overflow-hidden"
+      className="group relative rounded-xl border border-line bg-bg p-6 hover:border-orange/30 transition overflow-hidden"
     >
       <div className="flex items-center justify-between">
-        <span className="font-mono text-[9.5px] tracking-wide3 text-coffee-dim">{label}</span>
-        <span className="font-mono text-[9px] tracking-wide3 text-coffee-dim opacity-0 group-hover:opacity-100 transition">
+        <span className="font-mono text-[9.5px] tracking-wide3 text-ink-ghost">{label}</span>
+        <span className="font-mono text-[9px] tracking-wide3 text-ink-ghost opacity-0 group-hover:opacity-100 transition">
           ↗ VERIFIED
         </span>
       </div>
-      <div className={`mt-3 font-serif font-light tracking-tighter tabular text-[44px] md:text-[52px] leading-none
-        ${accent ? 'text-crimson' : 'text-noir'}`}>
+      <div className={`mt-3 font-sans font-bold tracking-tighter tabular text-[44px] md:text-[52px] leading-none
+        ${accent ? 'text-orange' : 'text-ink'}`}>
         {prefix}{display}{suffix}
       </div>
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent opacity-0 group-hover:opacity-100 transition" />
@@ -312,32 +312,32 @@ function CandidateOpen() {
   const inView = useInView(ref, { once: true, amount: 0.2 })
 
   return (
-    <section ref={ref} id="open" className="py-24 md:py-36 border-t border-noir/8">
+    <section ref={ref} id="open" className="py-24 md:py-36 border-t border-line">
       <div className="mx-auto max-w-6xl px-5 md:px-10">
         <div className="flex items-center gap-3">
-          <span className="h-px w-8 bg-crimson/60" />
-          <span className="font-mono text-[10px] tracking-wide3 text-crimson">Open challenges · sample</span>
+          <span className="h-px w-8 bg-orange/60" />
+          <span className="font-mono text-[10px] tracking-wide3 text-orange">Open challenges · sample</span>
         </div>
 
         <motion.h2
           initial={{ opacity: 0, y: 14 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease }}
-          className="mt-5 max-w-3xl font-serif tracking-tighter text-[30px] md:text-[42px] leading-[1.05] text-noir"
+          className="mt-5 max-w-3xl font-sans tracking-tighter text-[30px] md:text-[42px] leading-[1.05] text-ink"
         >
-          Live <span className="text-crimson">right now.</span>
+          Live <span className="text-orange">right now.</span>
         </motion.h2>
 
-        <div className="mt-10 rounded-2xl border border-noir/8 bg-cream overflow-hidden">
-          <div className="flex items-center gap-3 px-5 h-11 border-b border-noir/8">
+        <div className="mt-10 rounded-2xl border border-line bg-bg overflow-hidden">
+          <div className="flex items-center gap-3 px-5 h-11 border-b border-line">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-moss opacity-50 animate-ping" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-moss" />
+              <span className="absolute inline-flex h-full w-full rounded-full bg-sage opacity-50 animate-ping" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-sage" />
             </span>
-            <span className="font-mono text-[10px] tracking-wide3 text-coffee">LIVE · OPEN FOR SUBMISSION</span>
+            <span className="font-mono text-[10px] tracking-wide3 text-ink-dim">LIVE · OPEN FOR SUBMISSION</span>
           </div>
 
-          <div className="divide-y divide-noir/6">
+          <div className="divide-y divide-line/70">
             {OPEN_CHALLENGES.map((c, i) => (
               <motion.a
                 key={c.co + i}
@@ -346,21 +346,21 @@ function CandidateOpen() {
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.55, delay: 0.1 + i * 0.08, ease }}
                 className="group grid grid-cols-2 sm:grid-cols-[1.4fr_1fr_1fr_auto] gap-3 sm:gap-5 items-center px-5 py-4
-                  hover:bg-crimson/[0.03] transition-colors"
+                  hover:bg-orange/[0.04] transition-colors"
               >
                 <div>
-                  <div className="font-serif text-[15px] text-noir group-hover:text-crimson transition-colors">
+                  <div className="font-sans text-[15px] text-ink group-hover:text-orange transition-colors">
                     {c.co}
                   </div>
-                  <div className="font-sans text-[12.5px] text-coffee-dim">{c.role}</div>
+                  <div className="font-sans text-[12.5px] text-ink-ghost">{c.role}</div>
                 </div>
-                <div className="hidden sm:block font-mono text-[10px] tracking-wide2 text-crimson">
+                <div className="hidden sm:block font-mono text-[10px] tracking-wide2 text-orange">
                   {c.reward}
                 </div>
-                <div className="font-mono text-[10px] tracking-wide2 text-coffee">
-                  <span className="text-coffee-dim">DEADLINE</span> · <span className="tabular">{c.deadline}</span>
+                <div className="font-mono text-[10px] tracking-wide2 text-ink-dim">
+                  <span className="text-ink-ghost">DEADLINE</span> · <span className="tabular">{c.deadline}</span>
                 </div>
-                <div className="font-mono text-[10px] tracking-wide2 text-coffee-dim tabular text-right">
+                <div className="font-mono text-[10px] tracking-wide2 text-ink-ghost tabular text-right">
                   {c.subs} submissions
                 </div>
               </motion.a>
@@ -374,18 +374,18 @@ function CandidateOpen() {
 
 function CandidateCTA() {
   return (
-    <section className="py-28 md:py-44 border-t border-noir/8">
+    <section className="py-28 md:py-44 border-t border-line">
       <div className="mx-auto max-w-3xl px-5 md:px-10 text-center">
         <div className="inline-flex items-center gap-3">
-          <span className="h-px w-8 bg-crimson/60" />
-          <span className="font-mono text-[10px] tracking-wide3 text-crimson">Your next 72 hours</span>
-          <span className="h-px w-8 bg-crimson/60" />
+          <span className="h-px w-8 bg-orange/60" />
+          <span className="font-mono text-[10px] tracking-wide3 text-orange">Your next 72 hours</span>
+          <span className="h-px w-8 bg-orange/60" />
         </div>
-        <h2 className="mt-6 font-serif tracking-tighter text-[36px] md:text-[56px] leading-[1.02] text-noir">
+        <h2 className="mt-6 font-sans tracking-tighter text-[36px] md:text-[56px] leading-[1.02] text-ink">
           Your work is the only<br />
-          <span className="text-crimson">resume</span> you need.
+          <span className="text-orange">resume</span> you need.
         </h2>
-        <p className="mt-6 font-sans text-[15px] text-coffee leading-[1.65] max-w-xl mx-auto">
+        <p className="mt-6 font-sans text-[15px] text-ink-dim leading-[1.65] max-w-xl mx-auto">
           Pick one challenge. Spend 72 hours on it. Walk away with a credential that
           actually says something. The downside is zero. The upside is uncapped.
         </p>
@@ -393,10 +393,10 @@ function CandidateCTA() {
           <MagneticPrimary href="#open" tone="warm">Take a challenge</MagneticPrimary>
           <Link
             to="/employer"
-            className="font-sans text-[14px] text-coffee hover:text-noir transition inline-flex items-center gap-2"
+            className="font-sans text-[14px] text-ink-dim hover:text-ink transition inline-flex items-center gap-2"
           >
             I'm an employer
-            <span className="font-mono text-[10px] tracking-wide3 text-coffee-dim">→</span>
+            <span className="font-mono text-[10px] tracking-wide3 text-ink-ghost">→</span>
           </Link>
         </div>
       </div>
@@ -427,8 +427,8 @@ function MagneticPrimary({ href, tone = 'warm', children }) {
         className={`inline-flex items-center gap-2.5 px-6 h-12 rounded-full font-sans text-[14px] font-semibold
           transition-shadow duration-300 will-change-transform
           ${warm
-            ? 'bg-crimson text-ink hover:shadow-paper'
-            : 'bg-bone text-ink hover:shadow-paper'}`}
+            ? 'bg-orange text-ink hover:shadow-card'
+            : 'bg-bone text-ink hover:shadow-card'}`}
       >
         {children}
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">

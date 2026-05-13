@@ -1,4 +1,4 @@
-export default function Sparkline({ values = [], color = '#C53030', strokeWidth = 1.5, className = '', filled = true }) {
+export default function Sparkline({ values = [], color = '#E85D2A', strokeWidth = 1.5, className = '', filled = true }) {
   if (!values.length) return null
   const W = 100, H = 32
   const min = Math.min(...values)
@@ -16,7 +16,7 @@ export default function Sparkline({ values = [], color = '#C53030', strokeWidth 
         <>
           <defs>
             <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={color} stopOpacity="0.18" />
+              <stop offset="0%" stopColor={color} stopOpacity="0.20" />
               <stop offset="100%" stopColor={color} stopOpacity="0" />
             </linearGradient>
           </defs>

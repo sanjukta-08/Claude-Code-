@@ -28,10 +28,10 @@ export default function ChallengeDetailPage() {
   return (
     <PageShell>
       {/* Breadcrumb */}
-      <div className="mb-5 flex items-center gap-2 font-mono text-[10px] tracking-wide3 text-coffee-dim">
-        <Link to="/app/challenges" className="hover:text-noir transition">CHALLENGES</Link>
+      <div className="mb-5 flex items-center gap-2 font-mono text-[10px] tracking-wide3 text-ink-ghost">
+        <Link to="/app/challenges" className="hover:text-ink transition">CHALLENGES</Link>
         <IconChevronRight size={11} />
-        <span className="text-noir">{challenge.id}</span>
+        <span className="text-ink">{challenge.id}</span>
       </div>
 
       <motion.div
@@ -47,15 +47,15 @@ export default function ChallengeDetailPage() {
             <Avatar logo={challenge.company.logo} size="xl" tone="gold" />
             <div className="min-w-0">
               <div className="flex items-center gap-2 mb-2 flex-wrap">
-                <span className="font-serif text-[14px] text-noir">{challenge.company.name}</span>
-                <span className="font-mono text-[10px] text-coffee-dim">·</span>
-                <span className="font-mono text-[10px] tracking-wide2 text-coffee-dim">{challenge.id}</span>
+                <span className="font-sans text-[14px] text-ink">{challenge.company.name}</span>
+                <span className="font-mono text-[10px] text-ink-ghost">·</span>
+                <span className="font-mono text-[10px] tracking-wide2 text-ink-ghost">{challenge.id}</span>
                 <Pill tone={challenge.tier === 'premium' ? 'premium' : 'standard'}>{challenge.tier}</Pill>
               </div>
-              <h1 className="font-serif font-light tracking-tighter text-[30px] md:text-[42px] leading-[1.05] text-noir">
+              <h1 className="font-sans font-bold tracking-tighter text-[30px] md:text-[42px] leading-[1.05] text-ink">
                 {challenge.role}
               </h1>
-              <p className="mt-4 font-sans text-[15px] text-coffee leading-[1.65] max-w-2xl">
+              <p className="mt-4 font-sans text-[15px] text-ink-dim leading-[1.65] max-w-2xl">
                 72 hours of real work. Scored across 5 dimensions. Top {challenge.topN} earn a guaranteed
                 interview with {challenge.company.name}.
               </p>
@@ -64,8 +64,8 @@ export default function ChallengeDetailPage() {
 
           {/* Brief */}
           <Section kicker="01 · THE BRIEF" title="What you'll build">
-            <Panel className="bg-crimson/[0.03] border-crimson/15">
-              <pre className="font-mono text-[12.5px] md:text-[13px] leading-[1.8] text-noir whitespace-pre-wrap">
+            <Panel className="bg-orange/[0.03] border-orange/15">
+              <pre className="font-mono text-[12.5px] md:text-[13px] leading-[1.8] text-ink whitespace-pre-wrap">
 {challenge.brief}
               </pre>
             </Panel>
@@ -73,7 +73,7 @@ export default function ChallengeDetailPage() {
 
           {/* Rubric */}
           <Section kicker="02 · THE RUBRIC" title="How you'll be scored — fully public">
-            <p className="font-sans text-[13.5px] text-coffee mb-4 max-w-2xl">
+            <p className="font-sans text-[13.5px] text-ink-dim mb-4 max-w-2xl">
               Five dimensions. 200 points each. Total 1,000. Knowing what gets measured is half the work.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -81,12 +81,12 @@ export default function ChallengeDetailPage() {
                 <Panel key={code} className="!p-4">
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] tracking-wide3 text-crimson">{code}</span>
-                      <span className="font-serif text-[14px] text-noir">{d.name}</span>
+                      <span className="font-mono text-[10px] tracking-wide3 text-orange">{code}</span>
+                      <span className="font-sans text-[14px] text-ink">{d.name}</span>
                     </div>
-                    <span className="font-mono text-[10px] tracking-wide2 text-coffee-dim">/ {d.max}</span>
+                    <span className="font-mono text-[10px] tracking-wide2 text-ink-ghost">/ {d.max}</span>
                   </div>
-                  <p className="font-sans text-[12.5px] text-coffee leading-[1.55]">{d.desc}</p>
+                  <p className="font-sans text-[12.5px] text-ink-dim leading-[1.55]">{d.desc}</p>
                 </Panel>
               ))}
             </div>
@@ -111,26 +111,26 @@ export default function ChallengeDetailPage() {
             />
 
             <div className="flex items-center gap-2 mb-2">
-              <IconClock size={13} className="text-crimson" />
-              <span className="font-mono text-[9.5px] tracking-wide3 text-coffee-dim">DEADLINE</span>
+              <IconClock size={13} className="text-orange" />
+              <span className="font-mono text-[9.5px] tracking-wide3 text-ink-ghost">DEADLINE</span>
             </div>
-            <div className="font-serif font-light tracking-tighter text-[28px] text-noir leading-none">
+            <div className="font-sans font-bold tracking-tighter text-[28px] text-ink leading-none">
               <Countdown deadline={challenge.deadline} className="text-[28px]" />
             </div>
-            <div className="font-mono text-[10px] tracking-wide2 text-coffee-dim mt-2">
+            <div className="font-mono text-[10px] tracking-wide2 text-ink-ghost mt-2">
               {shortDate(challenge.deadline)}
             </div>
 
-            <div className="my-5 h-px bg-noir/[0.06]" />
+            <div className="my-5 h-px bg-bg" />
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <div className="font-mono text-[9px] tracking-wide3 text-coffee-dim">REWARD</div>
-                <div className="mt-1 font-mono text-[11.5px] text-crimson">{challenge.bounty}</div>
+                <div className="font-mono text-[9px] tracking-wide3 text-ink-ghost">REWARD</div>
+                <div className="mt-1 font-mono text-[11.5px] text-orange">{challenge.bounty}</div>
               </div>
               <div>
-                <div className="font-mono text-[9px] tracking-wide3 text-coffee-dim">SUBMISSIONS</div>
-                <div className="mt-1 font-serif text-[16px] text-noir tabular">{allSubs.length}</div>
+                <div className="font-mono text-[9px] tracking-wide3 text-ink-ghost">SUBMISSIONS</div>
+                <div className="mt-1 font-sans text-[16px] text-ink tabular">{allSubs.length}</div>
               </div>
             </div>
 
@@ -148,7 +148,7 @@ export default function ChallengeDetailPage() {
               )}
             </div>
 
-            <div className="mt-4 font-mono text-[9.5px] tracking-wide3 text-coffee-dim text-center">
+            <div className="mt-4 font-mono text-[9.5px] tracking-wide3 text-ink-ghost text-center">
               NO RESUME · NO COVER LETTER
             </div>
           </Panel>
@@ -162,10 +162,10 @@ function Section({ kicker, title, children }) {
   return (
     <section className="mt-10 first:mt-0">
       <div className="flex items-center gap-2.5 mb-2">
-        <span className="h-px w-5 bg-crimson/60" />
-        <span className="font-mono text-[10px] tracking-wide3 text-crimson">{kicker}</span>
+        <span className="h-px w-5 bg-orange/60" />
+        <span className="font-mono text-[10px] tracking-wide3 text-orange">{kicker}</span>
       </div>
-      <h2 className="font-serif tracking-tighter text-[22px] md:text-[26px] text-noir mb-5">
+      <h2 className="font-sans tracking-tighter text-[22px] md:text-[26px] text-ink mb-5">
         {title}
       </h2>
       {children}
@@ -177,13 +177,13 @@ function Part({ n, title, body, icon }) {
   return (
     <Panel className="!p-5">
       <div className="flex items-center gap-2 mb-3">
-        <span className="h-7 w-7 rounded-md border border-crimson/30 bg-crimson/[0.06] flex items-center justify-center text-crimson">
+        <span className="h-7 w-7 rounded-md border border-orange/30 bg-orange/[0.06] flex items-center justify-center text-orange">
           {icon}
         </span>
-        <span className="font-mono text-[10px] tracking-wide3 text-crimson">PART {n}</span>
+        <span className="font-mono text-[10px] tracking-wide3 text-orange">PART {n}</span>
       </div>
-      <div className="font-serif text-[15px] text-noir mb-1.5">{title}</div>
-      <p className="font-sans text-[12.5px] text-coffee leading-[1.6]">{body}</p>
+      <div className="font-sans text-[15px] text-ink mb-1.5">{title}</div>
+      <p className="font-sans text-[12.5px] text-ink-dim leading-[1.6]">{body}</p>
     </Panel>
   )
 }

@@ -42,7 +42,7 @@ export default function SubmissionPage() {
 
   return (
     <PageShell>
-      <Link to="/app/me" className="font-mono text-[10px] tracking-wide3 text-coffee-dim hover:text-crimson transition inline-flex items-center gap-1.5">
+      <Link to="/app/me" className="font-mono text-[10px] tracking-wide3 text-ink-ghost hover:text-orange transition inline-flex items-center gap-1.5">
         <IconChevronLeft size={11} /> BACK TO VAULT
       </Link>
 
@@ -58,17 +58,17 @@ export default function SubmissionPage() {
           >
             <div className="relative">
               <div className="absolute inset-0 -z-10" style={{ background: 'radial-gradient(ellipse at center, rgba(197,48,48,0.10), transparent 60%)' }} />
-              <div className="font-mono text-[10px] tracking-wide3 text-crimson mb-5 inline-flex items-center gap-2">
+              <div className="font-mono text-[10px] tracking-wide3 text-orange mb-5 inline-flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-crimson opacity-60 animate-ping" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-crimson" />
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-orange opacity-60 animate-ping" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-orange" />
                 </span>
                 SCORING · 5 DIMENSIONS · SEALING
               </div>
-              <div className="font-serif font-light tracking-tighter text-[100px] md:text-[160px] leading-none text-noir tabular animate-pulse-soft">
-                <span className="text-crimson">...</span>
+              <div className="font-sans font-bold tracking-tighter text-[100px] md:text-[160px] leading-none text-ink tabular animate-pulse-soft">
+                <span className="text-orange">...</span>
               </div>
-              <div className="mt-5 font-mono text-[10.5px] tracking-wide3 text-coffee-dim">
+              <div className="mt-5 font-mono text-[10.5px] tracking-wide3 text-ink-ghost">
                 DELEGATION · DISCERNMENT · DILIGENCE · DEPLOYMENT · DIRECTION
               </div>
             </div>
@@ -82,7 +82,7 @@ export default function SubmissionPage() {
             className="mt-6"
           >
             {/* HERO RESULT CARD */}
-            <Panel padded={false} className="relative overflow-hidden border-crimson/30 bg-gradient-to-br from-crimson/[0.04] to-transparent">
+            <Panel padded={false} className="relative overflow-hidden border-orange/30 bg-gradient-to-br from-orange/[0.04] to-transparent">
               <div className="absolute inset-0 -z-10" style={{ background: 'radial-gradient(ellipse 600px 300px at 80% 20%, rgba(197,48,48,0.08), transparent 60%)' }} />
               
               
@@ -94,15 +94,15 @@ export default function SubmissionPage() {
                   <div className="flex items-center gap-3 mb-4">
                     <Avatar logo={challenge?.company.logo} size="md" tone="gold" />
                     <div>
-                      <div className="font-serif text-[14px] text-noir">{challenge?.company.name}</div>
-                      <div className="font-mono text-[10px] tracking-wide2 text-coffee-dim">{challenge?.id} · {challenge?.role}</div>
+                      <div className="font-sans text-[14px] text-ink">{challenge?.company.name}</div>
+                      <div className="font-mono text-[10px] tracking-wide2 text-ink-ghost">{challenge?.id} · {challenge?.role}</div>
                     </div>
                   </div>
 
-                  <div className="font-mono text-[10px] tracking-wide3 text-crimson mb-3">YOUR AIQ SCORE</div>
-                  <div className="font-serif font-light tracking-tighter text-[88px] md:text-[140px] leading-[0.95] text-noir tabular">
+                  <div className="font-mono text-[10px] tracking-wide3 text-orange mb-3">YOUR AIQ SCORE</div>
+                  <div className="font-sans font-bold tracking-tighter text-[88px] md:text-[140px] leading-[0.95] text-ink tabular">
                     {counted}
-                    <span className="font-mono text-[20px] md:text-[24px] text-crimson align-top ml-2">/1000</span>
+                    <span className="font-mono text-[20px] md:text-[24px] text-orange align-top ml-2">/1000</span>
                   </div>
 
                   <div className="mt-5 flex flex-wrap items-center gap-2">
@@ -116,14 +116,14 @@ export default function SubmissionPage() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.5, duration: 0.5 }}
-                    className="rounded-xl border border-crimson/40 bg-crimson/[0.08] p-5 max-w-[280px]"
+                    className="rounded-xl border border-orange/40 bg-orange/[0.08] p-5 max-w-[280px]"
                   >
                     <div className="flex items-center gap-2 mb-2">
-                      <IconAward size={14} className="text-crimson" />
-                      <span className="font-mono text-[9.5px] tracking-wide3 text-crimson">GUARANTEED INTERVIEW</span>
+                      <IconAward size={14} className="text-orange" />
+                      <span className="font-mono text-[9.5px] tracking-wide3 text-orange">GUARANTEED INTERVIEW</span>
                     </div>
-                    <div className="font-serif text-[18px] text-noir leading-tight">You earned it.</div>
-                    <p className="mt-2 font-sans text-[12.5px] text-coffee leading-[1.55]">
+                    <div className="font-sans text-[18px] text-ink leading-tight">You earned it.</div>
+                    <p className="mt-2 font-sans text-[12.5px] text-ink-dim leading-[1.55]">
                       Top {challenge.topN} of {allSubs.length}. {challenge.company.name} has been notified.
                       Watch your email.
                     </p>
@@ -132,14 +132,14 @@ export default function SubmissionPage() {
               </div>
 
               {/* Action bar */}
-              <div className="border-t border-noir/10 px-7 md:px-10 py-4 flex flex-wrap items-center gap-3 bg-cream">
+              <div className="border-t border-line px-7 md:px-10 py-4 flex flex-wrap items-center gap-3 bg-bg">
                 <Button to="/app/me" iconRight={<IconArrowRight size={13} />}>
                   View my AIQ profile
                 </Button>
                 <Button to="/app/challenges" variant="outline">
                   Take another challenge
                 </Button>
-                <button className="ml-auto inline-flex items-center gap-1.5 font-mono text-[10.5px] tracking-wide3 text-coffee hover:text-crimson transition">
+                <button className="ml-auto inline-flex items-center gap-1.5 font-mono text-[10.5px] tracking-wide3 text-ink-dim hover:text-orange transition">
                   <IconArrowUpRight size={12} /> SHARE ON LINKEDIN
                 </button>
               </div>
@@ -148,10 +148,10 @@ export default function SubmissionPage() {
             {/* DIMENSIONS */}
             <section className="mt-10">
               <div className="flex items-center gap-2.5 mb-4">
-                <span className="h-px w-5 bg-crimson/60" />
-                <span className="font-mono text-[10px] tracking-wide3 text-crimson">DIMENSION BREAKDOWN</span>
+                <span className="h-px w-5 bg-orange/60" />
+                <span className="font-mono text-[10px] tracking-wide3 text-orange">DIMENSION BREAKDOWN</span>
               </div>
-              <h2 className="font-serif tracking-tighter text-[22px] md:text-[26px] text-noir mb-5">
+              <h2 className="font-sans tracking-tighter text-[22px] md:text-[26px] text-ink mb-5">
                 Why this score, dimension by dimension.
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -164,37 +164,37 @@ export default function SubmissionPage() {
             {/* SUBMITTED WORK */}
             <section className="mt-10">
               <div className="flex items-center gap-2.5 mb-4">
-                <span className="h-px w-5 bg-crimson/60" />
-                <span className="font-mono text-[10px] tracking-wide3 text-crimson">YOUR SUBMISSION</span>
+                <span className="h-px w-5 bg-orange/60" />
+                <span className="font-mono text-[10px] tracking-wide3 text-orange">YOUR SUBMISSION</span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <Panel>
-                  <div className="font-mono text-[9.5px] tracking-wide3 text-coffee-dim mb-2">PART 1 · DELIVERABLE</div>
+                  <div className="font-mono text-[9.5px] tracking-wide3 text-ink-ghost mb-2">PART 1 · DELIVERABLE</div>
                   <a href={sub.deliverableUrl} target="_blank" rel="noreferrer"
-                    className="group inline-flex items-center gap-2 font-mono text-[12.5px] text-crimson hover:text-crimson break-all">
+                    className="group inline-flex items-center gap-2 font-mono text-[12.5px] text-orange hover:text-orange break-all">
                     <span className="truncate">{sub.deliverableUrl}</span>
                     <IconExternal size={12} className="flex-shrink-0" />
                   </a>
                 </Panel>
                 <Panel>
-                  <div className="font-mono text-[9.5px] tracking-wide3 text-coffee-dim mb-2">
+                  <div className="font-mono text-[9.5px] tracking-wide3 text-ink-ghost mb-2">
                     PART 3 · PROCESS TRAIL · {sub.processTrail.length} ITEMS
                   </div>
                   <ul className="space-y-1.5">
                     {sub.processTrail.map((t, i) => (
-                      <li key={i} className="font-mono text-[11.5px] text-coffee flex gap-3">
-                        <span className="text-coffee-dim tabular w-6">{String(i + 1).padStart(2, '0')}</span>
+                      <li key={i} className="font-mono text-[11.5px] text-ink-dim flex gap-3">
+                        <span className="text-ink-ghost tabular w-6">{String(i + 1).padStart(2, '0')}</span>
                         <span className="truncate">{t}</span>
                       </li>
                     ))}
                   </ul>
                 </Panel>
                 <Panel className="md:col-span-2">
-                  <div className="font-mono text-[9.5px] tracking-wide3 text-coffee-dim mb-2">
+                  <div className="font-mono text-[9.5px] tracking-wide3 text-ink-ghost mb-2">
                     PART 2 · REFLECTION · {sub.reflection.trim().split(/\s+/).length} WORDS
                   </div>
-                  <p className="font-sans text-[13.5px] text-coffee leading-[1.75] whitespace-pre-wrap">{sub.reflection}</p>
+                  <p className="font-sans text-[13.5px] text-ink-dim leading-[1.75] whitespace-pre-wrap">{sub.reflection}</p>
                 </Panel>
               </div>
             </section>
@@ -219,7 +219,7 @@ function RankPill({ rank, total, pct, closed, inTopN }) {
 function CertPill({ candidate, challenge, score }) {
   return (
     <Pill tone="neutral">
-      <IconCheck size={10} className="text-crimson" />
+      <IconCheck size={10} className="text-orange" />
       CERT · {candidate?.name?.split(' ')[0]?.toUpperCase() || 'YOU'} · {score} · {challenge?.company?.name?.toUpperCase()}
     </Pill>
   )

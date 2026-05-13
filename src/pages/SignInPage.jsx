@@ -2,10 +2,8 @@ import { useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
-import { Panel } from '../ui/Panel'
 import Button from '../ui/Button'
 import { Field, Input } from '../ui/Field'
-import Pill from '../ui/Pill'
 import { IconArrowRight, IconChevronLeft, IconUser, IconBriefcase } from '../ui/Icons'
 
 const ease = [0.22, 1, 0.36, 1]
@@ -16,15 +14,17 @@ export default function SignInPage() {
   const next = params.get('next')
 
   return (
-    <main className="min-h-screen paper-bg text-noir flex flex-col">
-      <header className="flex items-center justify-between px-6 md:px-10 py-5">
+    <main className="min-h-screen bg-bg text-ink flex flex-col">
+      <header className="flex items-center justify-between px-6 md:px-10 py-5 border-b border-line">
         <Link to="/" className="inline-flex items-center gap-2">
-          <Mark />
-          <span className="font-serif font-light tracking-wide2 text-[13px] text-noir">PROOF</span>
-          <span className="font-mono text-[9px] tracking-wide3 text-coffee-dim">· SIGN IN</span>
+          <span className="inline-flex items-center justify-center h-5 w-5 rounded-sm bg-orange text-bg">
+            <span className="font-mono font-bold text-[10px] leading-none">p</span>
+          </span>
+          <span className="font-sans font-bold tracking-tight text-[15px] text-ink">proof</span>
+          <span className="font-mono text-[10px] tracking-wide2 text-ink-ghost">/ sign in</span>
         </Link>
-        <Link to="/" className="font-mono text-[10px] tracking-wide3 text-coffee-dim hover:text-crimson transition">
-          ← BACK TO HOME
+        <Link to="/" className="font-mono text-[10px] tracking-wide2 text-ink-ghost hover:text-orange transition">
+          ← back to home
         </Link>
       </header>
 
@@ -38,8 +38,8 @@ export default function SignInPage() {
         </div>
       </div>
 
-      <footer className="px-6 md:px-10 py-5 font-mono text-[10px] tracking-wide3 text-coffee-dim text-center">
-        DEMO MODE · NO EMAIL VERIFICATION · DATA PERSISTS IN BROWSER
+      <footer className="px-6 md:px-10 py-5 border-t border-line font-mono text-[10px] tracking-wide2 text-ink-ghost text-center">
+        → demo mode · no email verification · data persists in browser
       </footer>
     </main>
   )
@@ -47,63 +47,46 @@ export default function SignInPage() {
 
 function ModePicker({ setMode }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.5, ease }}
-    >
-      <Pill tone="gold" className="mb-5">CHOOSE YOUR DOOR</Pill>
-      <h1 className="font-serif font-light tracking-tighter text-[36px] leading-[1.02] text-noir mb-3">
+    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.5, ease }}>
+      <div className="font-mono text-[10px] tracking-wide2 text-orange mb-4">[ choose your door ]</div>
+      <h1 className="font-sans font-black tracking-tighter text-[40px] leading-[0.98] text-ink mb-3">
         How will you<br/>enter PROOF?
       </h1>
-      <p className="font-sans text-[14px] text-coffee leading-[1.6] mb-8">
+      <p className="font-sans text-[14px] text-ink-dim leading-[1.55] mb-8">
         Demo mode — no email verification needed. Your data persists in this browser.
       </p>
 
       <div className="space-y-3">
-        <ModeCard
-          onClick={() => setMode('candidate')}
-          tone="gold"
-          kicker="CANDIDATE"
-          title="I'm taking challenges"
-          sub="Discover live challenges. Ship work. Earn your AIQ score."
-          icon={<IconUser size={16} />}
-        />
-        <ModeCard
-          onClick={() => setMode('admin')}
-          tone="blue"
-          kicker="ADMIN · EMPLOYER"
-          title="I'm posting challenges"
-          sub="Paste a JD. Generate a brief. Score the leaderboard."
-          icon={<IconBriefcase size={16} />}
-        />
+        <ModeCard onClick={() => setMode('candidate')} tone="orange" kicker="[ 01 · candidate ]"
+          title="I'm taking challenges" sub="Discover live challenges. Ship work. Earn your AIQ score."
+          icon={<IconUser size={16} />} />
+        <ModeCard onClick={() => setMode('admin')} tone="ink" kicker="[ 02 · admin · employer ]"
+          title="I'm posting challenges" sub="Paste a JD. Generate a brief. Score the leaderboard."
+          icon={<IconBriefcase size={16} />} />
       </div>
     </motion.div>
   )
 }
 
 function ModeCard({ onClick, tone, kicker, title, sub, icon }) {
-  const cls = tone === 'gold'
-    ? 'hover:border-crimson/40 hover:bg-crimson/[0.04]'
-    : 'hover:border-noir/40 hover:bg-noir/[0.05]'
-  const iconCls = tone === 'gold'
-    ? 'bg-crimson/[0.08] border-crimson/30 text-crimson'
-    : 'bg-noir/[0.05] border-noir/25 text-noir'
-  const accentCls = tone === 'gold' ? 'text-crimson' : 'text-noir'
+  const cls = tone === 'orange'
+    ? 'hover:border-orange hover:bg-orange/[0.04]'
+    : 'hover:border-ink hover:bg-ink/[0.03]'
+  const iconCls = tone === 'orange'
+    ? 'bg-orange/[0.10] border-orange/30 text-orange'
+    : 'bg-canvas border-line-strong text-ink'
+  const accentCls = tone === 'orange' ? 'text-orange' : 'text-ink'
   return (
-    <button
-      onClick={onClick}
-      className={`group w-full text-left rounded-xl border border-noir/10 bg-paper p-5 transition-all duration-200 ${cls}`}
-    >
+    <button onClick={onClick}
+      className={`group w-full text-left rounded-md border border-line bg-canvas p-5 transition-all duration-200 ${cls}`}>
       <div className="flex items-center gap-4">
-        <span className={`h-10 w-10 rounded-md border flex items-center justify-center ${iconCls}`}>
+        <span className={`h-10 w-10 rounded-sm border flex items-center justify-center ${iconCls}`}>
           {icon}
         </span>
         <div className="flex-1 min-w-0">
-          <div className={`font-mono text-[9.5px] tracking-wide3 mb-1 ${accentCls}`}>{kicker}</div>
-          <div className="font-serif text-[16px] text-noir">{title}</div>
-          <div className="font-sans text-[12.5px] text-coffee mt-0.5">{sub}</div>
+          <div className={`font-mono text-[9.5px] tracking-wide2 mb-1 ${accentCls}`}>{kicker}</div>
+          <div className="font-sans font-bold text-[16px] text-ink">{title}</div>
+          <div className="font-sans text-[12.5px] text-ink-dim mt-0.5">{sub}</div>
         </div>
         <IconArrowRight size={14} className={`${accentCls} group-hover:translate-x-0.5 transition`} />
       </div>
@@ -115,10 +98,7 @@ function CandidateSignIn({ next, onBack }) {
   const { signInAsCandidate } = useAuth()
   const navigate = useNavigate()
   const [form, setForm] = useState({
-    name: 'Adi Sharma',
-    email: 'adi@example.com',
-    linkedin: 'linkedin.com/in/adisharma',
-    currentRole: 'Product Manager · Acme',
+    name: 'Adi Sharma', email: 'adi@example.com', linkedin: 'linkedin.com/in/adisharma', currentRole: 'Product Manager · Acme',
   })
 
   const submit = (e) => {
@@ -129,20 +109,15 @@ function CandidateSignIn({ next, onBack }) {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 12 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -12 }}
-      transition={{ duration: 0.35 }}
-    >
-      <button onClick={onBack} className="font-mono text-[10px] tracking-wide3 text-coffee-dim hover:text-crimson transition mb-5 inline-flex items-center gap-1.5">
-        <IconChevronLeft size={11} /> BACK
+    <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }} transition={{ duration: 0.35 }}>
+      <button onClick={onBack} className="font-mono text-[10px] tracking-wide2 text-ink-ghost hover:text-orange transition mb-5 inline-flex items-center gap-1.5">
+        <IconChevronLeft size={11} /> back
       </button>
-      <Pill tone="gold" className="mb-3">AS CANDIDATE</Pill>
-      <h1 className="font-serif font-light tracking-tighter text-[28px] leading-[1.05] text-noir mb-2">
-        Two minutes. No resume.
+      <div className="font-mono text-[10px] tracking-wide2 text-orange mb-3">[ as candidate ]</div>
+      <h1 className="font-sans font-black tracking-tighter text-[32px] leading-[0.98] text-ink mb-2">
+        Two minutes. No résumé.
       </h1>
-      <p className="font-sans text-[13.5px] text-coffee mb-7">
+      <p className="font-sans text-[13.5px] text-ink-dim mb-7">
         Just enough to issue your certificates and credit your AIQ.
       </p>
 
@@ -171,20 +146,15 @@ function AdminSignIn({ next, onBack }) {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 12 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -12 }}
-      transition={{ duration: 0.35 }}
-    >
-      <button onClick={onBack} className="font-mono text-[10px] tracking-wide3 text-coffee-dim hover:text-crimson transition mb-5 inline-flex items-center gap-1.5">
-        <IconChevronLeft size={11} /> BACK
+    <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }} transition={{ duration: 0.35 }}>
+      <button onClick={onBack} className="font-mono text-[10px] tracking-wide2 text-ink-ghost hover:text-orange transition mb-5 inline-flex items-center gap-1.5">
+        <IconChevronLeft size={11} /> back
       </button>
-      <Pill tone="blue" className="mb-3">AS ADMIN</Pill>
-      <h1 className="font-serif font-light tracking-tighter text-[28px] leading-[1.05] text-noir mb-2">
+      <div className="font-mono text-[10px] tracking-wide2 text-ink mb-3">[ as admin ]</div>
+      <h1 className="font-sans font-black tracking-tighter text-[32px] leading-[0.98] text-ink mb-2">
         Your console awaits.
       </h1>
-      <p className="font-sans text-[13.5px] text-coffee mb-7">
+      <p className="font-sans text-[13.5px] text-ink-dim mb-7">
         Post a JD, watch it become a challenge, pick from the scored leaderboard.
       </p>
       <form onSubmit={submit} className="space-y-4">
@@ -194,14 +164,5 @@ function AdminSignIn({ next, onBack }) {
         </Button>
       </form>
     </motion.div>
-  )
-}
-
-function Mark() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 32 32" fill="none" className="text-crimson">
-      <rect x="0.5" y="0.5" width="31" height="31" rx="6.5" stroke="currentColor" strokeOpacity="0.35" />
-      <path d="M9 22V10h5.6a4 4 0 0 1 0 8H12v4Zm3-7h2.4a1.5 1.5 0 0 0 0-3H12Z" fill="currentColor" />
-    </svg>
   )
 }

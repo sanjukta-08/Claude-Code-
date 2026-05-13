@@ -9,7 +9,7 @@ export default function Countdown({ deadline, className = '' }) {
   }, [])
   const closed = isExpired(deadline)
   return (
-    <span className={`font-mono tabular ${closed ? 'text-crimson' : 'text-noir'} ${className}`}>
+    <span className={`font-mono tabular ${closed ? 'text-ruby' : 'text-ink'} ${className}`}>
       {formatCountdown(deadline)}
     </span>
   )

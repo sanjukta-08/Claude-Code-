@@ -55,17 +55,17 @@ export default function AdminChallengesPage() {
                 onClick={() => setFilter(f.id)}
                 className={`px-3.5 h-9 inline-flex items-center gap-2 rounded-full font-mono text-[10.5px] tracking-wide2 transition
                   ${filter === f.id
-                    ? 'bg-crimson/[0.08] border border-crimson/40 text-crimson'
-                    : 'border border-noir/10 text-coffee hover:text-noir hover:border-noir/20'}`}
+                    ? 'bg-orange/[0.08] border border-orange/40 text-orange'
+                    : 'border border-line text-ink-dim hover:text-ink hover:border-line-strong'}`}
               >
                 {f.label.toUpperCase()}
-                <span className={`tabular ${filter === f.id ? 'text-crimson/70' : 'text-coffee-dim'}`}>{count}</span>
+                <span className={`tabular ${filter === f.id ? 'text-orange/70' : 'text-ink-ghost'}`}>{count}</span>
               </button>
             )
           })}
         </div>
         <div className="md:ml-auto relative md:w-72">
-          <IconSearch size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-coffee-dim pointer-events-none" />
+          <IconSearch size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-ghost pointer-events-none" />
           <Input
             value={q}
             onChange={(e) => setQ(e.target.value)}
@@ -77,7 +77,7 @@ export default function AdminChallengesPage() {
 
       {/* Table */}
       <Panel padded={false}>
-        <div className="grid grid-cols-[1fr_120px_80px_120px_24px] md:grid-cols-[1fr_140px_80px_140px_24px] gap-3 px-5 py-3 border-b border-noir/8 font-mono text-[9px] tracking-wide3 text-coffee-dim">
+        <div className="grid grid-cols-[1fr_120px_80px_120px_24px] md:grid-cols-[1fr_140px_80px_140px_24px] gap-3 px-5 py-3 border-b border-line font-mono text-[9px] tracking-wide3 text-ink-ghost">
           <div>ROLE · COMPANY</div>
           <div>STATUS</div>
           <div className="text-right">SUBS</div>
@@ -101,14 +101,14 @@ export default function AdminChallengesPage() {
                 key={c.id}
                 onClick={() => navigate(`/admin/challenges/${c.id}`)}
                 className={`grid grid-cols-[1fr_120px_80px_120px_24px] md:grid-cols-[1fr_140px_80px_140px_24px] gap-3 px-5 py-3.5 items-center
-                  w-full text-left group hover:bg-crimson/[0.03] transition-colors
-                  ${i > 0 ? 'border-t border-noir/6' : ''}`}
+                  w-full text-left group hover:bg-orange/[0.04] transition-colors
+                  ${i > 0 ? 'border-t border-line/70' : ''}`}
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <Avatar logo={c.company.logo} size="sm" tone="gold" />
                   <div className="min-w-0">
-                    <div className="font-serif text-[14px] text-noir truncate group-hover:text-crimson transition">{c.role}</div>
-                    <div className="font-mono text-[10px] tracking-wide2 text-coffee-dim truncate">{c.company.name} · {c.id}</div>
+                    <div className="font-sans text-[14px] text-ink truncate group-hover:text-orange transition">{c.role}</div>
+                    <div className="font-mono text-[10px] tracking-wide2 text-ink-ghost truncate">{c.company.name} · {c.id}</div>
                   </div>
                 </div>
                 <div>
@@ -116,11 +116,11 @@ export default function AdminChallengesPage() {
                     {c.status}
                   </Pill>
                 </div>
-                <div className="text-right font-serif text-[15px] text-noir tabular">{subs}</div>
-                <div className="font-mono text-[11px] text-coffee tabular">
+                <div className="text-right font-sans text-[15px] text-ink tabular">{subs}</div>
+                <div className="font-mono text-[11px] text-ink-dim tabular">
                   {c.status === 'live' ? <Countdown deadline={c.deadline} className="text-[11px]" /> : shortDate(c.deadline)}
                 </div>
-                <IconChevronRight size={13} className="text-coffee-dim group-hover:text-crimson transition" />
+                <IconChevronRight size={13} className="text-ink-ghost group-hover:text-orange transition" />
               </button>
             )
           })

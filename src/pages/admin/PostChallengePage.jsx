@@ -80,18 +80,18 @@ export default function PostChallengePage() {
               className={`flex items-center gap-2.5 group ${i > idx ? 'cursor-not-allowed' : 'cursor-pointer'}`}
             >
               <span className={`h-7 w-7 rounded-full inline-flex items-center justify-center font-mono text-[10px]
-                ${i < idx ? 'bg-crimson text-ink'
-                  : i === idx ? 'border border-crimson bg-crimson/[0.08] text-crimson'
-                  : 'border border-noir/12 text-coffee-dim'}`}>
+                ${i < idx ? 'bg-orange text-ink'
+                  : i === idx ? 'border border-orange bg-orange/[0.08] text-orange'
+                  : 'border border-line text-ink-ghost'}`}>
                 {i < idx ? <IconCheck size={12} /> : String(i + 1).padStart(2, '0')}
               </span>
               <span className={`font-mono text-[10px] tracking-wide3 hidden sm:inline
-                ${i === idx ? 'text-noir' : i < idx ? 'text-coffee' : 'text-coffee-dim'}`}>
+                ${i === idx ? 'text-ink' : i < idx ? 'text-ink-dim' : 'text-ink-ghost'}`}>
                 {s.label.toUpperCase()}
               </span>
             </button>
             {i < STEPS.length - 1 && (
-              <span className={`h-px flex-1 ${i < idx ? 'bg-crimson/40' : 'bg-noir/[0.06]'}`} />
+              <span className={`h-px flex-1 ${i < idx ? 'bg-orange/40' : 'bg-bg'}`} />
             )}
           </div>
         ))}
@@ -99,13 +99,13 @@ export default function PostChallengePage() {
 
       <div className="mb-6">
         <div className="flex items-center gap-2.5 mb-2.5">
-          <span className="h-px w-6 bg-crimson/60" />
-          <span className="font-mono text-[10px] tracking-wide3 text-crimson">POST A JD</span>
+          <span className="h-px w-6 bg-orange/60" />
+          <span className="font-mono text-[10px] tracking-wide3 text-orange">POST A JD</span>
         </div>
-        <h1 className="font-serif font-light tracking-tighter text-[30px] md:text-[40px] leading-[1.05] text-noir">
-          {stage === 'jd' && <>Paste in dead text.<br/><span className="text-crimson">Get back live work.</span></>}
-          {stage === 'review' && <>Review the brief.<br/><span className="text-crimson">Edit, then sign.</span></>}
-          {stage === 'publish' && <>Choose the package.<br/><span className="text-crimson">Go live.</span></>}
+        <h1 className="font-sans font-bold tracking-tighter text-[30px] md:text-[40px] leading-[1.05] text-ink">
+          {stage === 'jd' && <>Paste in dead text.<br/><span className="text-orange">Get back live work.</span></>}
+          {stage === 'review' && <>Review the brief.<br/><span className="text-orange">Edit, then sign.</span></>}
+          {stage === 'publish' && <>Choose the package.<br/><span className="text-orange">Go live.</span></>}
         </h1>
       </div>
 
@@ -141,7 +141,7 @@ export default function PostChallengePage() {
                     value={logo}
                     maxLength={2}
                     onChange={(e) => setLogo(e.target.value.toUpperCase())}
-                    className="!font-mono uppercase !text-crimson"
+                    className="!font-mono uppercase !text-orange"
                   />
                 </Field>
               </Panel>
@@ -152,15 +152,15 @@ export default function PostChallengePage() {
                 <motion.div
                   initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                 >
-                  <Panel className="border-crimson/30 bg-crimson/[0.04]">
+                  <Panel className="border-orange/30 bg-orange/[0.04]">
                     <div className="flex items-center gap-3">
                       <span className="relative flex h-2 w-2">
-                        <span className="absolute inline-flex h-full w-full rounded-full bg-crimson opacity-60 animate-ping" />
-                        <span className="relative inline-flex h-2 w-2 rounded-full bg-crimson" />
+                        <span className="absolute inline-flex h-full w-full rounded-full bg-orange opacity-60 animate-ping" />
+                        <span className="relative inline-flex h-2 w-2 rounded-full bg-orange" />
                       </span>
                       <div>
-                        <div className="font-mono text-[10px] tracking-wide3 text-crimson">PARSING · EXTRACTING SIGNAL</div>
-                        <div className="font-sans text-[12.5px] text-coffee mt-0.5">
+                        <div className="font-mono text-[10px] tracking-wide3 text-orange">PARSING · EXTRACTING SIGNAL</div>
+                        <div className="font-sans text-[12.5px] text-ink-dim mt-0.5">
                           Role · seniority · AI capabilities · task categories…
                         </div>
                       </div>
@@ -171,7 +171,7 @@ export default function PostChallengePage() {
             </AnimatePresence>
 
             <StickyBar
-              left={<span className="font-mono text-[10px] tracking-wide3 text-coffee-dim">STEP 1 OF 3</span>}
+              left={<span className="font-mono text-[10px] tracking-wide3 text-ink-ghost">STEP 1 OF 3</span>}
               right={
                 <Button
                   onClick={generate}
@@ -199,18 +199,18 @@ export default function PostChallengePage() {
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   placeholder="Senior Product Manager"
-                  className="!font-serif !font-bold !text-[18px]"
+                  className="!font-sans !font-bold !text-[18px]"
                 />
               </Field>
             </Panel>
 
-            <Panel className="border-crimson/25 bg-crimson/[0.03]">
+            <Panel className="border-orange/25 bg-orange/[0.03]">
               <Field label="Challenge brief · live work" hint="Edit freely · nothing publishes without your sign-off">
                 <Textarea
                   rows={16}
                   value={brief}
                   onChange={(e) => setBrief(e.target.value)}
-                  className="font-mono text-[12.5px] !leading-[1.7] !border-crimson/25"
+                  className="font-mono text-[12.5px] !leading-[1.7] !border-orange/25"
                 />
               </Field>
             </Panel>
@@ -242,7 +242,7 @@ export default function PostChallengePage() {
             className="space-y-5"
           >
             <Panel>
-              <div className="font-mono text-[9.5px] tracking-wide3 text-crimson mb-4">CHOOSE PACKAGE</div>
+              <div className="font-mono text-[9.5px] tracking-wide3 text-orange mb-4">CHOOSE PACKAGE</div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {TIERS.map((t) => (
                   <button
@@ -250,21 +250,21 @@ export default function PostChallengePage() {
                     onClick={() => setTier(t.id)}
                     className={`relative text-left rounded-xl border p-5 transition-all
                       ${tier === t.id
-                        ? 'border-crimson/50 bg-crimson/[0.04] shadow-gold-glow'
-                        : 'border-noir/10 bg-cream hover:border-noir/20'}`}
+                        ? 'border-orange/50 bg-orange/[0.04] shadow-gold-glow'
+                        : 'border-line bg-bg hover:border-line-strong'}`}
                   >
                     {t.featured && tier !== t.id && (
-                      <span className="absolute top-2 right-2 font-mono text-[8.5px] tracking-wide4 px-1.5 py-0.5 rounded border border-crimson/40 text-crimson">
+                      <span className="absolute top-2 right-2 font-mono text-[8.5px] tracking-wide4 px-1.5 py-0.5 rounded border border-orange/40 text-orange">
                         POPULAR
                       </span>
                     )}
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-serif text-[15px] text-noir">{t.name}</span>
-                      <span className={`font-mono text-[12px] tabular ${tier === t.id ? 'text-crimson' : 'text-coffee-dim'}`}>
+                      <span className="font-sans text-[15px] text-ink">{t.name}</span>
+                      <span className={`font-mono text-[12px] tabular ${tier === t.id ? 'text-orange' : 'text-ink-ghost'}`}>
                         {t.price}
                       </span>
                     </div>
-                    <p className="font-sans text-[12.5px] text-coffee leading-[1.6]">{t.desc}</p>
+                    <p className="font-sans text-[12.5px] text-ink-dim leading-[1.6]">{t.desc}</p>
                   </button>
                 ))}
               </div>
@@ -273,30 +273,30 @@ export default function PostChallengePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Panel>
                 <div className="flex items-center justify-between mb-3">
-                  <span className="font-mono text-[9.5px] tracking-wide3 text-coffee-dim">TOP N · GUARANTEED INTERVIEWS</span>
-                  <span className="font-serif text-[20px] text-crimson tabular">{topN}</span>
+                  <span className="font-mono text-[9.5px] tracking-wide3 text-ink-ghost">TOP N · GUARANTEED INTERVIEWS</span>
+                  <span className="font-sans text-[20px] text-orange tabular">{topN}</span>
                 </div>
                 <input
                   type="range" min={3} max={30} value={topN}
                   onChange={(e) => setTopN(parseInt(e.target.value))}
-                  className="w-full accent-crimson"
+                  className="w-full accent-orange"
                 />
-                <div className="mt-2 font-mono text-[10px] tracking-wide3 text-coffee-dim">
+                <div className="mt-2 font-mono text-[10px] tracking-wide3 text-ink-ghost">
                   TOP {topN} CANDIDATES EARN A GUARANTEED INTERVIEW
                 </div>
               </Panel>
 
               <Panel>
                 <div className="flex items-center justify-between mb-3">
-                  <span className="font-mono text-[9.5px] tracking-wide3 text-coffee-dim">DEADLINE</span>
-                  <span className="font-serif text-[20px] text-crimson tabular">{days}d</span>
+                  <span className="font-mono text-[9.5px] tracking-wide3 text-ink-ghost">DEADLINE</span>
+                  <span className="font-sans text-[20px] text-orange tabular">{days}d</span>
                 </div>
                 <input
                   type="range" min={3} max={14} value={days}
                   onChange={(e) => setDays(parseInt(e.target.value))}
-                  className="w-full accent-crimson"
+                  className="w-full accent-orange"
                 />
-                <div className="mt-2 font-mono text-[10px] tracking-wide3 text-coffee-dim">
+                <div className="mt-2 font-mono text-[10px] tracking-wide3 text-ink-ghost">
                   CANDIDATES HAVE {days} DAYS TO SUBMIT
                 </div>
               </Panel>
@@ -304,7 +304,7 @@ export default function PostChallengePage() {
 
             {/* Summary */}
             <Panel>
-              <div className="font-mono text-[9.5px] tracking-wide3 text-coffee-dim mb-3">YOU'RE ABOUT TO PUBLISH</div>
+              <div className="font-mono text-[9.5px] tracking-wide3 text-ink-ghost mb-3">YOU'RE ABOUT TO PUBLISH</div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-left">
                 <Summary label="Role"     value={role || '—'} />
                 <Summary label="Company"  value={company} />
@@ -336,7 +336,7 @@ function StickyBar({ left, right }) {
   return (
     <div className="sticky bottom-4 z-20 mt-6">
       <div className="flex items-center justify-between gap-3 px-5 py-3
-        rounded-2xl border border-noir/10 bg-paper backdrop-blur-md shadow-xl">
+        rounded-2xl border border-line bg-canvas backdrop-blur-md shadow-xl">
         <div>{left}</div>
         <div>{right}</div>
       </div>
@@ -347,8 +347,8 @@ function StickyBar({ left, right }) {
 function Summary({ label, value, accent }) {
   return (
     <div>
-      <div className="font-mono text-[9px] tracking-wide3 text-coffee-dim">{label}</div>
-      <div className={`mt-1 font-serif text-[14px] truncate ${accent ? 'text-crimson uppercase' : 'text-noir'}`}>{value}</div>
+      <div className="font-mono text-[9px] tracking-wide3 text-ink-ghost">{label}</div>
+      <div className={`mt-1 font-sans text-[14px] truncate ${accent ? 'text-orange uppercase' : 'text-ink'}`}>{value}</div>
     </div>
   )
 }
