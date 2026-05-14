@@ -1,0 +1,39 @@
+{
+  "TIER2_AUTO": {
+    "name": "Tier 2 Auto Sequence (LCS 40-69)",
+    "platform": "apollo + instantly.ai warmup",
+    "warmup_rule": "ALWAYS send from secondary domains — never main domain. Domain reputation is non-negotiable.",
+    "steps": [
+      {
+        "day": 1,
+        "subject": "{{first_name}}, quick question about {{school_name}}",
+        "body": "Hi {{first_name}},\n\nI lead partnerships at LWL. I noticed {{school_name}} has a strong {{curriculum}} programme — I help schools like yours give students a clear path to top US universities through our {{best_lwl_programme}} programme.\n\nWorth a 15-min call?\n\nLink: {{calendly_url}}\n\n— {{sender_name}}",
+        "ab_variants": ["{{first_name}}, helping {{school_name}} students stand out", "Question for {{school_name}}"]
+      },
+      {
+        "day": 3,
+        "subject": "Re: students published in research journals",
+        "body": "Quick follow-up — last cohort had {{n_publications}} students publish papers under {{mentor_name}} (Harvard student mentors).\n\nWould this fit {{school_name}}?\n\n{{calendly_url}}"
+      },
+      {
+        "day": 7,
+        "subject": "Free masterclass invite for {{school_name}}",
+        "body": "We're running a free masterclass with {{host_name}} next week — open to your top students.\n\nRegister: {{masterclass_url}}\n\nNo pitch, just content. 40 mins."
+      },
+      {
+        "day": 10,
+        "subject": "Last 6 spots — {{programme}} cohort closes Friday",
+        "body": "Limited cohort fills fast. If even 2-3 of your students would be a fit, worth a 10-min chat this week?\n\n{{calendly_url}}"
+      },
+      {
+        "day": 14,
+        "subject": "Closing the loop, {{first_name}}",
+        "body": "I'll stop reaching out after this — if {{programme}} ever becomes relevant for {{school_name}}, I'm one reply away.\n\nThank you for your time."
+      }
+    ],
+    "targets": {
+      "open_rate": 0.35,
+      "reply_rate": 0.05
+    }
+  }
+}

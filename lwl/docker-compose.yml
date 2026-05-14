@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  hub:
+    build: .
+    env_file: .env
+    ports:
+      - "${HUB_PORT:-8000}:8000"
+    volumes:
+      - ./:/app
+    command: uvicorn api.server:app --host 0.0.0.0 --port 8000 --reload
+
+  n8n:
+    image: n8nio/n8n:latest
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=${N8N_HOST:-localhost}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=${N8N_WEBHOOK_BASE}
+      - GENERIC_TIMEZONE=UTC
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./workflows/n8n:/workflows:ro
+
+volumes:
+  n8n_data:

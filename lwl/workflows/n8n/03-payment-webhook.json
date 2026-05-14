@@ -1,0 +1,84 @@
+{
+  "name": "LWL · 03 · Payment → Programme Lock + Brevo Nurture",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "lwl-payment", "responseMode": "responseNode", "options": {} },
+      "id": "wh",
+      "name": "Webhook · Stripe/Razorpay",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const e = $input.first().json.body;\nconst stripe = e.type?.startsWith('checkout');\nconst customer_email = stripe ? e.data.object.customer_details?.email : e.payload.payment.entity.email;\nconst amount = stripe ? e.data.object.amount_total/100 : e.payload.payment.entity.amount/100;\nconst metadata = stripe ? e.data.object.metadata : e.payload.payment.entity.notes;\nreturn [{ json: { customer_email, amount_usd: amount, programme: metadata?.programme, tier: metadata?.tier, school_id: metadata?.school_id, discount_code: metadata?.discount_code, paid_at: new Date().toISOString() }}];"
+      },
+      "id": "normalize",
+      "name": "Normalize Event",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.HUB_BASE_URL }}/registry/lock",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "x-internal-secret", "value": "={{ $env.HUB_INTERNAL_SECRET }}" } ] },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}"
+      },
+      "id": "lock",
+      "name": "Anjali · Programme Lock",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brevo.com/v3/contacts",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "api-key", "value": "={{ $env.BREVO_API_KEY }}" }, { "name": "content-type", "value": "application/json" } ] },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"email\": \"{{ $('Normalize Event').item.json.customer_email }}\",\n  \"attributes\": { \"PROGRAMME\": \"{{ $('Normalize Event').item.json.programme }}\", \"AMOUNT\": {{ $('Normalize Event').item.json.amount_usd }} },\n  \"listIds\": [1, 7],\n  \"updateEnabled\": true\n}"
+      },
+      "id": "brevo",
+      "name": "Brevo · Enrol Post-Pay",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": "#sales-wins",
+        "text": "=:moneybag: *PAID* — {{ $('Normalize Event').item.json.programme }} — ${{ $('Normalize Event').item.json.amount_usd }} from {{ $('Normalize Event').item.json.customer_email }}\\nCode: {{ $('Normalize Event').item.json.discount_code }}"
+      },
+      "id": "slack",
+      "name": "Slack · Sales Win",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": { "respondWith": "text", "responseBody": "ok" },
+      "id": "ok",
+      "name": "200 OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1340, 300]
+    }
+  ],
+  "connections": {
+    "Webhook · Stripe/Razorpay": { "main": [[{ "node": "Normalize Event", "type": "main", "index": 0 }]] },
+    "Normalize Event": { "main": [[{ "node": "Anjali · Programme Lock", "type": "main", "index": 0 }]] },
+    "Anjali · Programme Lock": { "main": [[{ "node": "Brevo · Enrol Post-Pay", "type": "main", "index": 0 }]] },
+    "Brevo · Enrol Post-Pay": { "main": [[{ "node": "Slack · Sales Win", "type": "main", "index": 0 }]] },
+    "Slack · Sales Win": { "main": [[{ "node": "200 OK", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": ["lwl", "conversion", "payments"]
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LWL 30-Field School Profile",
+  "type": "object",
+  "required": ["school_name", "domain", "country_iso2", "lcs_score", "tier"],
+  "properties": {
+    "school_name": { "type": "string" },
+    "domain": { "type": "string" },
+    "country": { "type": "string" },
+    "country_iso2": { "type": "string", "minLength": 2, "maxLength": 2 },
+    "region": { "enum": ["UAE","US","UK","IN","KR","SG","LATAM","EU","OTHER"] },
+    "curriculum": { "enum": ["IB","British","American","National","Hybrid"] },
+    "ib_status": { "enum": ["YES","NO","Candidate"] },
+    "ib_programmes": { "type": "string" },
+    "grades_served": { "type": "string" },
+    "est_enrollment": { "type": ["integer","null"] },
+    "tuition_usd_per_year": { "type": ["integer","null"] },
+    "is_yale_camp_eligible": { "type": "boolean" },
+    "lwl_fit_score": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "best_lwl_programme": { "enum": ["FDSP","Edge","Research","Onward","Yale","Harvard"] },
+    "urgency_signals": { "type": "array", "items": { "type": "string" } },
+    "recent_news": { "type": ["string","null"] },
+    "apollo_org_id": { "type": ["string","null"] },
+    "org_size": { "type": ["integer","null"] },
+    "contacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "title": { "type": "string" },
+          "email": { "type": ["string","null"] },
+          "linkedin": { "type": ["string","null"] },
+          "phone": { "type": ["string","null"] }
+        }
+      }
+    },
+    "hunter_emails": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": { "type": "string" },
+          "type": { "type": "string" },
+          "confidence": { "type": "integer" }
+        }
+      }
+    },
+    "lcs_score": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "tier": { "enum": [1,2,3] },
+    "owner": { "type": "string" },
+    "enriched_at": { "type": "string", "format": "date-time" },
+    "cost_estimate_usd": { "type": "number" }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "name": "LWL · 04 · WhatsApp Masterclass Nurture + Bland Recovery",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "lwl-masterclass-register", "responseMode": "onReceived", "options": {} },
+      "id": "wh",
+      "name": "Webhook · JotForm",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v18.0/{{ $env.WHATSAPP_BSP_PHONE_ID }}/messages",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "Authorization", "value": "=Bearer {{ $env.WHATSAPP_BSP_TOKEN }}" }, { "name": "Content-Type", "value": "application/json" } ] },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $json.body.phone }}\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"masterclass_welcome\",\n    \"language\": { \"code\": \"en\" },\n    \"components\": [\n      { \"type\": \"body\", \"parameters\": [ { \"type\": \"text\", \"text\": \"{{ $json.body.first_name }}\" }, { \"type\": \"text\", \"text\": \"{{ $json.body.programme }}\" } ] }\n    ]\n  }\n}"
+      },
+      "id": "wa-d1",
+      "name": "WA · Day 1 Welcome",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [460, 320]
+    },
+    {
+      "parameters": { "amount": 2, "unit": "days" },
+      "id": "wait2",
+      "name": "Wait → Day 3",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [700, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v18.0/{{ $env.WHATSAPP_BSP_PHONE_ID }}/messages",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "Authorization", "value": "=Bearer {{ $env.WHATSAPP_BSP_TOKEN }}" } ] },
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $('Webhook · JotForm').item.json.body.phone }}\",\n  \"type\": \"template\",\n  \"template\": { \"name\": \"masterclass_reminder_d3\", \"language\": { \"code\": \"en\" } }\n}"
+      },
+      "id": "wa-d3",
+      "name": "WA · Day 3 Reminder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [940, 320]
+    },
+    {
+      "parameters": { "amount": 2, "unit": "days" },
+      "id": "wait4",
+      "name": "Wait → Day 5",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1180, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v18.0/{{ $env.WHATSAPP_BSP_PHONE_ID }}/messages",
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $('Webhook · JotForm').item.json.body.phone }}\",\n  \"type\": \"template\",\n  \"template\": { \"name\": \"masterclass_last_chance\", \"language\": { \"code\": \"en\" } }\n}",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "Authorization", "value": "=Bearer {{ $env.WHATSAPP_BSP_TOKEN }}" } ] }
+      },
+      "id": "wa-d5",
+      "name": "WA · Day 5 Last Chance",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1420, 320]
+    }
+  ],
+  "connections": {
+    "Webhook · JotForm": { "main": [[{ "node": "WA · Day 1 Welcome", "type": "main", "index": 0 }]] },
+    "WA · Day 1 Welcome": { "main": [[{ "node": "Wait → Day 3", "type": "main", "index": 0 }]] },
+    "Wait → Day 3": { "main": [[{ "node": "WA · Day 3 Reminder", "type": "main", "index": 0 }]] },
+    "WA · Day 3 Reminder": { "main": [[{ "node": "Wait → Day 5", "type": "main", "index": 0 }]] },
+    "Wait → Day 5": { "main": [[{ "node": "WA · Day 5 Last Chance", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": ["lwl", "outreach", "whatsapp"]
+}

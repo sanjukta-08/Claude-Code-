@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LWL Full Agent Network — v2</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#EDEBE4;min-height:100vh}
+.page{max-width:1380px;margin:0 auto;padding:16px}
+/* Header */
+.hdr{background:#1A2744;color:#fff;border-radius:14px;padding:20px 26px;margin-bottom:12px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.h-left .h-title{font-size:20px;font-weight:700;letter-spacing:-.3px}
+.h-left .h-sub{font-size:12px;opacity:.65;margin-top:3px}
+.pills{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.pill{font-size:11px;font-weight:500;padding:3px 10px;border-radius:99px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.88)}
+.h-right{text-align:right;flex-shrink:0}
+.h-stat{font-size:28px;font-weight:700;line-height:1}
+.h-stat-label{font-size:11px;opacity:.6;margin-top:2px}
+/* Diagram */
+.diagram-card{background:#fff;border-radius:14px;border:1px solid #DDD9CF;overflow:hidden;margin-bottom:10px}
+.diagram-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+#net{display:block;cursor:default}
+/* Legend bar */
+.legend{display:flex;gap:0;border-top:1px solid #EEE;background:#FAFAF8}
+.leg-item{display:flex;align-items:center;gap:6px;padding:8px 16px;font-size:11px;color:#555;border-right:1px solid #EEE;white-space:nowrap}
+.leg-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+/* Detail panel */
+.detail{background:#fff;border-radius:14px;border:1px solid #DDD9CF;overflow:hidden;display:none}
+.detail.on{display:block}
+.d-hdr{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid #F0EDE6}
+.d-badge{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.d-title{font-size:14px;font-weight:700;color:#1a1a1a;flex:1}
+.d-close{background:#F0EDE6;border:none;border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;color:#555;font-weight:500}
+.d-close:hover{background:#E5E1D5}
+.d-body{padding:14px 18px}
+.d-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px 20px}
+.d-row{font-size:12px;line-height:1.5;padding:3px 0;border-bottom:.5px solid #F5F3EE}
+.d-key{color:#999}
+.d-val{color:#1a1a1a;font-weight:600}
+/* Tip */
+.tip{text-align:center;font-size:11px;color:#999;padding:6px;margin-top:-4px}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="hdr">
+  <div class="h-left">
+    <div class="h-title">🏫 LWL Full Agent Network System</div>
+    <div class="h-sub">7 layers · 25 agents · school discovery → paid student · click any node for details</div>
+    <div class="pills">
+      <span class="pill">5,000 student target</span>
+      <span class="pill">~$0.07 per school profiled</span>
+      <span class="pill">n8n · Clay · Apollo · Claude API · Supabase</span>
+      <span class="pill">3 routing tiers · 48hr urgency mechanic</span>
+    </div>
+  </div>
+  <div class="h-right">
+    <div class="h-stat">7k+</div>
+    <div class="h-stat-label">schools in network</div>
+  </div>
+</div>
+
+<div class="diagram-card">
+  <div class="diagram-scroll">
+    <svg id="net" width="1320" height="516"></svg>
+  </div>
+  <div class="legend" id="legend"></div>
+</div>
+
+<div class="tip">↑ Scroll right to see full network · Click any node for detailed breakdown</div>
+
+<div class="detail" id="detail">
+  <div class="d-hdr">
+    <span class="d-badge" id="d-badge"></span>
+    <span class="d-title" id="d-title"></span>
+    <button class="d-close" onclick="closeD()">✕ close</button>
+  </div>
+  <div class="d-body">
+    <div class="d-grid" id="d-grid"></div>
+  </div>
+</div>
+
+</div><!-- end page -->
+
+<script>
+/* ─── DATA ─────────────────────────────────────────────────── */
+const LAYERS = [
+  {id:'src',    name:'Data Sources',   col:'#185FA5', bg:'#EBF3FD', x:90  },
+  {id:'scrape', name:'Scraping',       col:'#0A6647', bg:'#DFF4EC', x:280 },
+  {id:'enrich', name:'Enrichment',     col:'#534AB7', bg:'#EEEDFE', x:475 },
+  {id:'intel',  name:'Intelligence',   col:'#7A4509', bg:'#FEF3E2', x:665 },
+  {id:'route',  name:'Routing',        col:'#8B2F14', bg:'#FEEAE3', x:845 },
+  {id:'reach',  name:'Outreach',       col:'#2E6010', bg:'#E8F5DD', x:1030},
+  {id:'conv',   name:'Conversion',     col:'#065040', bg:'#DCF0EA', x:1215},
+];
+
+const NW=120, NH=54, ROW=88, TOP=76;
+
+const NODES = [
+  // Sources
+  {id:'ib',    l:'src',    r:0, t:'IB World',    s:'5,000+ schools'},
+  {id:'nais',  l:'src',    r:1, t:'NAIS 1,688',  s:'US private schools'},
+  {id:'apoldb',l:'src',    r:2, t:'Apollo DB',   s:'270M contacts'},
+  {id:'gmaps', l:'src',    r:3, t:'Google Maps', s:'Apify actor'},
+  {id:'khda',  l:'src',    r:4, t:'KHDA · COBIS',s:'Regional registries'},
+  // Scrape
+  {id:'wf1',   l:'scrape', r:0, t:'n8n IB Scraper',s:'Workflow 1 · weekly'},
+  {id:'naispy',l:'scrape', r:1, t:'NAIS Python',  s:'nais_scraper.py'},
+  {id:'browse',l:'scrape', r:2, t:'Browse AI',    s:'No-code · $49/mo'},
+  {id:'apify', l:'scrape', r:3, t:'Apify Actors', s:'Maps · LinkedIn'},
+  // Enrich
+  {id:'clay',  l:'enrich', r:0, t:'Clay Waterfall',s:'Apollo→Hunter→Clearbit'},
+  {id:'wf2',   l:'enrich', r:3, t:'Intel Agent',  s:'Workflow 2 · webhook'},
+  // Intel
+  {id:'claude',l:'intel',  r:0, t:'Claude API',   s:'Research + profile'},
+  {id:'lcs',   l:'intel',  r:1, t:'LCS Scorer',   s:'0-100 · auto'},
+  {id:'reg',   l:'intel',  r:2, t:'Central Reg',  s:'Anjali · Supabase'},
+  {id:'gs',    l:'intel',  r:3, t:'GSheets',      s:'Pipeline tracker'},
+  // Route
+  {id:'t1',    l:'route',  r:0, t:'Tier 1 ≥70',  s:'Abhijeet · 4hr SLA'},
+  {id:'t2',    l:'route',  r:2, t:'Tier 2 40-69', s:'Apollo auto-seq'},
+  {id:'t3',    l:'route',  r:3, t:'Tier 3 <40',   s:'Parking · re-score'},
+  // Reach
+  {id:'seq',   l:'reach',  r:0, t:'Apollo Seq',   s:'5 emails · 14 days'},
+  {id:'wa',    l:'reach',  r:1, t:'WhatsApp BSP', s:'+ Bland.ai recovery'},
+  {id:'tavus', l:'reach',  r:2, t:'Tavus Priya',  s:'AI video avatar'},
+  {id:'mc2',   l:'reach',  r:3, t:'ManyChat',     s:'Instagram DM auto'},
+  // Convert
+  {id:'mc',    l:'conv',   r:0, t:'Masterclass',  s:'Tasia · Dr. JoJo'},
+  {id:'c48',   l:'conv',   r:1, t:'48hr Code',    s:'LUTHER48 · EDGE48'},
+  {id:'stripe',l:'conv',   r:2, t:'Stripe Pay',   s:'$1,500 → $2,800'},
+  {id:'brevo', l:'conv',   r:3, t:'Brevo + Upsell',s:'Day 30/60/90'},
+];
+
+const EDGES = [
+  // Sources → Scrape
+  ['ib','wf1'],['nais','naispy'],['apoldb','clay'],['gmaps','apify'],['khda','browse'],
+  // Scrape → Enrich
+  ['wf1','clay'],['naispy','clay'],['browse','clay'],['apify','clay'],
+  ['wf1','wf2'],['naispy','wf2'],
+  // Enrich → Intel
+  ['clay','lcs'],['clay','wf2'],['wf2','claude'],['wf2','lcs'],
+  // Intel → Route
+  ['lcs','t1'],['lcs','t2'],['lcs','t3'],['reg','t1'],['reg','t2'],['gs','t1'],
+  // Route → Reach
+  ['t1','seq'],['t2','seq'],['t1','wa'],['t2','wa'],['t1','tavus'],['mc2','mc'],
+  // Reach → Convert
+  ['seq','mc'],['wa','mc'],['mc','c48'],['c48','stripe'],['stripe','brevo'],
+];
+
+const DEETS = {
+  ib:{t:'IB World Directory — ibo.org',r:[['Schools','5,000+ worldwide · 159 countries'],['Programmes','PYP (Gr 3-12) · MYP (11-16) · DP (16-19) · CP'],['Scrape','Apify Web Scraper actor · n8n weekly trigger'],['Priority','UAE · India · Korea · Singapore · LATAM'],['Owner','Nishant (Apify + Workflow 1 setup)']]},
+  nais:{t:'NAIS Directory — 1,688 US Private Schools',r:[['Total','1,688 NAIS member schools · 47 states'],['Scraper','nais_scraper.py (Python · project files)'],['Batches done','Batch 2: NY/NE · Batch 3 complete'],['Best fit','Yale Camp + Harvard Camp + Research Fellowship'],['Key rule','Yale Camp: US ONLY — Middle East fully excluded'],['Owners','Ayush (East/NE) · Aditya (South/Asia/LatAm)']]},
+  apoldb:{t:'Apollo.io — 270M Contact Database',r:[['Size','270M+ contacts · 70M+ companies'],['Key API','POST /v1/organizations/enrich + /v1/mixed_people/search'],['Target titles','Principal · Head of School · Admissions · MUN Coord'],['Daily limit','50 email reveals/day — batch carefully'],['Owner','Abhijeet (sequences) · Nishant (API integration)']]},
+  gmaps:{t:'Google Maps + LinkedIn via Apify',r:[['Query','e.g. "international schools Dubai" → 500+ per query'],['Output','Name · phone · website · address · rating'],['LinkedIn','Staff pages → contact names + titles'],['Cost','~$0.50 per 1,000 results'],['Best for','UAE · LATAM · Korea city-level discovery']]},
+  khda:{t:'KHDA · COBIS · BSO — Regional Registries',r:[['KHDA','All Dubai schools — UAE government authority'],['COBIS','Council of British International Schools — global'],['BSO','British Schools Overseas — UK accredited'],['Access','Public PDFs + Browse AI scraping'],['UAE note','KHDA mandates enrichment — warmest market for Edge Club']]},
+  wf1:{t:'n8n IB Schools Scraper — Workflow 1',r:[['Trigger','Weekly Monday 06:00'],['Step 1','POST Apify → scrape ibo.org school pages'],['Step 2','Wait 90s → GET Apify dataset JSON items'],['Step 3','Filter valid · split batches of 5'],['Step 4','Apollo org search → Apollo people search'],['Step 5','Hunter.io verify → Code node merge + LCS score'],['Step 6','Filter ≥40 → Google Sheets append + Slack alert'],['File','LWL_IB_Schools_Scraper_n8n.json']]},
+  naispy:{t:'NAIS Python Scraper',r:[['File','nais_scraper.py (in project files)'],['Mode','State-by-state batch scraping'],['Output','Name · city · state · URL · contact info CSV'],['Next','CSV → Clay waterfall enrichment'],['Batches','NAIS_Batch2_NY_NE.xlsx · NAIS_Batch3.xlsx'],['Owner','Nishant (run) · Ayush/Aditya (manage output)']]},
+  browse:{t:'Browse AI — No-Code Directory Scraping',r:[['Targets','KHDA portal · COBIS · BSO · IBO country pages'],['Cost','~$49/month unlimited robots'],['Setup time','~30 mins to train a robot on any new site'],['Best for','Sites blocking Apify or requiring session cookies'],['Output','CSV → Google Sheets → Apollo batch upload']]},
+  apify:{t:'Apify Actors — School Discovery at Scale',r:[['Google Maps','500+ school results per city query'],['LinkedIn Actor','Staff pages + contact extraction'],['Web Scraper','Custom JS for IB + directories'],['Cost','~$0.50/1,000 results · pay-per-run'],['Owner','Nishant (actor config + n8n integration)']]},
+  clay:{t:'Clay Waterfall — Apollo → LinkedIn → Hunter → Clearbit',r:[['Step 1','Apollo: org ID + people search by domain'],['Step 2','LinkedIn (Clay built-in): verify title + URL'],['Step 3','Hunter.io: domain email search (all staff)'],['Step 4','Clearbit: org size + revenue estimate (fallback)'],['Result','First non-null email wins — source column tracks which'],['Template','LWL_Clay_Enrichment_Template.xlsx (5 region tabs)'],['Cost','$149-$800/month depending on credits']]},
+  wf2:{t:'School Intelligence Agent — Workflow 2',r:[['Trigger','POST /webhook/lwl-school-intel {school_name, domain}'],['Parallel','Claude + Apollo org + Apollo people + Hunter (all simultaneous)'],['Code node','Merges 4 sources → 30-field profile + LCS score 0-100'],['Routing','Switch: ≥70→Slack Abhijeet · 40-69→Apollo seq · <40→park'],['Cost','~$0.07/school · Claude $0.003 + Apollo + Hunter'],['File','LWL_School_Intelligence_Agent_n8n.json']]},
+  claude:{t:'Claude API — Research + Profile Generation',r:[['Model','claude-sonnet-4-20250514'],['Task','Curriculum · fees · IB status · news · LWL fit · urgency'],['Output','JSON only · 12 structured fields · no markdown'],['n8n','POST /v1/messages · x-api-key + anthropic-version headers'],['Cost','~$0.003/school · max_tokens: 1024']]},
+  lcs:{t:'Lead Conversion Score — 0 to 100',r:[['Apollo org confirmed','+20 pts'],['Verified email found','+25 pts'],['IB status YES','+20 pts'],['Fees > $15k USD/yr','+20 pts'],['Multiple contacts found','+15 pts'],['Tier 1','≥70 → Abhijeet · Slack alert · 4hr SLA'],['Tier 2','40-69 → Apollo auto email sequence'],['Tier 3','<40 → parking sheet · re-score monthly']]},
+  reg:{t:'Central Registry — Anjali (Supabase)',r:[['Core rule','One school, one active programme at a time'],['Lock','Programme lock — prevents cross-programme conflicts'],['Dedup','Anjali runs before every outreach batch'],['Cross-sell','Unlocks at Days 30, 60, 90 post-payment'],['Audit','Weekly: all copy checked for "Harvard student mentors" ONLY'],['Owner','Anjali — sole administrator — all teams clear with her first']]},
+  gs:{t:'Google Sheets — Live Pipeline Tracker',r:[['Tab 1','School Intelligence — 30-field enriched profiles'],['Tab 2','Low Priority Parking — LCS < 40'],['Tab 3','Enrichment Log — Clay run credits + history'],['Updates','n8n appends after each scrape + intel run'],['Access','Nishant (write) · Abhijeet (read + status update)']]},
+  t1:{t:'Tier 1 — Abhijeet · LCS ≥ 70 · 4-Hour SLA',r:[['Alert','Slack DM: name · title · email · phone · LWL fit · urgency signals'],['SLA','4 hours from Slack alert to first contact'],['First contact','Personalised email + LinkedIn message'],['Goal','Discovery call booked within 24hrs'],['Close','Proposal → Stripe payment link']]},
+  t2:{t:'Tier 2 — Apollo Auto Sequence · LCS 40-69',r:[['Day 1','Intro + programme overview (school name personalised)'],['Day 3','Social proof + published student outcome'],['Day 7','Free masterclass invite + Calendly link'],['Day 10','FOMO + limited cohort spots'],['Day 14','Breakup email — last chance'],['Warmup','Instantly.ai on separate sending domains — never main domain']]},
+  t3:{t:'Tier 3 — Parking · LCS < 40',r:[['Storage','Google Sheets: Low Priority Parking tab'],['Reason','Usually: no verified email or low fee range school'],['Action','No outreach — protect domain sending reputation'],['Re-score','Monthly review if new Hunter/Apollo data found'],['Volume','Expected ~35-40% of all enriched records']]},
+  seq:{t:'Apollo Email Sequences',r:[['Platform','Apollo.io emailer + Instantly.ai domain warming'],['Sequence','5 personalised emails · 14 days'],['A/B test','2 subject line variants per email — auto-winner'],['Open rate target','> 35%'],['Reply rate target','> 5%'],['Owner','Abhijeet (sequences) · Nishant (API routing)']]},
+  wa:{t:'WhatsApp BSP + Bland.ai Recovery',r:[['Trigger','JotForm registration → n8n → WhatsApp'],['Day 1','Welcome + what to expect in masterclass'],['Day 3','Reminder + add-to-calendar link'],['Day 5','Last chance + student testimonial'],['Bland.ai','AI call to no-shows within 2hrs of event end'],['Post-pay','WhatsApp drip at Days 30/60/90 for cross-sell']]},
+  tavus:{t:'Tavus "Priya" — AI Video Agent',r:[['Persona','"Priya" — LWL student success advisor avatar'],['Use','60-90s personalised video for Tier 1 non-responders'],['Trigger','After Day 7 of Apollo sequence — zero reply'],['CTA','Book discovery call OR register for masterclass'],['Status','Active · deployed for high-value non-responders']]},
+  mc2:{t:'ManyChat — Instagram DM Automation',r:[['Keywords','JOJO → FDSP · EDGE → Edge Club · DOCTOR → FDSP · PORTFOLIO → Onward'],['Flow','DM keyword → auto-reply → JotForm → masterclass registration'],['Trigger','Reels end: "DM me JOJO to get free access"'],['Integration','ManyChat → n8n webhook → WhatsApp nurture'],['Owner','Tasia (FDSP content) · Ayush/Aditya (growth ads)']]},
+  mc:{t:'Free Masterclass — Core Conversion Engine',r:[['Hosts','Tasia (Research Fellowship) · Dr. JoJo (Future Doctors FDSP)'],['Platform','Zoom · JotForm registration · Calendly scheduling'],['Structure','40min content + 5min soft pitch + 15min Q&A'],['Pitch moment','Minute 40: show student published papers + outcomes'],['Post-class','48hr discount code dropped within 1hr of end'],['Honest math','~1% of registrations → paid (not 10%)']]},
+  c48:{t:'48-Hour Discount Code — Urgency Mechanic',r:[['Codes','LUTHER48 · EDGE48 · ONWARD48 · JOJO48'],['Research Fellowship','CORE $1,800→$1,500 · PUBLISH+ $2,400→$1,950 · ELITE $3,500→$2,800'],['Delivery','Email + WhatsApp within 1hr of masterclass end'],['Expiry','Hard 48hr — no extensions — urgency IS the mechanic'],['Recovery','Bland.ai call at 24hr mark if no Stripe payment yet'],['Trigger','Payment → Anjali programme lock in Central Registry']]},
+  stripe:{t:'Stripe + Razorpay — Payments',r:[['Global','Stripe for international card payments'],['India','Razorpay for INR transactions'],['Webhook','Payment → n8n → Brevo nurture starts automatically'],['Tiers','CORE · PUBLISH+ · ELITE (3 price points)'],['ARPU target','~$1,750 blended across all LWL programmes']]},
+  brevo:{t:'Brevo + Cross-sell Engine',r:[['Post-pay','Welcome → expectations → milestone check-ins'],['Day 30','Cross-sell: complementary programme suggestion'],['Day 60','Tier upgrade: CORE → PUBLISH+ (+$450)'],['Day 90','Referral ask + ELITE upgrade offer'],['Lookalike','Each paying school → 10 similar schools queued for outreach']]},
+};
+
+/* ─── BUILD SVG ─────────────────────────────────────────────── */
+const NS='http://www.w3.org/2000/svg';
+function svgEl(tag,a={}){const e=document.createElementNS(NS,tag);Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v));return e;}
+
+const svg=document.getElementById('net');
+const lmap={};LAYERS.forEach(l=>lmap[l.id]=l);
+const nmap={};
+NODES.forEach(n=>{
+  const l=lmap[n.l];
+  n.x=l.x-NW/2; n.y=TOP+n.r*ROW;
+  n.cx=l.x; n.cy=n.y+NH/2;
+  nmap[n.id]=n;
+});
+
+/* DEFS: arrow marker */
+const defs=svgEl('defs');
+const mk=svgEl('marker',{id:'arr',viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'5',markerHeight:'5',orient:'auto-start-reverse'});
+const mp=svgEl('path',{d:'M1 2L8 5L1 8',fill:'none',stroke:'#b8b4aa','stroke-width':'1.5','stroke-linecap':'round','stroke-linejoin':'round'});
+mk.appendChild(mp);defs.appendChild(mk);svg.appendChild(defs);
+
+/* Lane backgrounds */
+LAYERS.forEach((l,i)=>{
+  const lx=l.x-NW/2-12, lw=NW+24;
+  const rect=svgEl('rect',{x:lx,y:0,width:lw,height:516,fill:l.bg});
+  svg.appendChild(rect);
+  // Subtle separator line
+  if(i>0){const sep=svgEl('line',{x1:lx,y1:0,x2:lx,y2:516,stroke:'#DDD9CF','stroke-width':'1'});svg.appendChild(sep);}
+});
+
+/* Layer header labels */
+LAYERS.forEach(l=>{
+  const lx=l.x-NW/2-12, lw=NW+24;
+  const bg=svgEl('rect',{x:lx,y:0,width:lw,height:34,fill:l.col});
+  svg.appendChild(bg);
+  const txt=svgEl('text',{x:l.x,y:17,'text-anchor':'middle','dominant-baseline':'central',fill:'#fff','font-size':'10.5','font-weight':'700','font-family':'system-ui, sans-serif','letter-spacing':'0.04em'});
+  txt.textContent=l.name.toUpperCase();
+  svg.appendChild(txt);
+});
+
+/* Funnel strip */
+const FY=462, FH=44;
+const fdata=[{n:'7k+',lbl:'Available'},{n:'1,500',lbl:'Scraped'},{n:'800',lbl:'Verified'},{n:'200',lbl:'Tier 1+2'},{n:'40',lbl:'Masterclass'},{n:'~3',lbl:'Paid/cycle'},{n:'×500',lbl:'To 5k goal'}];
+const fcolors=LAYERS.map(l=>l.col);
+const fBg=svgEl('rect',{x:0,y:FY,width:1320,height:FH,fill:'#F7F5F0'});
+svg.appendChild(fBg);
+const fLine=svgEl('line',{x1:0,y1:FY,x2:1320,y2:FY,stroke:'#DDD9CF','stroke-width':'1'});
+svg.appendChild(fLine);
+const fw=1320/fdata.length;
+fdata.forEach((f,i)=>{
+  const cx=i*fw+fw/2;
+  const bg2=svgEl('rect',{x:i*fw+4,y:FY+4,width:fw-8,height:FH-8,rx:5,fill:fcolors[i],opacity:'0.1'});
+  svg.appendChild(bg2);
+  const n=svgEl('text',{x:cx,y:FY+17,'text-anchor':'middle','dominant-baseline':'central',fill:fcolors[i],'font-size':'13','font-weight':'700','font-family':'system-ui'});
+  n.textContent=f.n;svg.appendChild(n);
+  const lb=svgEl('text',{x:cx,y:FY+32,'text-anchor':'middle','dominant-baseline':'central',fill:'#888','font-size':'9','font-family':'system-ui'});
+  lb.textContent=f.lbl;svg.appendChild(lb);
+  if(i<fdata.length-1){
+    const arr=svgEl('text',{x:(i+1)*fw,y:FY+22,'text-anchor':'middle','dominant-baseline':'central',fill:'#ccc','font-size':'14','font-family':'system-ui'});
+    arr.textContent='→';svg.appendChild(arr);
+  }
+});
+
+/* Edges */
+const edgeG=svgEl('g');
+EDGES.forEach(([a,b])=>{
+  const A=nmap[a],B=nmap[b];
+  if(!A||!B)return;
+  const x1=A.x+NW,y1=A.cy,x2=B.x,y2=B.cy;
+  const mx=(x1+x2)/2;
+  const isSameLayer=(A.l===B.l);
+  const path=svgEl('path',{
+    d:`M${x1},${y1} C${isSameLayer?x1+40:mx},${y1} ${isSameLayer?x2-40:mx},${y2} ${x2},${y2}`,
+    fill:'none',stroke:'#C5C1B7','stroke-width':'1.2',opacity:'0.7',
+    'marker-end':'url(#arr)'
+  });
+  edgeG.appendChild(path);
+});
+svg.appendChild(edgeG);
+
+/* Nodes */
+let activeNode=null;
+NODES.forEach(n=>{
+  const l=lmap[n.l];
+  const g=svgEl('g',{cursor:'pointer'});
+  
+  // Drop shadow (subtle)
+  const sh=svgEl('rect',{x:n.x+2,y:n.y+2,width:NW,height:NH,rx:9,fill:'rgba(0,0,0,0.07)'});
+  // Main box
+  const box=svgEl('rect',{x:n.x,y:n.y,width:NW,height:NH,rx:9,fill:'#fff',stroke:l.col,'stroke-width':'1.5'});
+  // Top accent strip (4px)
+  const acc=svgEl('rect',{x:n.x+1,y:n.y+1,width:NW-2,height:6,rx:8,fill:l.col,opacity:'0.9'});
+  const accOver=svgEl('rect',{x:n.x+1,y:n.y+5,width:NW-2,height:2,fill:l.col,opacity:'0.9'});
+  // Title
+  const tt=svgEl('text',{x:n.cx,y:n.y+21,'text-anchor':'middle','dominant-baseline':'central',fill:l.col,'font-size':'11','font-weight':'700','font-family':'system-ui, sans-serif'});
+  tt.textContent=n.t;
+  // Sub
+  const ss=svgEl('text',{x:n.cx,y:n.y+38,'text-anchor':'middle','dominant-baseline':'central',fill:'#888','font-size':'9.5','font-family':'system-ui'});
+  ss.textContent=n.s;
+
+  [sh,box,acc,accOver,tt,ss].forEach(e=>g.appendChild(e));
+  
+  g.addEventListener('mouseenter',()=>{
+    if(n.id!==activeNode){box.setAttribute('fill',l.bg);}
+    box.setAttribute('stroke-width','2');
+  });
+  g.addEventListener('mouseleave',()=>{
+    if(n.id!==activeNode){box.setAttribute('fill','#fff');}
+    box.setAttribute('stroke-width','1.5');
+  });
+  g.addEventListener('click',()=>{
+    // Reset previous
+    if(activeNode){
+      const prev=document.getElementById('node-'+activeNode);
+      if(prev){prev.querySelector('rect:nth-child(2)').setAttribute('fill','#fff');}
+    }
+    activeNode=n.id;
+    box.setAttribute('fill',l.bg);
+    showD(n.id,l);
+  });
+  g.setAttribute('id','node-'+n.id);
+  svg.appendChild(g);
+});
+
+/* Legend */
+const legEl=document.getElementById('legend');
+LAYERS.forEach(l=>{
+  const d=document.createElement('div');
+  d.className='leg-item';
+  d.innerHTML=`<span class="leg-dot" style="background:${l.col}"></span>${l.name}`;
+  legEl.appendChild(d);
+});
+
+/* Detail panel */
+function showD(id,layer){
+  const d=DEETS[id];
+  if(!d)return;
+  document.getElementById('d-badge').style.background=layer.col;
+  document.getElementById('d-title').textContent=d.t;
+  document.getElementById('d-grid').innerHTML=d.r.map(([k,v])=>
+    `<div class="d-row"><span class="d-key">${k}: </span><span class="d-val">${v}</span></div>`
+  ).join('');
+  const panel=document.getElementById('detail');
+  panel.classList.add('on');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function closeD(){
+  document.getElementById('detail').classList.remove('on');
+  if(activeNode){
+    const prev=document.getElementById('node-'+activeNode);
+    if(prev)prev.querySelector('rect:nth-child(2)').setAttribute('fill','#fff');
+  }
+  activeNode=null;
+}
+</script>
+</body>
+</html>

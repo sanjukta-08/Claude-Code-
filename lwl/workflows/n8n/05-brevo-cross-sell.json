@@ -1,0 +1,100 @@
+{
+  "name": "LWL · 05 · Brevo Cross-Sell (Day 30/60/90)",
+  "nodes": [
+    {
+      "parameters": { "rule": { "interval": [ { "field": "cronExpression", "expression": "0 9 * * *" } ] } },
+      "id": "trig",
+      "name": "Daily 09:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [220, 320]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.HUB_BASE_URL }}/registry/due-for-crosssell",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "x-internal-secret", "value": "={{ $env.HUB_INTERNAL_SECRET }}" } ] }
+      },
+      "id": "fetch",
+      "name": "Fetch Due Schools",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [440, 320]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            { "conditions": { "options": { "version": 2 }, "combinator": "and", "conditions": [ { "leftValue": "={{ $json.days_since_payment }}", "rightValue": 30, "operator": { "type": "number", "operation": "equals" } } ] }, "outputKey": "d30" },
+            { "conditions": { "options": { "version": 2 }, "combinator": "and", "conditions": [ { "leftValue": "={{ $json.days_since_payment }}", "rightValue": 60, "operator": { "type": "number", "operation": "equals" } } ] }, "outputKey": "d60" },
+            { "conditions": { "options": { "version": 2 }, "combinator": "and", "conditions": [ { "leftValue": "={{ $json.days_since_payment }}", "rightValue": 90, "operator": { "type": "number", "operation": "equals" } } ] }, "outputKey": "d90" }
+          ]
+        }
+      },
+      "id": "switch",
+      "name": "Switch · Day",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [660, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brevo.com/v3/smtp/email",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "api-key", "value": "={{ $env.BREVO_API_KEY }}" } ] },
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={\n  \"templateId\": 31,\n  \"to\": [ { \"email\": \"{{ $json.email }}\" } ],\n  \"params\": { \"PROGRAMME\": \"{{ $json.programme }}\", \"NEXT_SUGGESTION\": \"{{ $json.crosssell_suggestion }}\" }\n}"
+      },
+      "id": "b30",
+      "name": "Brevo · Day 30 Cross-sell",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [880, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brevo.com/v3/smtp/email",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "api-key", "value": "={{ $env.BREVO_API_KEY }}" } ] },
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={\n  \"templateId\": 32,\n  \"to\": [ { \"email\": \"{{ $json.email }}\" } ],\n  \"params\": { \"UPGRADE_PRICE\": 450 }\n}"
+      },
+      "id": "b60",
+      "name": "Brevo · Day 60 Tier Upgrade",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [880, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brevo.com/v3/smtp/email",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "api-key", "value": "={{ $env.BREVO_API_KEY }}" } ] },
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={\n  \"templateId\": 33,\n  \"to\": [ { \"email\": \"{{ $json.email }}\" } ]\n}"
+      },
+      "id": "b90",
+      "name": "Brevo · Day 90 Referral + ELITE",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [880, 440]
+    }
+  ],
+  "connections": {
+    "Daily 09:00": { "main": [[{ "node": "Fetch Due Schools", "type": "main", "index": 0 }]] },
+    "Fetch Due Schools": { "main": [[{ "node": "Switch · Day", "type": "main", "index": 0 }]] },
+    "Switch · Day": {
+      "main": [
+        [{ "node": "Brevo · Day 30 Cross-sell", "type": "main", "index": 0 }],
+        [{ "node": "Brevo · Day 60 Tier Upgrade", "type": "main", "index": 0 }],
+        [{ "node": "Brevo · Day 90 Referral + ELITE", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": ["lwl", "conversion", "brevo"]
+}

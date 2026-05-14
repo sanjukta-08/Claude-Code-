@@ -1,0 +1,17 @@
+{
+  "page_id": "{{ env.MANYCHAT_PAGE_ID }}",
+  "keywords": [
+    { "trigger": "JOJO",      "programme": "FDSP",     "flow_id": "fdsp_jojo_intake" },
+    { "trigger": "DOCTOR",    "programme": "FDSP",     "flow_id": "fdsp_jojo_intake" },
+    { "trigger": "EDGE",      "programme": "Edge",     "flow_id": "edge_intake" },
+    { "trigger": "PORTFOLIO", "programme": "Onward",   "flow_id": "onward_intake" },
+    { "trigger": "RESEARCH",  "programme": "Research", "flow_id": "research_fellowship_intake" }
+  ],
+  "default_flow": {
+    "step_1": "Hi! Thanks for reaching out. Drop your name + your child's grade level.",
+    "step_2": "Got it! Here's the masterclass registration: {{registration_url}}",
+    "step_3": "Reminder will be sent on WhatsApp 24hrs before."
+  },
+  "webhook": "{{ env.N8N_WEBHOOK_BASE }}/webhook/lwl-masterclass-register",
+  "instagram_caption_template": "DM me {{KEYWORD}} for free access — only 50 spots in this cohort."
+}

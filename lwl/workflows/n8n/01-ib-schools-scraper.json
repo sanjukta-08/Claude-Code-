@@ -1,0 +1,212 @@
+{
+  "name": "LWL · 01 · IB Schools Scraper",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            { "field": "cronExpression", "expression": "0 6 * * 1" }
+          ]
+        }
+      },
+      "id": "trig-weekly",
+      "name": "Weekly Mon 06:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [240, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/apify~web-scraper/runs?token={{ $env.APIFY_TOKEN }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"startUrls\": [\n    { \"url\": \"https://www.ibo.org/programmes/find-an-ib-school/\" }\n  ],\n  \"pageFunction\": \"async function pageFunction({ request, $ }) { const schools = []; $('.school-result').each((i, el) => { schools.push({ name: $(el).find('.name').text().trim(), country: $(el).find('.country').text().trim(), programmes: $(el).find('.programmes').text().trim(), url: $(el).find('a').attr('href') }); }); return schools; }\",\n  \"maxRequestsPerCrawl\": 5000,\n  \"maxConcurrency\": 5\n}",
+        "options": {}
+      },
+      "id": "apify-start",
+      "name": "Apify · Start Scrape",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [460, 320]
+    },
+    {
+      "parameters": { "amount": 90, "unit": "seconds" },
+      "id": "wait-90s",
+      "name": "Wait 90s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [680, 320]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.apify.com/v2/datasets/{{ $('Apify · Start Scrape').item.json.data.defaultDatasetId }}/items?token={{ $env.APIFY_TOKEN }}&format=json"
+      },
+      "id": "apify-fetch",
+      "name": "Apify · Fetch Dataset",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 320]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.first().json;\nconst priority = ['United Arab Emirates','India','Korea, South','Singapore','Brazil','Mexico','Argentina'];\nconst filtered = items\n  .filter(s => s.name && s.url)\n  .map(s => ({ ...s, priority_region: priority.includes(s.country) }))\n  .sort((a,b) => Number(b.priority_region) - Number(a.priority_region));\nreturn filtered.map(s => ({ json: s }));"
+      },
+      "id": "filter",
+      "name": "Filter + Priority Sort",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 320]
+    },
+    {
+      "parameters": { "batchSize": 5, "options": {} },
+      "id": "split",
+      "name": "Split in Batches of 5",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1340, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apollo.io/v1/organizations/enrich",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-api-key", "value": "={{ $env.APOLLO_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"domain\": \"{{ $json.url | replace('https://', '') | split('/')[0] }}\"\n}"
+      },
+      "id": "apollo-org",
+      "name": "Apollo · Org Enrich",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1560, 240]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apollo.io/v1/mixed_people/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-api-key", "value": "={{ $env.APOLLO_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"q_organization_domains\": \"{{ $('Apollo · Org Enrich').item.json.organization.primary_domain }}\",\n  \"person_titles\": [\"Principal\", \"Head of School\", \"Admissions Director\", \"MUN Coordinator\", \"Director of Studies\"],\n  \"page\": 1,\n  \"per_page\": 5\n}"
+      },
+      "id": "apollo-people",
+      "name": "Apollo · People Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1780, 240]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.hunter.io/v2/domain-search?domain={{ $('Apollo · Org Enrich').item.json.organization.primary_domain }}&api_key={{ $env.HUNTER_API_KEY }}&limit=10"
+      },
+      "id": "hunter",
+      "name": "Hunter · Domain Verify",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1560, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const school = $('Split in Batches of 5').item.json;\nconst org = $('Apollo · Org Enrich').item.json.organization || {};\nconst people = ($('Apollo · People Search').item.json.people || []);\nconst emails = ($('Hunter · Domain Verify').item.json.data?.emails || []);\n\nlet score = 0;\nif (org.id) score += 20;\nif (emails.length > 0 && emails.some(e => e.verification?.status === 'valid')) score += 25;\nif (school.programmes && school.programmes.includes('Diploma')) score += 20;\nconst feeText = (org.short_description || '') + (org.industry || '');\nif (/USD|tuition|fees|annual/i.test(feeText)) score += 20;\nif (people.length >= 2) score += 15;\n\nconst contacts = people.map(p => ({\n  name: p.name, title: p.title, email: p.email,\n  linkedin: p.linkedin_url, phone: p.phone_numbers?.[0]?.sanitized_number\n}));\n\nreturn [{ json: {\n  school_name: school.name,\n  country: school.country,\n  domain: org.primary_domain,\n  ib_programmes: school.programmes,\n  apollo_org_id: org.id,\n  org_size: org.estimated_num_employees,\n  contacts,\n  hunter_emails: emails.slice(0,5),\n  lcs_score: score,\n  tier: score >= 70 ? 1 : score >= 40 ? 2 : 3,\n  scraped_at: new Date().toISOString()\n}}];"
+      },
+      "id": "merge-score",
+      "name": "Merge + LCS Score",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 320]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "version": 2 },
+          "combinator": "and",
+          "conditions": [
+            { "leftValue": "={{ $json.lcs_score }}", "rightValue": 40, "operator": { "type": "number", "operation": "gte" } }
+          ]
+        }
+      },
+      "id": "filter-40",
+      "name": "LCS ≥ 40?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2220, 320]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": "={{ $env.PIPELINE_SHEET_ID }}",
+        "sheetName": "School Intelligence",
+        "columns": {
+          "mappingMode": "autoMapInputData"
+        }
+      },
+      "id": "sheets-append",
+      "name": "Sheets · Append",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [2440, 240]
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": "={{ $env.SLACK_TIER1_CHANNEL }}",
+        "text": "=:school: *{{ $json.school_name }}* ({{ $json.country }}) — LCS *{{ $json.lcs_score }}* · Tier {{ $json.tier }}\\n{{ $json.contacts[0]?.name }} ({{ $json.contacts[0]?.title }}) · {{ $json.contacts[0]?.email }}",
+        "otherOptions": {}
+      },
+      "id": "slack",
+      "name": "Slack · Tier 1 Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [2660, 160]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": "={{ $env.PIPELINE_SHEET_ID }}",
+        "sheetName": "Low Priority Parking",
+        "columns": { "mappingMode": "autoMapInputData" }
+      },
+      "id": "park",
+      "name": "Sheets · Park",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [2440, 440]
+    }
+  ],
+  "connections": {
+    "Weekly Mon 06:00": { "main": [[{ "node": "Apify · Start Scrape", "type": "main", "index": 0 }]] },
+    "Apify · Start Scrape": { "main": [[{ "node": "Wait 90s", "type": "main", "index": 0 }]] },
+    "Wait 90s": { "main": [[{ "node": "Apify · Fetch Dataset", "type": "main", "index": 0 }]] },
+    "Apify · Fetch Dataset": { "main": [[{ "node": "Filter + Priority Sort", "type": "main", "index": 0 }]] },
+    "Filter + Priority Sort": { "main": [[{ "node": "Split in Batches of 5", "type": "main", "index": 0 }]] },
+    "Split in Batches of 5": { "main": [[{ "node": "Apollo · Org Enrich", "type": "main", "index": 0 }, { "node": "Hunter · Domain Verify", "type": "main", "index": 0 }]] },
+    "Apollo · Org Enrich": { "main": [[{ "node": "Apollo · People Search", "type": "main", "index": 0 }]] },
+    "Apollo · People Search": { "main": [[{ "node": "Merge + LCS Score", "type": "main", "index": 0 }]] },
+    "Hunter · Domain Verify": { "main": [[{ "node": "Merge + LCS Score", "type": "main", "index": 0 }]] },
+    "Merge + LCS Score": { "main": [[{ "node": "LCS ≥ 40?", "type": "main", "index": 0 }]] },
+    "LCS ≥ 40?": {
+      "main": [
+        [{ "node": "Sheets · Append", "type": "main", "index": 0 }],
+        [{ "node": "Sheets · Park", "type": "main", "index": 0 }]
+      ]
+    },
+    "Sheets · Append": { "main": [[{ "node": "Slack · Tier 1 Alert", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": ["lwl", "scraping", "ib"]
+}

@@ -1,0 +1,23 @@
+{
+  "masterclass_welcome": {
+    "body": "Hi {{1}}! Thanks for registering for the {{2}} masterclass. We'll send Zoom link 24hrs before. Reply STOP to opt out."
+  },
+  "masterclass_reminder_d3": {
+    "body": "{{1}}, your masterclass is in 2 days. Add to calendar: {{2}}"
+  },
+  "masterclass_last_chance": {
+    "body": "Final reminder, {{1}} — masterclass starts in 24hrs. Zoom link: {{2}}"
+  },
+  "discount_48hr_drop": {
+    "body": "{{1}}! Thanks for joining the masterclass. Code *{{2}}* gives you {{3}}% off — expires in 48 hours. Pay: {{4}}"
+  },
+  "post_pay_d30": {
+    "body": "{{1}}, you're 30 days into {{2}}. Want to add {{3}} for $450 off?"
+  },
+  "post_pay_d60": {
+    "body": "{{1}}, your {{2}} cohort is going strong. ELITE tier opens 5 spots for {{3}} — interested?"
+  },
+  "post_pay_d90": {
+    "body": "{{1}}, would your school recommend 2 other families? Each successful referral = $200 credit."
+  }
+}
