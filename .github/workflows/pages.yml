@@ -1,0 +1,48 @@
+name: Deploy landing page to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - claude/create-landing-page-13klp
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare static site
+        run: |
+          mkdir -p _site
+          cp index.html _site/index.html
+          cp proof.html _site/proof.html 2>/dev/null || true
+          cp business-model.html _site/business-model.html 2>/dev/null || true
+          touch _site/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
