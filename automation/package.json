@@ -1,0 +1,14 @@
+{
+  "name": "social-automation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Daily AI-generated posts to Instagram and LinkedIn",
+  "scripts": {
+    "post": "node index.js",
+    "dry-run": "DRY_RUN=true node index.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.1"
+  }
+}
