@@ -6,7 +6,9 @@
   "description": "Daily AI-generated posts to Instagram and LinkedIn",
   "scripts": {
     "post": "node index.js",
-    "dry-run": "DRY_RUN=true node index.js"
+    "dry-run": "DRY_RUN=true node index.js",
+    "preview": "PREVIEW=true node index.js",
+    "gallery": "node scripts/rebuild-gallery.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.30.1"

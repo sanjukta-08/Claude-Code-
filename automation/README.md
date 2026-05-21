@@ -43,19 +43,45 @@ Create a Canva brand template with three text fields. The field **names** must m
 
 Edit `automation/config.js` — set `brand.name`, `niche`, `audience`, `voice`, `hashtags`, `cta`.
 
-### 4. Repo visibility
+### 4. Image hosting
 
-Instagram fetches the image from `raw.githubusercontent.com`, which requires the repo to be **public**. If your repo is private, swap `lib/storage.js`'s `rawGitHubUrl` for a Cloudinary / imgbb / S3 upload.
+Instagram requires a public URL for the image. Two options:
 
-## Local testing
+- **imgbb (recommended)** — free, instant. Get a key at https://api.imgbb.com/ → add `IMGBB_API_KEY` to secrets. Works with private repos.
+- **GitHub raw (fallback)** — if `IMGBB_API_KEY` is not set, the script commits the image to the repo and uses `raw.githubusercontent.com`. **Requires the repo to be public.**
+
+### 5. Long-lived Instagram token (do this once)
+
+Default Page tokens expire in 1-2 hours. Get a long-lived one (60 days, or **non-expiring** if derived from a long-lived User token):
+
+1. Generate a short-lived User token in Graph API Explorer with `instagram_basic` + `instagram_content_publish` + `pages_manage_posts` + `pages_read_engagement`.
+2. Exchange for a long-lived User token:
+   `GET /oauth/access_token?grant_type=fb_exchange_token&client_id=APP_ID&client_secret=APP_SECRET&fb_exchange_token=SHORT_TOKEN`
+3. Use that token to get a Page token: `GET /me/accounts?access_token=LONG_USER_TOKEN` — copy the page's `access_token`. **This Page token does not expire.**
+
+## Local testing & previewing designs
 
 ```bash
 cd automation
 npm install
 cp .env.example .env  # fill in real values
-DRY_RUN=true npm run post   # generates content + design, does not publish
-npm run post                # full run (will publish!)
+
+npm run preview   # generates design + saves to posts/, NO publishing.
+                  # Open automation/posts/gallery.html in a browser to see it.
+npm run dry-run   # generates everything, dumps JSON, no publish.
+npm run post      # full run (will publish to Instagram + LinkedIn!)
+npm run gallery   # rebuild gallery.html from history.json
 ```
+
+## How to see all generated posters
+
+Every run (preview or real) saves the design to `automation/posts/<date>.png` and updates `automation/posts/gallery.html`. To browse them:
+
+- **Locally**: open `automation/posts/gallery.html` in a browser — visual grid of every poster with date, topic, and a "Edit in Canva" link.
+- **On GitHub**: the `automation/posts/` folder shows all PNGs (just click any one to view).
+- **In Canva**: every entry in `history.json` has an `editUrl` — open it to edit the original design.
+
+Each preview is also kept in `history.json` (marked `"preview": true`) and shown in the gallery, so you can review the AI's output before turning on the daily cron.
 
 ## Tokens that expire
 

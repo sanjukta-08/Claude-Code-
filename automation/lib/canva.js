@@ -52,6 +52,7 @@ export async function createDesignFromTemplate({ headline, subheadline, footer }
   const jobId = create.job.id;
   const done = await poll(`/autofills/${jobId}`, (d) => d.job.status);
   const designId = done.job.result.design.id;
+  const editUrl = done.job.result.design.urls?.edit_url || `https://www.canva.com/design/${designId}/edit`;
 
   const exportJob = await canvaFetch("/exports", {
     method: "POST",
@@ -68,5 +69,5 @@ export async function createDesignFromTemplate({ headline, subheadline, footer }
   if (!imgRes.ok) throw new Error(`Failed to download Canva export: ${imgRes.status}`);
   const buffer = Buffer.from(await imgRes.arrayBuffer());
 
-  return { designId, imageUrl: url, buffer };
+  return { designId, editUrl, imageUrl: url, buffer };
 }
