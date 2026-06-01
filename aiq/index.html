@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIQ Lite — Human-AI Intelligence Index</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Figtree:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--w:#fff;--off:#F9F7F2;--off2:#F1EFE9;--ink:#0D0D12;--navy:#0E2240;--navy2:#162E52;
+--gold:#C8860A;--gl:#FBF0D9;--gm:#E8A020;--teal:#0A7463;--tl:#E6F4F1;
+--red:#B83232;--vio:#5B4FBF;--sage:#1F5C40;--amb:#8B4513;
+--mut:#888896;--m2:#B8B5AE;--brd:#E4E1DA;--brd2:#EDE9E2;
+--shd:0 1px 4px rgba(14,34,64,.07),0 4px 16px rgba(14,34,64,.05);
+--shdl:0 2px 8px rgba(14,34,64,.09),0 8px 32px rgba(14,34,64,.07)}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{background:var(--w);color:var(--ink);font-family:"Figtree",sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--brd);padding:0 48px;height:62px;display:flex;align-items:center;justify-content:space-between}
+@media(max-width:680px){nav{padding:0 20px}}
+.nav-logo{font-family:"Cormorant Garant",serif;font-size:20px;font-weight:700;color:var(--navy);letter-spacing:.01em;display:flex;align-items:center;gap:6px}
+.nav-logo-sub{font-family:"DM Mono",monospace;font-size:10px;font-weight:400;color:var(--gold);letter-spacing:.1em;text-transform:uppercase}
+.nav-r{display:flex;align-items:center;gap:24px}
+.nav-lnk{font-size:13px;font-weight:500;color:var(--mut);transition:color .2s}.nav-lnk:hover{color:var(--ink)}
+.nav-cta{background:var(--navy);color:var(--w);font-family:"Figtree",sans-serif;font-size:13px;font-weight:600;padding:9px 20px;border-radius:3px;border:none;cursor:pointer;transition:all .2s}.nav-cta:hover{background:var(--navy2);transform:translateY(-1px)}
+@media(max-width:640px){.nav-lnk{display:none}}
+
+/* REVEAL */
+.rev{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}.rev.vis{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.08s}.rd2{transition-delay:.16s}.rd3{transition-delay:.24s}.rd4{transition-delay:.32s}
+
+/* SECTIONS */
+.section{padding:80px 48px;max-width:1200px;margin:0 auto}
+.section-bg{background:var(--off)}
+.section-navy{background:var(--navy)}
+.section-ink{background:var(--ink)}
+@media(max-width:680px){.section{padding:56px 20px}}
+
+/* EYEBROW */
+.eyebrow{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.eyebrow::before{content:"";width:16px;height:1px;background:var(--gold)}
+.eyebrow-w{color:var(--gm)}.eyebrow-w::before{background:var(--gm)}
+.sh2{font-family:"Cormorant Garant",serif;font-size:clamp(26px,3.5vw,42px);font-weight:600;line-height:1.12;letter-spacing:-.015em;color:var(--ink);margin-bottom:12px}
+.sh2 em{font-style:italic;color:var(--navy)}
+.sh2-w{color:var(--w)}.sh2-w em{color:var(--gm)}
+.sp{font-size:15px;color:var(--mut);line-height:1.78;max-width:580px}
+.sp-w{color:rgba(255,255,255,.55)}
+
+/* BUTTONS */
+.btn-navy{background:var(--navy);color:var(--w);font-family:"Figtree",sans-serif;font-size:15px;font-weight:600;padding:14px 32px;border:none;border-radius:3px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:9px}
+.btn-navy:hover{background:var(--navy2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(14,34,64,.18)}
+.btn-gold{background:var(--gold);color:var(--w);font-family:"Figtree",sans-serif;font-size:14px;font-weight:600;padding:12px 26px;border:none;border-radius:3px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-gold:hover{background:var(--gm);transform:translateY(-1px)}
+.btn-ghost{font-family:"Figtree",sans-serif;font-size:14px;font-weight:500;color:var(--mut);background:none;border:1px solid var(--brd);padding:13px 24px;border-radius:3px;cursor:pointer;transition:all .2s}.btn-ghost:hover{border-color:var(--navy);color:var(--navy)}
+.arr{transition:transform .2s;display:inline-block}.btn-navy:hover .arr,.btn-gold:hover .arr{transform:translateX(3px)}
+
+/* ── HERO ── */
+.hero{min-height:100vh;padding:80px 48px 60px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+@media(max-width:880px){.hero{grid-template-columns:1fr;gap:36px;padding:80px 20px 48px}}
+.hero-h1{font-family:"Cormorant Garant",serif;font-size:clamp(40px,5.5vw,66px);font-weight:600;line-height:1.06;letter-spacing:-.025em;color:var(--ink);margin-bottom:8px}
+.hero-h1 em{font-style:italic;color:var(--navy)}
+.hero-rule{width:38px;height:2px;background:var(--gold);margin:16px 0}
+.hero-p{font-size:17px;color:var(--mut);line-height:1.78;max-width:480px;margin-bottom:26px}
+.hero-p strong{color:var(--ink);font-weight:500}
+.hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.hero-meta{font-family:"DM Mono",monospace;font-size:11px;color:var(--m2);letter-spacing:.05em}
+.hero-meta strong{color:var(--gold)}
+
+/* CREDENTIAL CARD */
+.cred-wrap{position:relative}
+.cred-float{position:absolute;background:var(--w);border:1px solid var(--brd);border-radius:7px;padding:10px 14px;box-shadow:var(--shd);font-size:12px;z-index:2}
+.cf-lbl{font-family:"DM Mono",monospace;font-size:9px;color:var(--m2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px}
+.cf-val{font-weight:600;color:var(--ink);font-size:13px}
+.cf1{top:-16px;right:-16px;animation:flt 4s ease-in-out infinite}
+.cf2{bottom:-12px;left:-12px;animation:flt 4s ease-in-out infinite;animation-delay:2s}
+@keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@media(max-width:880px){.cf1,.cf2{display:none}}
+
+.cred-card{background:var(--w);border:1px solid var(--brd);border-radius:12px;box-shadow:var(--shdl);overflow:hidden}
+.cc-hdr{background:var(--navy);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.cc-hdr-lbl{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.cc-hdr-stage{font-family:"DM Mono",monospace;font-size:10px;color:var(--gm);background:rgba(200,134,10,.15);border:1px solid rgba(200,134,10,.3);padding:3px 8px;border-radius:2px;letter-spacing:.06em}
+.cc-hdr-level{font-family:"DM Mono",monospace;font-size:9px;color:rgba(255,255,255,.35);letter-spacing:.08em}
+.cc-body{padding:18px 20px}
+.cc-person{font-family:"Cormorant Garant",serif;font-size:15px;font-weight:600;color:var(--ink);margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--brd2)}
+.cc-ajir-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.cc-ajir{text-align:center;padding:10px 6px;background:var(--off);border-radius:5px}
+.cc-ajir-letter{font-family:"Cormorant Garant",serif;font-size:24px;font-weight:700;line-height:1;margin-bottom:2px}
+.cc-ajir-score{font-family:"DM Mono",monospace;font-size:13px;font-weight:600}
+.cc-ajir-lbl{font-family:"DM Mono",monospace;font-size:8px;color:var(--m2);text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.cc-score-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px}
+.cc-score-main{display:flex;align-items:flex-end;gap:8px}
+.cc-num{font-family:"Cormorant Garant",serif;font-size:64px;font-weight:700;color:var(--navy);line-height:1;letter-spacing:-.04em}
+.cc-of{font-size:13px;color:var(--m2);padding-bottom:8px}
+.cc-right-info{}
+.cc-bench-lbl{font-size:11px;color:var(--mut);margin-bottom:5px}
+.cc-bench-track{height:5px;background:var(--off2);border-radius:3px;margin-bottom:5px;overflow:hidden}
+.cc-bench-fill{height:100%;background:linear-gradient(90deg,var(--navy),#2A6ECC);border-radius:3px;width:0;transition:width 1.8s cubic-bezier(.4,0,.2,1)}
+.cc-bench-res{font-size:11px;color:var(--navy);font-weight:500;margin-bottom:12px}
+.cc-expiry{font-family:"DM Mono",monospace;font-size:10px;color:var(--m2);padding-top:10px;border-top:1px solid var(--brd2);display:flex;align-items:center;gap:5px}
+.cc-exp-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
+
+/* STRIP */
+.strip{background:var(--ink);padding:14px 48px;display:flex;align-items:center;justify-content:center;gap:32px;flex-wrap:wrap}
+.strip-item{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.08em;color:rgba(255,255,255,.35);text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.strip-item::before{content:"◈";color:var(--gold);font-size:8px}
+
+/* NOT A TEST */
+.nat-band{background:var(--navy);padding:0}
+.nat-inner{max-width:1200px;margin:0 auto;padding:36px 48px;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:start}
+@media(max-width:640px){.nat-inner{grid-template-columns:1fr;padding:36px 20px}}
+.nat-icon{font-size:32px}
+.nat-h{font-family:"Cormorant Garant",serif;font-size:24px;font-weight:600;color:var(--w);margin-bottom:6px}
+.nat-p{font-size:14px;color:rgba(255,255,255,.5);line-height:1.75;max-width:640px}
+.nat-p strong{color:rgba(255,255,255,.8);font-weight:500}
+
+/* AJIR SECTION */
+.ajir-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:36px}
+@media(max-width:680px){.ajir-grid{grid-template-columns:1fr}}
+.ajir-card{background:var(--w);border:1px solid var(--brd);border-radius:8px;padding:20px;box-shadow:var(--shd);position:relative;overflow:hidden}
+.ajir-card::before{content:"";position:absolute;top:0;left:0;bottom:0;width:4px}
+.ac-a::before{background:#0E2240}.ac-j::before{background:#B83232}.ac-i::before{background:#0A7463}.ac-r::before{background:#5B4FBF}
+.ac-letter{font-family:"Cormorant Garant",serif;font-size:48px;font-weight:700;line-height:1;margin-bottom:4px}
+.ac-a .ac-letter{color:rgba(14,34,64,.1)}.ac-j .ac-letter{color:rgba(184,50,50,.1)}.ac-i .ac-letter{color:rgba(10,116,99,.1)}.ac-r .ac-letter{color:rgba(91,79,191,.1)}
+.ac-label{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.ac-wt{font-family:"DM Mono",monospace;font-size:10px;color:var(--m2);letter-spacing:.06em;margin-bottom:8px}
+.ac-desc{font-size:13px;color:var(--mut);line-height:1.65;margin-bottom:10px}
+.ac-subs{display:flex;flex-direction:column;gap:4px}
+.ac-sub{font-size:12px;color:var(--ink);display:flex;align-items:center;gap:6px}
+.ac-sub::before{content:"";width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.ac-a .ac-sub::before{background:#0E2240}.ac-j .ac-sub::before{background:#B83232}.ac-i .ac-sub::before{background:#0A7463}.ac-r .ac-sub::before{background:#5B4FBF}
+.ac-sub-wt{font-family:"DM Mono",monospace;font-size:9px;color:var(--m2)}
+
+/* LEVELS */
+.levels-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--brd);border:1px solid var(--brd);border-radius:8px;overflow:hidden;margin-top:36px}
+@media(max-width:640px){.levels-row{grid-template-columns:1fr}}
+.level-block{background:var(--w);padding:22px 20px;position:relative}
+.lb-num{font-family:"Cormorant Garant",serif;font-size:48px;font-weight:700;color:var(--brd2);line-height:1;margin-bottom:8px}
+.lb-badge{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:2px;margin-bottom:8px;display:inline-block}
+.lbb-l1{background:rgba(14,34,64,.07);color:var(--navy)}
+.lbb-l2{background:var(--gl);color:var(--gold)}
+.lbb-l3{background:var(--tl);color:var(--teal)}
+.lb-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.lb-desc{font-size:12px;color:var(--mut);line-height:1.65;margin-bottom:10px}
+.lb-facts{display:flex;flex-direction:column;gap:4px}
+.lb-fact{font-size:12px;color:var(--ink);display:flex;align-items:center;gap:6px}
+.lb-fact::before{content:"→";font-size:10px;color:var(--gold)}
+.lb-proof{position:absolute;top:12px;right:12px;font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:var(--w);padding:2px 6px;border-radius:2px}
+
+/* DECAY */
+.decay-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:18px 20px;margin-top:28px}
+.decay-title{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gm);margin-bottom:10px}
+.decay-levels{display:flex;flex-direction:column;gap:8px}
+.dl-row{display:flex;align-items:center;gap:12px}
+.dl-badge{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:2px;flex-shrink:0;width:28px;text-align:center}
+.dlb-l1{background:rgba(255,255,255,.1);color:rgba(255,255,255,.6)}
+.dlb-l2{background:rgba(200,134,10,.15);color:var(--gm)}
+.dlb-l3{background:rgba(10,116,99,.15);color:rgba(10,116,99,.8)}
+.dl-bar-o{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.dl-bar-f{height:100%;border-radius:3px}
+.dlb1{background:rgba(255,255,255,.35)}.dlb2{background:var(--gm)}.dlb3{background:#0A7463}
+.dl-text{font-size:12px;color:rgba(255,255,255,.5);flex-shrink:0;width:140px}
+
+/* HOW IT WORKS */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--brd);border:1px solid var(--brd);border-radius:8px;overflow:hidden;margin-top:36px}
+@media(max-width:700px){.steps{grid-template-columns:1fr 1fr}}
+@media(max-width:400px){.steps{grid-template-columns:1fr}}
+.step{background:var(--w);padding:22px 18px}
+.step-n{font-family:"Cormorant Garant",serif;font-size:42px;font-weight:700;color:var(--brd2);line-height:1;margin-bottom:8px}
+.step-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.step-desc{font-size:12px;color:var(--mut);line-height:1.6}
+.step-tag{display:inline-block;font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;border-radius:2px;margin-top:7px}
+.st-n{background:rgba(14,34,64,.07);color:var(--navy)}
+.st-g{background:var(--gl);color:var(--gold)}
+.st-t{background:var(--tl);color:var(--teal)}
+
+/* ORG SECTION */
+.org-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+@media(max-width:780px){.org-grid{grid-template-columns:1fr;gap:28px}}
+.org-items{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.org-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:6px}
+.oi-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.oi-title{font-size:13px;font-weight:600;color:var(--w);margin-bottom:3px}
+.oi-desc{font-size:12px;color:rgba(255,255,255,.4);line-height:1.55}
+.org-pricing{background:rgba(200,134,10,.1);border:1px solid rgba(200,134,10,.22);border-radius:8px;padding:20px 22px;margin-top:6px}
+.op-lbl{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gm);margin-bottom:6px}
+.op-std{font-size:12px;color:rgba(255,255,255,.3);text-decoration:line-through;margin-bottom:2px}
+.op-price{font-family:"Cormorant Garant",serif;font-size:36px;font-weight:700;color:var(--w);line-height:1}
+.op-price sub{font-size:14px;font-weight:400;color:rgba(255,255,255,.5)}
+.op-note{font-size:12px;color:rgba(255,255,255,.4);margin-top:6px;line-height:1.6}
+
+/* DASHBOARD PREVIEW */
+.dash-preview{background:var(--w);border:1px solid var(--brd);border-radius:10px;box-shadow:var(--shdl);overflow:hidden}
+.dp-bar{background:var(--navy);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.dp-logo{font-family:"DM Mono",monospace;font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.08em;text-transform:uppercase}
+.dp-badge{font-family:"DM Mono",monospace;font-size:9px;color:var(--gm);background:rgba(200,134,10,.15);border:1px solid rgba(200,134,10,.3);padding:2px 7px;border-radius:2px;letter-spacing:.06em}
+.dp-body{padding:16px}
+.dp-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.dp-stat{background:var(--off);border-radius:5px;padding:10px;text-align:center}
+.dp-stat-num{font-family:"Cormorant Garant",serif;font-size:22px;font-weight:700;color:var(--navy)}
+.dp-stat-lbl{font-family:"DM Mono",monospace;font-size:8px;color:var(--m2);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.dp-heatmap{border:1px solid var(--brd2);border-radius:5px;overflow:hidden;font-size:11px}
+.dp-hm-hdr{display:grid;grid-template-columns:120px repeat(6,1fr);gap:0;background:var(--off);padding:6px 8px}
+.dp-hm-lbl{font-family:"DM Mono",monospace;font-size:8px;color:var(--m2);text-transform:uppercase;letter-spacing:.06em;text-align:center}
+.dp-hm-lbl:first-child{text-align:left}
+.dp-hm-row{display:grid;grid-template-columns:120px repeat(6,1fr);gap:0;padding:6px 8px;border-top:1px solid var(--brd2)}
+.dp-hm-dept{font-size:10px;font-weight:600;color:var(--ink)}
+.dp-hm-cell{text-align:center;font-family:"DM Mono",monospace;font-size:10px;font-weight:600}
+.hmc-red{color:#B83232;background:rgba(184,50,50,.1);border-radius:3px;padding:1px 4px;display:inline-block}
+.hmc-amber{color:#C8860A;background:rgba(200,134,10,.1);border-radius:3px;padding:1px 4px;display:inline-block}
+.hmc-green{color:#0A7463;background:rgba(10,116,99,.08);border-radius:3px;padding:1px 4px;display:inline-block}
+.hmc-dk{color:#0A7463;background:var(--tl);border-radius:3px;padding:1px 4px;display:inline-block}
+
+/* QUOTE */
+.quote-wrap{max-width:1200px;margin:0 auto;padding:0 48px 64px}
+@media(max-width:640px){.quote-wrap{padding:0 20px 48px}}
+.quote-inner{border-left:3px solid var(--gold);padding:18px 24px;background:var(--w);border-radius:0 7px 7px 0;box-shadow:var(--shd)}
+.qt{font-family:"Cormorant Garant",serif;font-size:clamp(16px,2.2vw,21px);font-weight:400;font-style:italic;color:var(--navy);line-height:1.55;margin-bottom:10px}
+.qa{font-size:13px;color:var(--mut)}.qa strong{color:var(--ink);font-weight:500}
+
+/* CTA */
+.cta-section{background:var(--off);padding:72px 48px;text-align:center}
+@media(max-width:640px){.cta-section{padding:56px 20px}}
+.cta-h{font-family:"Cormorant Garant",serif;font-size:clamp(30px,5vw,56px);font-weight:600;line-height:1.1;letter-spacing:-.02em;color:var(--ink);margin-bottom:12px}
+.cta-h em{font-style:italic;color:var(--navy)}
+.cta-p{font-size:16px;color:var(--mut);max-width:480px;margin:0 auto 28px;line-height:1.72}
+.cta-p strong{color:var(--ink);font-weight:500}
+.cta-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.cta-note{font-family:"DM Mono",monospace;font-size:11px;color:var(--m2);letter-spacing:.06em}
+
+/* FOOTER */
+footer{background:var(--ink);padding:32px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+@media(max-width:640px){footer{padding:28px 20px;flex-direction:column;align-items:flex-start}}
+.ft-logo{font-family:"Cormorant Garant",serif;font-size:17px;font-weight:700;color:var(--w)}
+.ft-logo sub{font-size:9px;color:var(--gold);vertical-align:sub;margin-left:2px}
+.ft-links{display:flex;gap:18px}
+.ft-lnk{font-size:12px;color:rgba(255,255,255,.3);transition:color .2s}.ft-lnk:hover{color:var(--w)}
+.ft-copy{font-size:12px;color:rgba(255,255,255,.2)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">AIQ <span class="nav-logo-sub">Lite</span></div>
+  <div class="nav-r">
+    <a href="#ajir" class="nav-lnk">The AJIR framework</a>
+    <a href="#levels" class="nav-lnk">L1 / L2 / L3</a>
+    <a href="#organisations" class="nav-lnk">For teams</a>
+    <button class="nav-cta" onclick="window.location.href='aiq-lite.html'">Take the assessment →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section>
+  <div class="hero">
+    <div class="rev">
+      <div class="eyebrow">AJIR Framework · Human-AI Intelligence Index</div>
+      <h1 class="hero-h1">Four constructs.<br><em>One honest score.</em><br>Free.</h1>
+      <div class="hero-rule"></div>
+      <p class="hero-p">Not how often you use AI. Not which tools. <strong>How well.</strong> AIQ Lite assesses your Agency, Judgment, Impact, and Resilience — the four human capabilities that determine whether AI creates value or risk in your work.</p>
+      <div class="hero-actions">
+        <button class="btn-navy" onclick="window.location.href='aiq-lite.html'">Get your AIQ score <span class="arr">→</span></button>
+        <button class="btn-ghost" onclick="document.getElementById('ajir').scrollIntoView({behavior:'smooth'})">See the framework</button>
+      </div>
+      <div class="hero-meta">◈ 15–25 min · Free · Role and sector personalised · <strong>Score valid 90 days</strong></div>
+    </div>
+    <div class="rev rd2" style="position:relative">
+      <div class="cred-float cf1"><div class="cf-lbl">Strongest construct</div><div class="cf-val" style="color:#0A7463">Agency ↑ 74</div></div>
+      <div class="cred-card">
+        <div class="cc-hdr">
+          <div class="cc-hdr-lbl">AIQ Lite · AJIR Framework</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="cc-hdr-level">L2 · Validated</div>
+            <div class="cc-hdr-stage">Proficient</div>
+          </div>
+        </div>
+        <div class="cc-body">
+          <div class="cc-person">Alex Pemberton · Senior Consultant · Financial Services</div>
+          <div class="cc-ajir-row">
+            <div class="cc-ajir"><div class="cc-ajir-letter" style="color:#0E2240">A</div><div class="cc-ajir-score" style="color:#0A7463">74</div><div class="cc-ajir-lbl">Agency</div></div>
+            <div class="cc-ajir"><div class="cc-ajir-letter" style="color:#B83232">J</div><div class="cc-ajir-score" style="color:#C8860A">58</div><div class="cc-ajir-lbl">Judgment</div></div>
+            <div class="cc-ajir"><div class="cc-ajir-letter" style="color:#0A7463">I</div><div class="cc-ajir-score" style="color:#C8860A">51</div><div class="cc-ajir-lbl">Impact</div></div>
+            <div class="cc-ajir"><div class="cc-ajir-letter" style="color:#5B4FBF">R</div><div class="cc-ajir-score" style="color:#0A7463">67</div><div class="cc-ajir-lbl">Resilience</div></div>
+          </div>
+          <div class="cc-score-row">
+            <div class="cc-score-main"><div class="cc-num" id="demo-num">0</div><div class="cc-of">AIQ Index</div></div>
+          </div>
+          <div class="cc-bench-lbl">vs. Professional Services peers</div>
+          <div class="cc-bench-track"><div class="cc-bench-fill" id="demo-fill"></div></div>
+          <div class="cc-bench-res">Higher than 68% of sector professionals</div>
+          <div class="cc-expiry"><div class="cc-exp-dot"></div><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--m2)">Valid until 25 Aug 2026 · L2 · Score decays — reassess to renew</span></div>
+        </div>
+      </div>
+      <div class="cred-float cf2"><div class="cf-lbl">AIntervention</div><div class="cf-val" style="color:#C8860A">Three-Check Rule</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-item">AJIR framework</div>
+  <div class="strip-item">6 sub-dimensions</div>
+  <div class="strip-item">Role + function personalised</div>
+  <div class="strip-item">Not a skills test</div>
+  <div class="strip-item">Score decays — intentionally</div>
+  <div class="strip-item">Free forever</div>
+</div>
+
+<!-- NOT A TEST -->
+<div class="nat-band">
+  <div class="nat-inner rev">
+    <div class="nat-icon">◈</div>
+    <div>
+      <div class="nat-h">This is not a skills test. It is a judgment test.</div>
+      <div class="nat-p">AI can complete most AI skills assessments better than the humans taking them. Knowing which tools exist does not mean you use them well. AIQ Lite is specifically designed to resist AI completion — <strong>it measures problem framing, critical evaluation, ethical calibration, and the honesty to measure real impact.</strong> Every question is drawn from your actual sector and role context. You will be asked what you actually do — not what you know.</div>
+    </div>
+  </div>
+</div>
+
+<!-- AJIR FRAMEWORK -->
+<div id="ajir" class="section-bg">
+  <div class="section">
+    <div class="rev"><div class="eyebrow">The AJIR framework</div><h2 class="sh2">Four constructs. <em>All irreducibly human.</em></h2><p class="sp">AJIR measures the capabilities that sit upstream of any AI tool. None of them can be improved by using AI more. All of them determine whether AI creates value or creates risk in your work.</p></div>
+    <div class="ajir-grid">
+      <div class="ajir-card ac-a rev">
+        <div class="ac-letter">A</div>
+        <div class="ac-label">Agency</div>
+        <div class="ac-wt">35% of AIQ score</div>
+        <div class="ac-desc">How deliberately you direct and design your human-AI work. Agency is the capability that determines output quality before you open any tool — and the architecture that determines whether AI creates value at scale.</div>
+        <div class="ac-subs">
+          <div class="ac-sub">A1 · Directional Intelligence <span class="ac-sub-wt">(20%)</span></div>
+          <div class="ac-sub">A2 · Collaboration Architecture <span class="ac-sub-wt">(15%)</span></div>
+        </div>
+      </div>
+      <div class="ajir-card ac-j rev rd1">
+        <div class="ac-letter">J</div>
+        <div class="ac-label">Judgment</div>
+        <div class="ac-wt">35% of AIQ score</div>
+        <div class="ac-desc">How critically and responsibly you evaluate AI outputs before acting on them. Judgment is what prevents plausible-sounding AI errors from becoming client-facing mistakes — and what determines whether AI use is ethical.</div>
+        <div class="ac-subs">
+          <div class="ac-sub">J1 · Critical Discernment <span class="ac-sub-wt">(20%)</span></div>
+          <div class="ac-sub">J2 · Ethical Calibration <span class="ac-sub-wt">(15%)</span></div>
+        </div>
+      </div>
+      <div class="ajir-card ac-i rev">
+        <div class="ac-letter">I</div>
+        <div class="ac-label">Impact</div>
+        <div class="ac-wt">15% of AIQ score</div>
+        <div class="ac-desc">Whether you can actually demonstrate that AI improved your work — not feel, not assume, but show. The rarest capability in the workforce and the most honest signal of sophisticated AI practice.</div>
+        <div class="ac-subs">
+          <div class="ac-sub">I1 · Value Attribution <span class="ac-sub-wt">(15%)</span></div>
+        </div>
+      </div>
+      <div class="ajir-card ac-r rev rd1">
+        <div class="ac-letter">R</div>
+        <div class="ac-label">Resilience</div>
+        <div class="ac-wt">15% of AIQ score</div>
+        <div class="ac-desc">How deliberately you evolve your AI practice as tools change. The AI landscape shifts every quarter. Adaptive Velocity measures quality of practice evolution — not frequency of tool-switching.</div>
+        <div class="ac-subs">
+          <div class="ac-sub">R1 · Adaptive Velocity <span class="ac-sub-wt">(15%)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LEVELS -->
+<div id="levels">
+  <div class="section">
+    <div class="rev"><div class="eyebrow">Assessment levels</div><h2 class="sh2">Three levels. <em>One framework. One score.</em></h2><p class="sp">Each level adds evidence rigour. The AIQ score is comparable across levels — but a higher level means the score is grounded in more than self-report.</p></div>
+    <div class="levels-row rev">
+      <div class="level-block">
+        <div class="lb-num">L1</div>
+        <div class="lb-badge lbb-l1">Self-reported · Free</div>
+        <div class="lb-title">Standard assessment</div>
+        <div class="lb-desc">Scenario and behavioral anchor questions across all six sub-dimensions. Questions personalised by function and role tier. 18 scored questions, 6 evidence prompts.</div>
+        <div class="lb-facts">
+          <div class="lb-fact">~15 minutes</div>
+          <div class="lb-fact">AIQ score + 6 sub-scores</div>
+          <div class="lb-fact">gAIn · pAIn · AIntervention</div>
+          <div class="lb-fact">Individual credential</div>
+          <div class="lb-fact" style="color:var(--gold)">Valid 90 days</div>
+        </div>
+      </div>
+      <div class="level-block">
+        <div class="lb-num">L2</div>
+        <div class="lb-badge lbb-l2">+ Micro-challenge · Free</div>
+        <div class="lb-title">Validated assessment</div>
+        <div class="lb-desc">L1 plus a 10-minute role-specific judgment challenge — a realistic AI-generated artifact with embedded issues. Score is blended 60/40. The L2 badge signals that the score is grounded in demonstrated judgment.</div>
+        <div class="lb-facts">
+          <div class="lb-fact">~25 minutes</div>
+          <div class="lb-fact">L1 × 0.6 + challenge × 0.4</div>
+          <div class="lb-fact">L2 badge on credential</div>
+          <div class="lb-fact">18 challenge variants by role × function</div>
+          <div class="lb-fact" style="color:var(--gold)">Valid 180 days</div>
+        </div>
+      </div>
+      <div class="level-block">
+        <div class="lb-proof">Connects to PROOF</div>
+        <div class="lb-num">L3</div>
+        <div class="lb-badge lbb-l3">+ Artifact · Paid</div>
+        <div class="lb-title">Full AIQ assessment</div>
+        <div class="lb-desc">L1 + L2 plus a submitted work artifact scored against the AIQ rubric by a trained assessor. The artifact is the PROOF deliverable — real work produced under tracked conditions.</div>
+        <div class="lb-facts">
+          <div class="lb-fact">Full engagement</div>
+          <div class="lb-fact">Verified AIQ score with evidence trail</div>
+          <div class="lb-fact">Employer-shareable report</div>
+          <div class="lb-fact">Usable in hiring + promotion</div>
+          <div class="lb-fact" style="color:var(--teal)">Valid 12 months</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCORE DECAY EXPLAINER -->
+<div class="section-navy">
+  <div class="section">
+    <div class="rev">
+      <div class="eyebrow eyebrow-w">Score decay</div>
+      <h2 class="sh2 sh2-w">Your score expires. <em>Intentionally.</em></h2>
+      <p class="sp sp-w">A score from 6 months ago is not a score from today. The AI landscape has a meaningful shift roughly every quarter. Score decay normalises reassessment as part of practice — not as a burden but as a signal that your capability is live, not frozen.</p>
+    </div>
+    <div class="decay-card rev">
+      <div class="decay-title">Score validity by assessment level</div>
+      <div class="decay-levels">
+        <div class="dl-row">
+          <div class="dl-badge dlb-l1">L1</div>
+          <div class="dl-bar-o"><div class="dl-bar-f dlb1" style="width:25%"></div></div>
+          <div class="dl-text" style="color:rgba(255,255,255,.5)">90 days · Self-reported</div>
+        </div>
+        <div class="dl-row">
+          <div class="dl-badge dlb-l2">L2</div>
+          <div class="dl-bar-o"><div class="dl-bar-f dlb2" style="width:50%"></div></div>
+          <div class="dl-text" style="color:var(--gm)">180 days · Challenge validated</div>
+        </div>
+        <div class="dl-row">
+          <div class="dl-badge dlb-l3">L3</div>
+          <div class="dl-bar-o"><div class="dl-bar-f dlb3" style="width:100%"></div></div>
+          <div class="dl-text" style="color:rgba(10,116,99,.9)">12 months · Full artifact</div>
+        </div>
+      </div>
+    </div>
+    <div class="rev" style="margin-top:18px;font-size:14px;color:rgba(255,255,255,.4);line-height:1.7">Reassessment is free at L1 and L2. The question bank adapts on retake — 30% of scenario questions are newly selected to reduce practice effects. Your Q-over-Q trajectory is more valuable to an employer than any single snapshot.</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section-bg">
+  <div class="section">
+    <div class="rev"><div class="eyebrow">How it works</div><h2 class="sh2">Four steps. <em>Your score in under 25 minutes.</em></h2></div>
+    <div class="steps rev">
+      <div class="step"><div class="step-n">01</div><div class="step-title">Choose your level</div><div class="step-desc">L1 for a quick self-reported score, L2 for a validated score with a micro-challenge. Both free. L2 takes 10 extra minutes and is valid for twice as long.</div><span class="step-tag st-n">15 or 25 min</span></div>
+      <div class="step"><div class="step-n">02</div><div class="step-title">Tell us your role and function</div><div class="step-desc">Scenarios are personalised to your role tier (Leader/Manager/Practitioner). Your function determines which micro-challenge you receive (L2). Sector is used for benchmark comparison.</div><span class="step-tag st-n">2 min setup</span></div>
+      <div class="step"><div class="step-n">03</div><div class="step-title">Answer honestly</div><div class="step-desc">Scenario questions ask what you actually do. Behavioral anchors ask how you typically behave. Calibration checks ask how you compare to peers. Not what you should do — what you do.</div><span class="step-tag st-g">No right-looking answers</span></div>
+      <div class="step"><div class="step-n">04</div><div class="step-title">Get your AIQ score</div><div class="step-desc">Instant results: AIQ Index, Agency, Judgment, Impact, Resilience scores, six sub-dimension scores, sector benchmark, gAIn/pAIn, and one named AIntervention with a this-week specific action.</div><span class="step-tag st-t">Shareable credential</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ORGANISATIONS -->
+<div id="organisations" class="section-navy">
+  <div class="section">
+    <div class="org-grid">
+      <div class="rev">
+        <div class="eyebrow eyebrow-w">For organisations</div>
+        <h2 class="sh2 sh2-w">Individual scores.<br><em>Team intelligence.</em></h2>
+        <p class="sp sp-w">Every individual who completes AIQ Lite creates a data point. When your team completes it, you see your aggregate AIQ score, tier distribution, construct gap analysis by function, and a targeted AIntervention roadmap.</p>
+        <div class="org-items">
+          <div class="org-item"><div class="oi-icon">📊</div><div><div class="oi-title">1. Average AIQ score — benchmarked</div><div class="oi-desc">Your team's overall score against sector median, P25, and P75. With maturity tier and 12-month trajectory.</div></div></div>
+          <div class="org-item"><div class="oi-icon">📐</div><div><div class="oi-title">2. Tier distribution</div><div class="oi-desc">How many people sit at Passive / Exploring / Practising / Proficient / Multiplier. The shape of the distribution is more actionable than the average.</div></div></div>
+          <div class="org-item"><div class="oi-icon">🔴</div><div><div class="oi-title">3. pAIn — the lowest construct</div><div class="oi-desc">The sub-dimension where the team scores lowest — with what this means in practice and which department it hits hardest.</div></div></div>
+          <div class="org-item"><div class="oi-icon">🟢</div><div><div class="oi-title">4. gAIn — the highest construct</div><div class="oi-desc">The team's strongest sub-dimension — and how to use it as the foundation for improving the weakest.</div></div></div>
+          <div class="org-item"><div class="oi-icon">🎯</div><div><div class="oi-title">5. AInterventions — ranked and scoped</div><div class="oi-desc">3–5 named actions drawn from your actual diagnostic results, ranked by impact, targeted to the right departments.</div></div></div>
+        </div>
+      </div>
+      <div class="rev rd2">
+        <div class="dash-preview">
+          <div class="dp-bar">
+            <div class="dp-logo">AIQ Team Dashboard · Sonder Advisory</div>
+            <div class="dp-badge">8 members · 5 depts</div>
+          </div>
+          <div class="dp-body">
+            <div class="dp-stat-row">
+              <div class="dp-stat"><div class="dp-stat-num" style="color:#0A7463">61</div><div class="dp-stat-lbl">Team AIQ</div></div>
+              <div class="dp-stat"><div class="dp-stat-num">8</div><div class="dp-stat-lbl">Members</div></div>
+              <div class="dp-stat"><div class="dp-stat-num" style="color:#C8860A">2</div><div class="dp-stat-lbl">Expiring</div></div>
+              <div class="dp-stat"><div class="dp-stat-num" style="color:#0A7463">4</div><div class="dp-stat-lbl">L2 Valid.</div></div>
+            </div>
+            <div class="dp-heatmap">
+              <div class="dp-hm-hdr">
+                <div class="dp-hm-lbl">Function</div>
+                <div class="dp-hm-lbl">A1</div><div class="dp-hm-lbl">A2</div>
+                <div class="dp-hm-lbl">J1</div><div class="dp-hm-lbl">J2</div>
+                <div class="dp-hm-lbl">I1</div><div class="dp-hm-lbl">R1</div>
+              </div>
+              <div class="dp-hm-row">
+                <div class="dp-hm-dept">Technology</div>
+                <div class="dp-hm-cell"><span class="hmc-dk">86</span></div><div class="dp-hm-cell"><span class="hmc-green">78</span></div>
+                <div class="dp-hm-cell"><span class="hmc-green">80</span></div><div class="dp-hm-cell"><span class="hmc-amber">72</span></div>
+                <div class="dp-hm-cell"><span class="hmc-amber">72</span></div><div class="dp-hm-cell"><span class="hmc-green">74</span></div>
+              </div>
+              <div class="dp-hm-row">
+                <div class="dp-hm-dept">Strategy</div>
+                <div class="dp-hm-cell"><span class="hmc-dk">78</span></div><div class="dp-hm-cell"><span class="hmc-green">70</span></div>
+                <div class="dp-hm-cell"><span class="hmc-amber">72</span></div><div class="dp-hm-cell"><span class="hmc-amber">66</span></div>
+                <div class="dp-hm-cell"><span class="hmc-amber">65</span></div><div class="dp-hm-cell"><span class="hmc-amber">68</span></div>
+              </div>
+              <div class="dp-hm-row">
+                <div class="dp-hm-dept">Operations</div>
+                <div class="dp-hm-cell"><span class="hmc-amber">44</span></div><div class="dp-hm-cell"><span class="hmc-red">36</span></div>
+                <div class="dp-hm-cell"><span class="hmc-amber">42</span></div><div class="dp-hm-cell"><span class="hmc-red">34</span></div>
+                <div class="dp-hm-cell"><span class="hmc-red">35</span></div><div class="dp-hm-cell"><span class="hmc-amber">46</span></div>
+              </div>
+              <div class="dp-hm-row">
+                <div class="dp-hm-dept">HR & People</div>
+                <div class="dp-hm-cell"><span class="hmc-red">34</span></div><div class="dp-hm-cell"><span class="hmc-red">30</span></div>
+                <div class="dp-hm-cell"><span class="hmc-red">28</span></div><div class="dp-hm-cell"><span class="hmc-red">24</span></div>
+                <div class="dp-hm-cell"><span class="hmc-red">24</span></div><div class="dp-hm-cell"><span class="hmc-red">30</span></div>
+              </div>
+            </div>
+            <div style="margin-top:10px;font-size:11px;color:var(--mut)">pAIn: <strong style="color:#B83232">Ethical Calibration (J2)</strong> — avg 49 · Lowest: HR &amp; People (24)</div>
+          </div>
+        </div>
+        <div class="org-pricing" style="margin-top:12px">
+          <div class="op-lbl">Organisation pricing</div>
+          <div class="op-std">$50,000 USD standard rate</div>
+          <div class="op-price">$2,000 <sub>USD fixed · up to 15 employees</sub></div>
+          <div class="op-note">Team aggregate report, function heatmap, AIntervention roadmap, and a 60-minute debrief. Individual assessments always free.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<div class="quote-wrap rev">
+  <div class="quote-inner">
+    <div class="qt">"I scored 74 on Agency and 34 on Ethical Calibration. I had no idea that gap existed until I saw it. The AIntervention was one question I now ask before every AI task involving people decisions. It changed how I work that week."</div>
+    <div class="qa"><strong>Head of Strategy</strong> · Professional Services · AIQ score: 67 · L2</div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="rev">
+    <div class="eyebrow" style="justify-content:center">Get your AIQ score</div>
+    <h2 class="cta-h">Know your four constructs.<br><em>Act on one thing this week.</em></h2>
+    <p class="cta-p">15–25 minutes. Free. Questions drawn from your actual sector and role. A precise view of where you stand on human-AI intelligence — and <strong>one named AIntervention to act on this week.</strong></p>
+    <div class="cta-actions">
+      <button class="btn-navy" onclick="window.location.href='aiq-lite.html'">Get your AIQ score — free <span class="arr">→</span></button>
+      <button class="btn-ghost" onclick="window.location.href='aiq-team-dashboard.html'">View team dashboard</button>
+    </div>
+    <div class="cta-note">◈ L1 free · L2 free · L3 paid · Always free for individuals</div>
+  </div>
+</div>
+
+<footer>
+  <div class="ft-logo">AIQ <sub>Lite</sub></div>
+  <div class="ft-links">
+    <a href="aiq-team-dashboard.html" class="ft-lnk">Team dashboard</a>
+    <a href="index.html#organisations" class="ft-lnk">AIQ (Organisations)</a>
+    <a href="#" class="ft-lnk">Methodology</a>
+  </div>
+  <div class="ft-copy">© 2026 AIQ Diagnostics · AJIR Framework</div>
+</footer>
+
+<script>
+setTimeout(()=>{
+  let n=0;const iv=setInterval(()=>{
+    n=Math.min(n+2,63);
+    document.getElementById("demo-num").textContent=n;
+    if(n>=63){clearInterval(iv);document.getElementById("demo-fill").style.width="68%";}
+  },28);
+},800);
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("vis");});},{threshold:.1,rootMargin:"0px 0px -40px 0px"});
+document.querySelectorAll(".rev").forEach(el=>{obs.observe(el);if(el.getBoundingClientRect().top<window.innerHeight*.9)el.classList.add("vis");});
+</script>
+</body>
+</html>

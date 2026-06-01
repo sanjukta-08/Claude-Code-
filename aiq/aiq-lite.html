@@ -1,0 +1,2774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIQ Lite — Human-AI Intelligence Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Figtree:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+:root{--w:#FFF;--off:#F9F7F2;--off2:#F1EFE9;--ink:#0D0D12;--navy:#0E2240;--navy2:#162E52;
+--gold:#C8860A;--gl:#FBF0D9;--gm:#E8A020;--teal:#0A7463;--tl:#E6F4F1;--red:#B83232;--rl:#FDEAEA;
+--vio:#5B4FBF;--sage:#1F5C40;--amb:#8B4513;--mut:#888896;--m2:#B8B5AE;
+--brd:#E4E1DA;--brd2:#EDE9E2;--shd:0 1px 3px rgba(14,34,64,.06),0 4px 14px rgba(14,34,64,.04);
+--shd2:0 2px 8px rgba(14,34,64,.09),0 8px 28px rgba(14,34,64,.07)}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{background:var(--off);color:var(--ink);font-family:"Figtree",sans-serif;font-size:15px;line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+/* TOPBAR */
+.topbar{background:var(--navy);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:60;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.tb-logo{font-family:"Cormorant Garant",serif;font-size:18px;font-weight:700;color:#fff;letter-spacing:.01em}
+.tb-logo span{font-size:10px;color:var(--gm);letter-spacing:.1em;text-transform:uppercase;margin-left:6px;font-family:"DM Mono",monospace}
+.tb-right{display:flex;align-items:center;gap:12px}
+.tb-section{font-family:"DM Mono",monospace;font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.06em;text-transform:uppercase}
+.prog-wrap{width:100px;height:2px;background:rgba(255,255,255,.1);border-radius:1px}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gm));border-radius:1px;width:0%;transition:width .5s ease}
+/* AJIR PILLARS BAR */
+.ajir-bar{background:#fff;border-bottom:1px solid var(--brd);padding:10px 28px;display:flex;align-items:center;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.ajir-bar::-webkit-scrollbar{display:none}
+.ajir-pill{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:5px 14px;border-radius:20px;border:1.5px solid var(--brd);color:var(--m2);background:transparent;transition:all .25s;white-space:nowrap;flex-shrink:0}
+.ajir-pill.active{border-color:var(--navy);color:var(--navy);background:rgba(14,34,64,.06);font-weight:600}
+.ajir-pill.done{border-color:var(--teal);color:var(--teal);background:var(--tl)}
+.ajir-sep{font-size:10px;color:var(--m2);margin:0 4px;flex-shrink:0}
+/* SCREENS */
+.screen{display:none;animation:rise .38s ease forwards;padding-bottom:80px}.screen.active{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.wrap{max-width:720px;margin:0 auto;padding:0 24px}
+/* LANDING */
+.land-hero{padding:48px 0 32px}
+.kicker{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.kicker::before{content:"";width:16px;height:1px;background:var(--gold)}
+.land-h1{font-family:"Cormorant Garant",serif;font-size:clamp(34px,5vw,52px);font-weight:600;line-height:1.07;letter-spacing:-.02em;color:var(--ink);margin-bottom:6px}
+.land-h1 em{font-style:italic;color:var(--navy)}
+.land-rule{width:36px;height:2px;background:var(--gold);margin:16px 0}
+.land-sub{font-size:16px;color:var(--mut);line-height:1.78;max-width:520px;margin-bottom:22px}
+.land-sub strong{color:var(--ink);font-weight:500}
+/* AJIR EXPLAINER */
+.ajir-explainer{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+@media(max-width:500px){.ajir-explainer{grid-template-columns:1fr}}
+.ae-card{background:#fff;border:1px solid var(--brd);border-radius:7px;padding:13px 15px;display:flex;align-items:flex-start;gap:10px;box-shadow:var(--shd)}
+.ae-letter{font-family:"Cormorant Garant",serif;font-size:32px;font-weight:700;line-height:1;flex-shrink:0}
+.ae-label{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.ae-sub{font-size:11px;color:var(--mut);line-height:1.45}
+/* LEVEL CHOICE */
+.level-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+@media(max-width:480px){.level-cards{grid-template-columns:1fr}}
+.lcard{background:#fff;border:1.5px solid var(--brd);border-radius:8px;padding:18px;cursor:pointer;transition:all .2s;box-shadow:var(--shd)}
+.lcard:hover{border-color:var(--navy);box-shadow:var(--shd2)}
+.lcard.sel{border-color:var(--navy);background:rgba(14,34,64,.03)}
+.lc-badge{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:2px;margin-bottom:8px;display:inline-block}
+.lcb-l1{background:rgba(14,34,64,.07);color:var(--navy)}
+.lcb-l2{background:var(--gl);color:var(--gold)}
+.lc-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.lc-desc{font-size:12px;color:var(--mut);line-height:1.55}
+.lc-meta{font-family:"DM Mono",monospace;font-size:10px;color:var(--m2);margin-top:8px;letter-spacing:.04em}
+/* NOT A TEST */
+.nat{background:var(--navy);border-radius:8px;padding:16px 18px;margin-bottom:22px;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.nat-icon{font-size:18px}
+.nat-title{font-size:13px;font-weight:600;color:#fff;margin-bottom:3px}
+.nat-desc{font-size:12px;color:rgba(255,255,255,.5);line-height:1.6}
+.nat-desc strong{color:rgba(255,255,255,.8)}
+/* FORM */
+.form-card{background:#fff;border:1px solid var(--brd);border-radius:8px;padding:22px;margin-bottom:12px;box-shadow:var(--shd)}
+.fc-title{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--brd2)}
+.fg{margin-bottom:12px}
+.fl{display:block;font-size:12px;font-weight:600;color:var(--ink);margin-bottom:5px;letter-spacing:.02em}
+.fl .req{color:var(--gold)}
+.fi{width:100%;background:#fff;border:1px solid var(--brd);border-radius:4px;color:var(--ink);font-family:"Figtree",sans-serif;font-size:14px;padding:10px 13px;transition:border-color .2s;outline:none;-webkit-appearance:none}
+.fi:focus{border-color:var(--navy);box-shadow:0 0 0 2px rgba(14,34,64,.05)}
+.fi option{background:#fff}
+.fg.err .fi{border-color:var(--red)}
+.eh{font-size:11px;color:var(--red);margin-top:4px;display:none}
+.fg.err .eh{display:block}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.frow{grid-template-columns:1fr}}
+/* SECTION HDR */
+.sec-hdr{padding:32px 0 18px}
+.sec-construct{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.sec-construct::before{content:"";width:14px;height:1px}
+.sec-h2{font-family:"Cormorant Garant",serif;font-size:clamp(22px,3vw,32px);font-weight:600;line-height:1.1;letter-spacing:-.015em;color:var(--ink);margin-bottom:6px}
+.sec-tagline{font-size:14px;color:var(--mut);line-height:1.65;max-width:520px}
+.sec-why{font-size:12px;color:var(--m2);font-style:italic;line-height:1.6;margin-top:8px;padding:9px 13px;border-left:2px solid var(--brd2);background:#fff;border-radius:0 4px 4px 0}
+/* SCENARIO BOX */
+.scenario-box{background:#fff;border:1.5px solid var(--brd2);border-radius:7px;padding:13px 16px;margin-bottom:11px;position:relative;overflow:hidden}
+.scenario-box::before{content:"";position:absolute;top:0;left:0;bottom:0;width:3px}
+.sb-navy::before{background:var(--navy)}.sb-red::before{background:var(--red)}
+.sb-vio::before{background:var(--vio)}.sb-sage::before{background:var(--sage)}
+.sb-gold::before{background:var(--gold)}.sb-amb::before{background:var(--amb)}
+.sb-label{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--m2);margin-bottom:5px}
+.sb-text{font-size:14px;color:var(--ink);line-height:1.6;font-weight:500}
+/* QBLOCK */
+.qblock{margin-bottom:16px}
+.qblock-meta{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.q-id{font-family:"DM Mono",monospace;font-size:10px;color:var(--m2);background:var(--off2);border:1px solid var(--brd2);padding:2px 7px;border-radius:3px;letter-spacing:.05em}
+.q-badge{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;border-radius:2px}
+.qb-sj{background:rgba(91,79,191,.08);color:var(--vio)}
+.qb-ba{background:var(--gl);color:var(--gold)}
+.qb-fc{background:var(--tl);color:var(--teal)}
+.qb-ev{background:rgba(31,92,64,.07);color:var(--sage)}
+.q-wt{font-family:"DM Mono",monospace;font-size:9px;color:var(--m2)}
+.q-text{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:11px;line-height:1.5}
+/* MC OPTIONS */
+.mc-opts{display:flex;flex-direction:column;gap:6px}
+.mc-opt{background:#fff;border:1.5px solid var(--brd);border-radius:7px;padding:12px 14px;cursor:pointer;transition:all .16s;display:flex;align-items:flex-start;gap:10px;box-shadow:var(--shd)}
+.mc-opt:hover{border-color:var(--navy);box-shadow:var(--shd2);transform:translateY(-1px)}
+.mc-opt.sel{border-color:var(--navy);background:rgba(14,34,64,.04)}
+.mc-opt.sel .mc-ring{background:var(--navy);border-color:var(--navy)}
+.mc-opt.sel .mc-ring::after{opacity:1}
+.mc-ring{width:19px;height:19px;border-radius:50%;border:2px solid var(--m2);background:#fff;flex-shrink:0;margin-top:2px;transition:all .16s;position:relative;display:flex;align-items:center;justify-content:center}
+.mc-ring::after{content:"";width:7px;height:7px;border-radius:50%;background:#fff;opacity:0;transition:opacity .16s}
+.mc-txt{font-size:13px;color:var(--ink);line-height:1.55}
+/* BA CARDS */
+.ba-cards{display:flex;flex-direction:column;gap:6px}
+.ba-card{background:#fff;border:1.5px solid var(--brd);border-radius:7px;padding:11px 14px;cursor:pointer;transition:all .16s;display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;box-shadow:var(--shd)}
+.ba-card:hover{border-color:var(--gold)}.ba-card.sel{border-color:var(--gold);background:var(--gl)}
+.ba-card.sel .ba-lvl{background:var(--gold);border-color:var(--gold);color:#fff}
+.ba-lvl{width:26px;height:26px;border-radius:4px;border:1.5px solid var(--brd);display:flex;align-items:center;justify-content:center;font-family:"DM Mono",monospace;font-size:12px;font-weight:700;flex-shrink:0;transition:all .16s;color:var(--m2)}
+.ba-lbl{font-size:10px;font-weight:600;color:var(--m2);text-transform:uppercase;letter-spacing:.04em;font-family:"DM Mono",monospace;margin-bottom:2px}
+.ba-card.sel .ba-lbl{color:var(--gold)}
+.ba-txt{font-size:13px;color:var(--ink);line-height:1.5}
+/* FC */
+.fc-wrap{background:var(--tl);border:1.5px solid rgba(10,116,99,.2);border-radius:7px;padding:13px 15px}
+.fc-hdr{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.fc-badge{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:var(--teal);color:#fff;padding:2px 7px;border-radius:2px}
+.fc-q{font-size:13px;font-weight:600;color:var(--ink)}
+.fc-opts{display:flex;gap:5px;flex-wrap:wrap}
+.fc-opt{font-family:"DM Mono",monospace;font-size:11px;color:var(--teal);background:#fff;border:1.5px solid rgba(10,116,99,.25);padding:6px 11px;border-radius:5px;cursor:pointer;transition:all .16s;letter-spacing:.03em}
+.fc-opt:hover{border-color:var(--teal)}.fc-opt.sel{background:var(--teal);color:#fff;border-color:var(--teal)}
+/* EV */
+.ev-wrap{background:#fff;border:1.5px solid var(--brd2);border-radius:7px;overflow:hidden;box-shadow:var(--shd)}
+.ev-top{background:rgba(31,92,64,.06);border-bottom:1px solid rgba(31,92,64,.12);padding:8px 14px;display:flex;align-items:center;justify-content:space-between}
+.ev-badge{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);display:flex;align-items:center;gap:5px}
+.ev-skip{font-size:11px;color:var(--m2);cursor:pointer;transition:color .2s;background:none;border:none;font-family:"Figtree",sans-serif}.ev-skip:hover{color:var(--red)}
+.ev-body{padding:12px 15px}
+.ev-q{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:5px;line-height:1.5}
+.ev-hint{font-size:11px;color:var(--m2);margin-bottom:9px;font-style:italic;line-height:1.5}
+.ev-ta{width:100%;background:transparent;border:none;border-top:1px solid var(--brd2);font-family:"Figtree",sans-serif;font-size:13px;color:var(--ink);padding:10px 0;resize:none;min-height:68px;outline:none;line-height:1.65}
+.ev-foot{font-family:"DM Mono",monospace;font-size:9px;color:var(--m2);letter-spacing:.04em;margin-top:3px}
+/* CHALLENGE */
+.challenge-hdr{background:var(--navy);border-radius:8px 8px 0 0;padding:18px 22px}
+.ch-badge{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gm);margin-bottom:6px}
+.ch-title{font-family:"Cormorant Garant",serif;font-size:22px;font-weight:600;color:#fff;margin-bottom:4px}
+.ch-context{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6}
+.ch-body{background:#fff;border:1px solid var(--brd);border-top:none;border-radius:0 0 8px 8px;margin-bottom:18px}
+.ch-brief-box{background:var(--off);border-bottom:1px solid var(--brd2);padding:16px 18px}
+.ch-brief-label{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--m2);margin-bottom:6px}
+.ch-brief-text{font-size:13px;color:var(--ink);line-height:1.65;font-style:italic}
+.ch-items{padding:4px 0}
+.ch-item{padding:16px 18px;border-bottom:1px solid var(--brd2)}
+.ch-item:last-child{border-bottom:none}
+.ch-item-label{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+.ch-item-text{font-size:13px;color:var(--ink);line-height:1.6;margin-bottom:10px;padding:10px 12px;background:var(--off);border-radius:5px;border-left:3px solid var(--brd2)}
+.ch-item-q{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:9px}
+.ch-opt{background:var(--off);border:1.5px solid var(--brd2);border-radius:6px;padding:10px 13px;cursor:pointer;transition:all .16s;margin-bottom:6px;font-size:13px;color:var(--ink);line-height:1.5}
+.ch-opt:hover{border-color:var(--navy);background:#fff}
+.ch-opt.sel{border-color:var(--navy);background:rgba(14,34,64,.04)}
+.ch-timer{background:var(--gl);border:1px solid rgba(200,134,10,.25);border-radius:5px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.ch-timer-icon{font-size:16px}
+.ch-timer-text{font-size:13px;color:var(--gold);font-weight:500}
+.ch-timer-sub{font-size:11px;color:var(--m2)}
+/* DIVIDER */
+.div{height:1px;background:var(--brd2);margin:16px 0}
+/* BTNS */
+.btn{background:var(--navy);color:#fff;font-family:"Figtree",sans-serif;font-size:14px;font-weight:600;padding:12px 26px;border:none;border-radius:3px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{background:var(--navy2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(14,34,64,.15)}
+.btn .arr{transition:transform .2s}.btn:hover .arr{transform:translateX(3px)}
+.btn2{background:#fff;color:var(--mut);font-family:"Figtree",sans-serif;font-size:13px;font-weight:500;padding:11px 18px;border:1px solid var(--brd);border-radius:3px;cursor:pointer;transition:all .2s}
+.btn2:hover{border-color:var(--navy);color:var(--navy)}
+.bgh{background:none;border:none;color:var(--mut);font-size:13px;cursor:pointer;font-family:"Figtree",sans-serif;transition:color .2s}.bgh:hover{color:var(--ink)}
+.btn-row{display:flex;gap:10px;align-items:center;margin-top:20px}
+/* RESULTS */
+.cert{background:var(--navy);border-radius:12px;overflow:hidden;margin-top:32px;box-shadow:var(--shd2)}
+.cert::before{content:"";display:block;height:3px;background:linear-gradient(90deg,var(--gold),var(--gm),var(--teal))}
+.cert-body{padding:26px 30px}
+.cert-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.cert-brand{font-family:"Cormorant Garant",serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.4)}
+.cert-level{font-family:"DM Mono",monospace;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:rgba(200,134,10,.15);border:1px solid rgba(200,134,10,.3);color:var(--gm);padding:3px 9px;border-radius:2px}
+.cert-valid{font-family:"DM Mono",monospace;font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.05em}
+.cert-main{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;margin-bottom:18px}
+@media(max-width:460px){.cert-main{grid-template-columns:1fr}}
+.cert-score-wrap{text-align:center}
+.cert-num{font-family:"Cormorant Garant",serif;font-size:76px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.04em}
+.cert-of{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:1px}
+.cert-stage{display:inline-block;font-family:"DM Mono",monospace;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--gm);background:rgba(200,134,10,.15);border:1px solid rgba(200,134,10,.3);padding:3px 9px;border-radius:2px;margin-bottom:6px}
+.cert-hl{font-family:"Cormorant Garant",serif;font-size:19px;font-weight:600;color:#fff;margin-bottom:4px;line-height:1.2}
+.cert-desc{font-size:13px;color:rgba(255,255,255,.5);line-height:1.6;max-width:320px}
+.cert-person{border-top:1px solid rgba(255,255,255,.1);padding-top:12px;margin-top:4px;font-size:13px;color:rgba(255,255,255,.4);font-family:"Cormorant Garant",serif}
+.cert-person strong{color:#fff;font-size:15px}
+/* AJIR ROW */
+.ajir-result-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
+@media(max-width:480px){.ajir-result-row{grid-template-columns:1fr 1fr}}
+.ajir-cell{background:var(--off);border:1px solid var(--brd);border-radius:6px;padding:12px 10px;text-align:center}
+.ajir-cell-letter{font-family:"Cormorant Garant",serif;font-size:28px;font-weight:700;line-height:1;margin-bottom:2px}
+.ajir-cell-name{font-size:10px;color:var(--mut);letter-spacing:.03em;margin-bottom:5px}
+.ajir-cell-score{font-family:"DM Mono",monospace;font-size:14px;font-weight:600}
+.ajir-cell-bar{height:3px;background:var(--brd2);border-radius:2px;margin-top:5px}
+.ajir-cell-bar-f{height:100%;border-radius:2px;transition:width 1.4s cubic-bezier(.4,0,.2,1);width:0}
+/* SUB DIMS */
+.sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+@media(max-width:460px){.sub-grid{grid-template-columns:1fr}}
+.sub-card{background:#fff;border:1px solid var(--brd);border-radius:6px;padding:12px 14px;box-shadow:var(--shd)}
+.sub-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px}
+.sub-info{display:flex;align-items:center;gap:6px}
+.sub-code{font-family:"DM Mono",monospace;font-size:10px;color:var(--m2);background:var(--off2);border:1px solid var(--brd2);padding:1px 6px;border-radius:2px}
+.sub-name{font-size:11px;font-weight:600;color:var(--ink)}
+.sub-wt{font-family:"DM Mono",monospace;font-size:9px;color:var(--m2);letter-spacing:.04em}
+.sub-score{font-family:"DM Mono",monospace;font-size:15px;font-weight:600}
+.sub-bar-o{height:3px;background:var(--off2);border-radius:2px}
+.sub-bar-f{height:100%;border-radius:2px;transition:width 1.4s cubic-bezier(.4,0,.2,1);width:0}
+.sub-verdict{font-size:10px;color:var(--mut);margin-top:5px;line-height:1.4}
+/* BENCH */
+.bench-card{background:#fff;border:1px solid var(--brd);border-radius:7px;padding:16px 18px;margin:10px 0;box-shadow:var(--shd)}
+.bc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.bc-lbl{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.bc-pct{font-family:"Cormorant Garant",serif;font-size:24px;font-weight:700;color:var(--navy)}
+.bc-blbls{display:flex;justify-content:space-between;font-family:"DM Mono",monospace;font-size:10px;color:var(--m2);margin-bottom:4px}
+.bc-track{height:5px;background:var(--off2);border-radius:3px;margin-bottom:7px;position:relative}
+.bc-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--navy),#2A6ECC);transition:width 1.5s cubic-bezier(.4,0,.2,1);width:0}
+.bc-note{font-size:11px;color:var(--m2);font-style:italic;margin-top:6px;line-height:1.5;border-top:1px solid var(--brd2);padding-top:7px}
+/* GPA */
+.gpa-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+@media(max-width:460px){.gpa-row{grid-template-columns:1fr}}
+.gpa-card{background:#fff;border:1px solid var(--brd);border-radius:7px;padding:14px;box-shadow:var(--shd)}
+.gpa-pill{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:3px;display:inline-flex;align-items:center;gap:5px;margin-bottom:7px}
+.gpp-g{color:var(--teal);border:1px solid rgba(10,116,99,.2);background:var(--tl)}
+.gpp-p{color:var(--red);border:1px solid rgba(184,50,50,.2);background:var(--rl)}
+.gpa-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.gpa-desc{font-size:12px;color:var(--mut);line-height:1.6}
+/* AINT */
+.aint{background:var(--navy);border-radius:7px;padding:18px 20px;margin:10px 0}
+.aint-k{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gm);margin-bottom:5px}
+.aint-title{font-family:"Cormorant Garant",serif;font-size:18px;font-weight:600;color:#fff;margin-bottom:5px}
+.aint-body{font-size:13px;color:rgba(255,255,255,.65);line-height:1.65;margin-bottom:10px}
+.aint-week{background:rgba(200,134,10,.12);border:1px solid rgba(200,134,10,.25);border-radius:4px;padding:10px 13px}
+.aw-l{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gm);margin-bottom:3px}
+.aw-t{font-size:12px;color:#fff;font-weight:500;line-height:1.5}
+/* EXPIRY */
+.expiry-card{background:var(--gl);border:1px solid rgba(200,134,10,.22);border-radius:7px;padding:12px 14px;margin:10px 0;display:flex;align-items:center;gap:10px}
+.exp-icon{font-size:18px}
+.exp-text{font-size:13px;color:var(--ink)}
+.exp-text strong{color:var(--gold)}
+/* SHARE */
+.share-card{background:#fff;border:1px solid var(--brd);border-radius:7px;padding:16px 18px;margin:10px 0;box-shadow:var(--shd)}
+.share-card h4{font-family:"Cormorant Garant",serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.share-card p{font-size:12px;color:var(--mut);margin-bottom:13px}
+.share-btns{display:flex;gap:8px;flex-wrap:wrap}
+.sbtn{font-family:"Figtree",sans-serif;font-size:12px;font-weight:600;padding:8px 16px;border-radius:3px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;border:none}
+.sb-li{background:#0A66C2;color:#fff}.sb-li:hover{background:#0856a3}
+.sb-team{background:var(--navy);color:#fff}.sb-team:hover{background:var(--navy2)}
+.sb-pr{background:var(--off2);color:var(--ink);border:1px solid var(--brd)}.sb-pr:hover{background:var(--off)}
+/* TEAM SHARE */
+.team-share-panel{background:var(--off);border:1px solid var(--brd2);border-radius:7px;padding:14px 16px;margin-top:10px}
+.ts-label{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+.ts-code{font-family:"DM Mono",monospace;font-size:13px;background:#fff;border:1px solid var(--brd);border-radius:4px;padding:8px 12px;word-break:break-all;color:var(--ink);line-height:1.5}
+.ts-copy{font-size:12px;color:var(--teal);cursor:pointer;background:none;border:none;font-family:"Figtree",sans-serif;font-weight:600;padding:4px 0;display:block;margin-top:6px;transition:color .2s}
+.ts-copy:hover{color:var(--sage)}
+.ts-note{font-size:11px;color:var(--m2);margin-top:5px;line-height:1.5;font-style:italic}
+/* RUBRIC */
+.rub-tog{display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--mut);font-size:12px;padding:7px 0;transition:color .2s;user-select:none;font-family:"Figtree",sans-serif}
+.rub-tog:hover{color:var(--ink)}.rub-tog svg{transition:transform .2s}.rub-tog.op svg{transform:rotate(180deg)}
+.rub-panel{display:none}.rub-panel.op{display:block}
+.res-foot{font-size:11px;color:var(--m2);text-align:center;margin-top:12px;padding-bottom:24px}
+@media print{.topbar,.ajir-bar,.btn-row,.share-btns,.rub-tog,.rub-panel,.team-share-panel{display:none!important}.screen{display:block!important}.screen:not(#screen-results){display:none!important}}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-logo">AIQ <span>Lite</span></div>
+  <div class="tb-right">
+    <div class="tb-section" id="tb-sec"></div>
+    <div class="prog-wrap"><div class="prog-fill" id="pfill"></div></div>
+  </div>
+</div>
+<div class="ajir-bar" id="ajir-bar" style="display:none"></div>
+
+<div class="wrap">
+
+<!-- LANDING -->
+<div class="screen active" id="screen-0">
+  <div class="land-hero">
+    <div class="kicker">AJIR Framework · Human-AI Intelligence Index</div>
+    <h1 class="land-h1">How well do you <em>actually</em><br>work with AI?</h1>
+    <div class="land-rule"></div>
+    <p class="land-sub">Not how often. Not which tools. <strong>How well.</strong> AIQ Lite measures four AJIR constructs — the human capabilities that determine whether AI creates value or risk in your work.</p>
+    <div class="nat">
+      <div class="nat-icon">◈</div>
+      <div>
+        <div class="nat-title">This is not a skills test</div>
+        <div class="nat-desc">AI can complete most AI skills assessments better than humans. AIQ Lite is designed to measure what AI cannot replicate: <strong>judgment, direction, ethical calibration, and the honesty to measure real impact.</strong> Questions are drawn from your actual sector and role.</div>
+      </div>
+    </div>
+    <div class="ajir-explainer">
+      <div class="ae-card"><div class="ae-letter" style="color:rgba(14,34,64,.15)">A</div><div><div class="ae-label">Agency</div><div class="ae-sub">How deliberately you direct and design your human-AI work</div></div></div>
+      <div class="ae-card"><div class="ae-letter" style="color:rgba(184,50,50,.15)">J</div><div><div class="ae-label">Judgment</div><div class="ae-sub">How critically and responsibly you evaluate AI outputs</div></div></div>
+      <div class="ae-card"><div class="ae-letter" style="color:rgba(10,116,99,.15)">I</div><div><div class="ae-label">Impact</div><div class="ae-sub">How honestly you measure AI's actual contribution</div></div></div>
+      <div class="ae-card"><div class="ae-letter" style="color:rgba(91,79,191,.15)">R</div><div><div class="ae-label">Resilience</div><div class="ae-sub">How deliberately you evolve your AI practice</div></div></div>
+    </div>
+    <div style="margin-bottom:20px">
+      <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px">Choose your assessment level:</div>
+      <div class="level-cards">
+        <div class="lcard sel" id="lcard-l1" onclick="selLevel(1)">
+          <div class="lc-badge lcb-l1">L1 · Self-reported</div>
+          <div class="lc-title">Standard Assessment</div>
+          <div class="lc-desc">Scenario and behavioral anchor questions across all four AJIR constructs and six sub-dimensions.</div>
+          <div class="lc-meta">~15 min · Credential valid 3 months</div>
+        </div>
+        <div class="lcard" id="lcard-l2" onclick="selLevel(2)">
+          <div class="lc-badge lcb-l2">L2 · + Micro-challenge</div>
+          <div class="lc-title">Validated Assessment</div>
+          <div class="lc-desc">L1 plus a 10-minute role-specific judgment challenge. Score blended 60/40. Stronger credential.</div>
+          <div class="lc-meta">~25 min · Credential valid 6 months · L2 badge</div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn" onclick="goTo('profile')">Begin Assessment <span class="arr">→</span></button></div>
+    <div style="font-size:12px;color:var(--m2);font-family:'DM Mono',monospace;letter-spacing:.04em;margin-top:10px">Free · Individual credential · Sector and role personalised</div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div class="screen" id="screen-profile">
+  <div class="sec-hdr"><div class="kicker" style="padding-top:36px">About you</div><h2 class="sec-h2">A few details to personalise your assessment.</h2></div>
+  <div class="form-card">
+    <div class="fc-title">Your profile — used to select your personalised scenario questions</div>
+    <div class="frow">
+      <div class="fg" id="fg-name"><label class="fl">Name <span class="req">*</span></label><input class="fi" id="f-name" type="text" placeholder="Alex Pemberton"><div class="eh">Required</div></div>
+      <div class="fg" id="fg-role"><label class="fl">Role <span class="req">*</span></label>
+        <select class="fi" id="f-role"><option value="">Select</option><option value="L">C-Suite / Executive</option><option value="L">VP / Senior Director</option><option value="M">Head of Department</option><option value="M">Team Lead / Manager</option><option value="P">Senior Contributor</option><option value="P">Individual Contributor</option><option value="P">Consultant / Advisor</option></select>
+        <div class="eh">Required</div></div>
+    </div>
+    <div class="frow">
+      <div class="fg" id="fg-sector"><label class="fl">Sector <span class="req">*</span></label>
+        <select class="fi" id="f-sector"><option value="">Select</option><option value="A">Financial Services</option><option value="A">Professional Services</option><option value="B">Technology &amp; SaaS</option><option value="B">Media &amp; Creative</option><option value="C">Healthcare &amp; Life Sciences</option><option value="C">Education</option><option value="C">Government &amp; Public Sector</option><option value="D">Manufacturing &amp; Logistics</option><option value="D">Retail &amp; E-commerce</option><option value="D">Property &amp; Construction</option></select>
+        <div class="eh">Required</div></div>
+      <div class="fg" id="fg-dept"><label class="fl">Function <span class="req">*</span></label>
+        <select class="fi" id="f-dept"><option value="">Select</option><option value="HR">People &amp; HR</option><option value="MK">Marketing &amp; Growth</option><option value="SR">Sales &amp; Revenue</option><option value="FO">Finance &amp; Operations</option><option value="PT">Product &amp; Technology</option><option value="LC">Legal &amp; Compliance</option></select>
+        <div class="eh">Required</div></div>
+    </div>
+    <div class="fg"><label class="fl">Team code <span style="font-size:10px;color:var(--m2);font-weight:400">(optional — provided by your employer)</span></label>
+      <input class="fi" id="f-team" type="text" placeholder="e.g. SONDER-Q1-2026"></div>
+    <div class="fg"><label class="fl">Email <span style="font-size:10px;color:var(--m2);font-weight:400">(optional — for score expiry reminder)</span></label>
+      <input class="fi" id="f-email" type="email" placeholder="alex@company.com"></div>
+  </div>
+  <div class="btn-row"><button class="btn" onclick="validateProfile()">Start Assessment <span class="arr">→</span></button><button class="bgh" onclick="goTo('0')">← Back</button></div>
+</div>
+
+<!-- CONSTRUCT SCREENS (JS rendered) -->
+<div class="screen" id="screen-A1"></div>
+<div class="screen" id="screen-A2"></div>
+<div class="screen" id="screen-J1"></div>
+<div class="screen" id="screen-J2"></div>
+<div class="screen" id="screen-I1"></div>
+<div class="screen" id="screen-R1"></div>
+
+<!-- CHALLENGE (L2) -->
+<div class="screen" id="screen-challenge"></div>
+
+<!-- RESULTS -->
+<div class="screen" id="screen-results"></div>
+
+</div><!-- /wrap -->
+
+<script>
+// ════ DATA ════
+const SCENARIOS = {
+  "A1": {
+    "Q1": {
+      "A": {
+        "L": "You lead a major client practice. Engagement revenue has declined 22% year-on-year. You need AI to diagnose why.",
+        "M": "Your team's proposal conversion rate dropped 22% in Q3. You need AI to analyse what is driving it.",
+        "P": "You are preparing a due diligence report and want AI to identify its weakest sections before it goes to the partner for review."
+      },
+      "B": {
+        "L": "Following your last product release, monthly active users declined 14%. You need AI to diagnose why.",
+        "M": "Sprint velocity in your team dropped 30% over the last quarter. You need AI to analyse the cause.",
+        "P": "A specific API endpoint has been showing elevated error rates since last Wednesday's deployment. You need AI to investigate."
+      },
+      "C": {
+        "L": "Patient satisfaction scores dropped 19% following a system implementation you sponsored. You need AI to understand why.",
+        "M": "Referral-to-treatment times in your department have increased for 8 consecutive weeks. You need AI to identify the cause.",
+        "P": "You have 300 case notes and need AI to identify patterns that correlate with rising complaint rates in your service."
+      },
+      "D": {
+        "L": "Customer churn increased 24% across your retail channels in Q3. You need AI to explain what is driving it.",
+        "M": "Order fulfilment accuracy in your team has declined for three consecutive weeks. You need AI to diagnose why.",
+        "P": "You need AI to identify which products are at highest stockout risk over the next 30 days based on current sales patterns."
+      }
+    },
+    "Q3": {
+      "A": "A colleague in your organisation used AI to produce a competitor analysis for a client pitch. The document is well-structured \u2014 but it analyses companies that are not in the client's actual competitive set.",
+      "B": "A colleague used AI to generate a user research synthesis ahead of a roadmap planning session. It is coherent and well-formatted \u2014 but it answers a question the team never asked.",
+      "C": "A colleague used AI to draft a service improvement proposal. It is clear and persuasive \u2014 but it recommends changes to a process that was redesigned 6 months ago.",
+      "D": "A colleague used AI to produce a supplier risk assessment. The report is detailed and professional \u2014 but it scored dimensions that are not relevant to your procurement criteria."
+    }
+  },
+  "A2": {
+    "Q1": {
+      "A": {
+        "L": "You are leading a major client engagement \u2014 market analysis, strategic recommendations, and a C-suite presentation \u2014 and deciding how to deploy AI across it.",
+        "M": "Your team is preparing a comprehensive pitch for a significant new client: research, proposal writing, financial modelling, and the presentation itself.",
+        "P": "You are producing a detailed investment research report: company analysis, comparable transactions, valuation, and executive summary."
+      },
+      "B": {
+        "L": "You are overseeing a major product discovery initiative: user research, competitive analysis, feature prioritisation, and a board-ready roadmap.",
+        "M": "Your team is building a significant new feature \u2014 discovery, specification, development, and QA \u2014 and AI is available at every stage.",
+        "P": "You are designing a new data pipeline: requirements, architecture, implementation, and documentation."
+      },
+      "C": {
+        "L": "You are leading a service redesign: patient journey mapping, process analysis, stakeholder consultation synthesis, and a policy document.",
+        "M": "Your team is conducting a departmental review: performance data analysis, case file review, staff input synthesis, and recommendations.",
+        "P": "You are producing a comprehensive case management plan: background review, risk assessment, intervention options, and review schedule."
+      },
+      "D": {
+        "L": "You are leading a supply chain optimisation project: spend analysis, supplier mapping, risk assessment, and board recommendations.",
+        "M": "Your team is producing a quarterly operational performance review: data analysis, benchmarking, root cause analysis, and action plan.",
+        "P": "You are creating a product range review: sales analysis, margin calculation, demand forecasting, and ranging recommendations."
+      }
+    },
+    "Q3": {
+      "A": "An AI tool has produced an excellent first draft of a strategic recommendation for a major client \u2014 well-structured, clearly argued, drawing on all the right data you provided.",
+      "B": "An AI tool has produced a detailed first draft of a product roadmap decision memo \u2014 well-organised, covering the right features, with supporting user data included.",
+      "C": "An AI tool has produced a thorough first draft of a service improvement plan \u2014 clearly structured, evidence-based, written in appropriately professional language.",
+      "D": "An AI tool has produced a solid first draft of a supplier renegotiation brief \u2014 comprehensive, data-backed, and professionally formatted."
+    }
+  },
+  "J1": {
+    "Q1": {
+      "A": {
+        "L": "An AI tool gives you a confident briefing with three market statistics supporting your recommendation to the investment committee. The meeting is in 30 minutes.",
+        "M": "AI generates a client briefing note with three performance statistics you need for a client call. The call is in 30 minutes.",
+        "P": "AI produces three market share statistics you want to include in a client deliverable. The submission deadline is in 30 minutes."
+      },
+      "B": {
+        "L": "AI produces an executive summary with three product metrics supporting your roadmap prioritisation decision. The board presentation is in 30 minutes.",
+        "M": "AI generates a sprint performance report with three velocity metrics for your leadership update. The meeting is in 30 minutes.",
+        "P": "AI produces three user engagement figures you want to cite in a feature specification. The engineering review is in 30 minutes."
+      },
+      "C": {
+        "L": "AI generates a policy briefing with three patient outcome statistics for a board presentation. The meeting is in 30 minutes.",
+        "M": "AI produces a department performance report with three clinical outcome figures for your weekly review. The meeting is in 30 minutes.",
+        "P": "AI creates a case summary with three outcome statistics you need for a multi-agency meeting. The meeting is in 30 minutes."
+      },
+      "D": {
+        "L": "AI produces a market analysis with three supply chain statistics supporting a major supplier decision. The negotiation call is in 30 minutes.",
+        "M": "AI generates an operational performance summary with three KPIs for your management review. The meeting is in 30 minutes.",
+        "P": "AI produces three demand forecast figures you want to use in a procurement recommendation. The buyer meeting is in 30 minutes."
+      }
+    },
+    "Q3": {
+      "A": "An AI-generated investment analysis confidently cites a specific market size figure that does not appear in any source document you provided. The figure is plausible and supports the investment thesis.",
+      "B": "An AI-generated competitive analysis includes a specific market share figure you cannot trace to any data you provided. It fits the narrative perfectly.",
+      "C": "An AI-generated policy brief cites a specific prevalence rate you cannot find in any NHS data, government statistics, or academic papers in your reference set. The figure would significantly strengthen the policy case.",
+      "D": "An AI-generated supplier analysis includes a specific on-time delivery rate for a key supplier that does not appear in any performance data you provided. The figure supports your preferred recommendation."
+    }
+  },
+  "J2": {
+    "Q1": {
+      "A": {
+        "L": "A colleague proposes using an AI model trained on your firm's historical hiring and promotion data to identify high-potential candidates for the partner track.",
+        "M": "A colleague proposes using AI trained on historical client onboarding decisions to automatically flag applications for enhanced due diligence.",
+        "P": "You are asked to use AI trained on historical credit decisions to pre-score a batch of loan applications before human review."
+      },
+      "B": {
+        "L": "A colleague proposes using an AI model trained on historical employee performance and promotion data to recommend who should be fast-tracked for senior roles.",
+        "M": "Your team proposes deploying AI trained on historical content moderation decisions to automatically remove user-generated content without human review.",
+        "P": "You are asked to use AI trained on historical support ticket resolutions to automatically close tickets classified as low-priority without agent review."
+      },
+      "C": {
+        "L": "A colleague proposes using an AI model trained on historical treatment pathway decisions to recommend care plans for new patients with complex needs.",
+        "M": "Your team proposes using AI trained on historical referral decisions to automatically triage incoming referrals and assign urgency scores.",
+        "P": "You are asked to use AI trained on historical case outcomes to recommend intervention levels for new cases in your caseload."
+      },
+      "D": {
+        "L": "A colleague proposes using AI trained on historical performance management data to recommend which employees should be put on performance improvement plans.",
+        "M": "Your team wants to use AI trained on historical supplier performance data to automatically reject supplier applications below a risk threshold.",
+        "P": "You are asked to use AI trained on historical quality control records to automatically pass or fail incoming product batches without manual inspection."
+      }
+    },
+    "Q3": {
+      "A": "You have been asked to use AI to draft personalised performance review sections for 18 direct reports, based on their annual KPI data and 360-degree feedback scores.",
+      "B": "Your team is under delivery pressure. A colleague suggests using AI to automatically generate code review sign-offs for pull requests that pass automated testing, without a human reviewer reading the code.",
+      "C": "Under significant capacity pressure, a colleague suggests using AI to generate initial clinical assessment notes from patient records, which clinicians would countersign without fully rewriting.",
+      "D": "To reduce manual processing time, your team is considering using AI to generate supplier contract renewal recommendations \u2014 pricing, terms, and risk clauses \u2014 for routine contracts, with a human approving rather than authoring."
+    }
+  },
+  "I1": {
+    "Q1": {
+      "A": {
+        "L": "Your board asks directly: the firm has invested significantly in AI tools over the past year. Can you demonstrate the return?",
+        "M": "In a team debrief, your director asks: has using AI actually improved the quality of your client deliverables \u2014 or just made them faster to produce?",
+        "P": "A client asks: 'I understand your team uses AI in your analysis. Can you tell me specifically how that improves what you deliver to us?'"
+      },
+      "B": {
+        "L": "Your investors ask: you have invested heavily in AI tooling across the product team. What measurable improvement in output quality or velocity can you show?",
+        "M": "Your VP asks: we have been using AI-assisted development for 6 months. Has it improved code quality or just reduced time per PR?",
+        "P": "In a performance review, your manager asks: you said AI improved your analysis output this quarter. Can you demonstrate that?"
+      },
+      "C": {
+        "L": "Your board asks: we have invested in AI tools across the clinical teams. What evidence do we have that patient outcomes have improved?",
+        "M": "In a quality review, the clinical director asks: has using AI in documentation actually reduced errors or just saved time?",
+        "P": "A service user asks: 'Does using AI in your assessments improve the quality of care you provide \u2014 or is it just quicker for you?'"
+      },
+      "D": {
+        "L": "Your CEO asks: the business has spent significantly on AI tools in operations. Can you show a measurable improvement in performance?",
+        "M": "In a monthly review, your director asks: has AI-assisted forecasting actually improved accuracy \u2014 or are we just getting answers faster?",
+        "P": "Your buyer asks: you used AI to prepare this ranging recommendation. Is it actually better than what you would have produced manually?"
+      }
+    },
+    "Q3": {
+      "A": "You have been using AI to produce first-draft client reports for 4 months. First-draft time has halved. But internal review rounds are now longer \u2014 the drafts require more restructuring than your pre-AI drafts used to.",
+      "B": "Your team has been using AI-assisted code generation for 3 months. Development speed has increased 40%. But code review times have increased \u2014 reviewers are catching more logic errors than before the AI was introduced.",
+      "C": "Your team has been using AI to draft case notes for 6 months. Documentation time has reduced significantly. But supervisors are flagging more corrections at review \u2014 the notes are fluent but sometimes lack the specific clinical detail that matters.",
+      "D": "You have been using AI to generate demand forecasts for 5 months. Forecast production time has dropped significantly. But stock accuracy has not improved \u2014 in some categories it has slightly declined."
+    }
+  },
+  "R1": {
+    "Q1": {
+      "A": {
+        "L": "A core AI tool your practice relies on for research synthesis and client briefing has been significantly updated. The model is more capable but your existing prompt templates no longer produce the quality of output they used to.",
+        "M": "An AI writing tool your team uses for client proposals has had a major model update. Your existing prompts are now producing inconsistent output quality.",
+        "P": "The AI research tool you use daily for market analysis has been updated. Your saved prompts now produce differently structured outputs that require more editing."
+      },
+      "B": {
+        "L": "A core AI tool your engineering teams rely on for code generation has had a major update. Existing integrations and prompts are behaving unpredictably.",
+        "M": "An AI tool your team uses for sprint planning and specification has been significantly updated. Your established workflows are producing lower-quality outputs.",
+        "P": "The AI coding assistant you use daily has had a major model update. Your usual approaches are producing different \u2014 sometimes better, sometimes worse \u2014 output."
+      },
+      "C": {
+        "L": "A core AI tool your organisation relies on for patient communications and documentation has received a significant update. Existing templates are not working as before.",
+        "M": "An AI documentation tool your team uses daily has been updated. Outputs now require significantly more editing than they did before the update.",
+        "P": "The AI tool you use for case note drafting has been updated. Your usual approach now produces outputs that are less accurate to the specific details of each case."
+      },
+      "D": {
+        "L": "A core AI tool your operations teams rely on for demand forecasting and reporting has had a major update. Existing models and templates are producing unreliable outputs.",
+        "M": "An AI reporting tool your team uses has been updated. Your established report templates are now producing inconsistent results.",
+        "P": "The AI tool you use for product analysis has been updated. Your usual prompts are producing outputs that need significant editing before use."
+      }
+    },
+    "Q3": {
+      "A": "An AI workflow you built 8 months ago handles your standard client research synthesis and saves your team approximately 3 hours per engagement. A colleague describes a newer approach that they estimate saves 6-7 hours for the same task.",
+      "B": "A CI/CD integration you built 9 months ago saves your team roughly 4 hours per sprint on test writing. A colleague demonstrates a newer toolset that appears to save 8-9 hours for the same work.",
+      "C": "A documentation workflow you established 7 months ago saves your team approximately 2 hours per week. A colleague from another department shows an approach using updated AI tools that appears to save 4-5 hours for the same workload.",
+      "D": "A demand forecasting workflow you set up 6 months ago saves your team 3-4 hours per week. A supplier introduces a newer AI toolset that appears to produce comparable accuracy in significantly less time."
+    }
+  }
+};
+
+const Q_OPTIONS = {
+  "A1_Q1": [
+    {
+      "s": 1,
+      "t": "Paste the relevant data in and ask AI directly: \"What is driving this decline?\""
+    },
+    {
+      "s": 3,
+      "t": "Describe the problem and ask for a framework to analyse it"
+    },
+    {
+      "s": 4,
+      "t": "Break it into sub-questions \u2014 by segment, time period, and context \u2014 then synthesise"
+    },
+    {
+      "s": 5,
+      "t": "Define what the decline means in context, specify the data available, state what a useful answer looks like \u2014 then design the AI task sequence"
+    }
+  ],
+  "A1_Q3": [
+    {
+      "s": 1,
+      "t": "The AI model used was not sophisticated enough for this task"
+    },
+    {
+      "s": 2,
+      "t": "Not enough source material was provided to the AI"
+    },
+    {
+      "s": 3,
+      "t": "The prompt was too vague about what was needed"
+    },
+    {
+      "s": 5,
+      "t": "The underlying problem was not clearly defined before any prompting happened \u2014 the brief itself was wrong"
+    }
+  ],
+  "A2_Q1": [
+    {
+      "s": 1,
+      "t": "Use AI where it feels useful as I work through each stage"
+    },
+    {
+      "s": 2,
+      "t": "Use AI for the research and drafting \u2014 keep strategic and evaluative work human"
+    },
+    {
+      "s": 4,
+      "t": "Decide at the start which components AI handles based on where accuracy and judgment matter most"
+    },
+    {
+      "s": 5,
+      "t": "Design the full workflow before starting: task map, AI/human split, handoff points, and verification requirements at each stage"
+    }
+  ],
+  "A2_Q3": [
+    {
+      "s": 2,
+      "t": "Editing the tone, formatting, and length for the specific audience"
+    },
+    {
+      "s": 3,
+      "t": "Fact-checking the key claims and statistics in the document"
+    },
+    {
+      "s": 4,
+      "t": "Evaluating whether the recommendation is right for this specific context \u2014 something AI could not know"
+    },
+    {
+      "s": 5,
+      "t": "Evaluating whether the recommendation is right for the context AND whether the right question was answered \u2014 AI may have addressed the stated brief perfectly but missed the real issue"
+    }
+  ],
+  "J1_Q1": [
+    {
+      "s": 1,
+      "t": "Include them \u2014 AI-generated statistics are generally reliable"
+    },
+    {
+      "s": 2,
+      "t": "Skim them \u2014 they sound plausible and fit with what you expected"
+    },
+    {
+      "s": 3,
+      "t": "Check one of the three against a source you trust"
+    },
+    {
+      "s": 5,
+      "t": "Verify all three against primary sources before including any of them, even at cost to the deadline"
+    }
+  ],
+  "J1_Q3": [
+    {
+      "s": 1,
+      "t": "Include it \u2014 specific numbers generated by AI are usually based on reliable training data"
+    },
+    {
+      "s": 2,
+      "t": "Add a caveat noting it is approximate and include it anyway"
+    },
+    {
+      "s": 3,
+      "t": "Search for a similar figure online to see if something comparable exists"
+    },
+    {
+      "s": 4,
+      "t": "Remove it unless it can be traced to a verifiable primary source"
+    },
+    {
+      "s": 5,
+      "t": "Remove it, flag it as a likely fabrication, and use it as a signal to systematically check every other claim in the document"
+    }
+  ],
+  "J2_Q1": [
+    {
+      "s": 1,
+      "t": "Proceed \u2014 AI-driven decisions are faster and more consistent than human review"
+    },
+    {
+      "s": 2,
+      "t": "Ask for accuracy statistics from the vendor before deciding"
+    },
+    {
+      "s": 3,
+      "t": "Implement with a human reviewing all flagged cases before any action is taken"
+    },
+    {
+      "s": 5,
+      "t": "First assess whether the historical decisions the AI was trained on reflect the standards and outcomes you want to perpetuate \u2014 before committing to any AI involvement"
+    }
+  ],
+  "J2_Q3": [
+    {
+      "s": 2,
+      "t": "Proceed \u2014 the efficiency gain is significant and a human is still in the loop for final sign-off"
+    },
+    {
+      "s": 3,
+      "t": "Proceed for routine cases but require human authorship for complex or borderline ones"
+    },
+    {
+      "s": 4,
+      "t": "Use AI as a starting point but require every output to be substantively reviewed and personally owned by the responsible person"
+    },
+    {
+      "s": 5,
+      "t": "Question whether AI should be involved at all \u2014 accountability for consequential decisions requires that the responsible person genuinely authors, not merely approves, the judgment"
+    }
+  ],
+  "I1_Q1": [
+    {
+      "s": 1,
+      "t": "Yes \u2014 outputs are noticeably better and we produce them faster. The improvement is clear."
+    },
+    {
+      "s": 2,
+      "t": "I believe so \u2014 feedback has been positive and my own sense is that quality has improved"
+    },
+    {
+      "s": 3,
+      "t": "Probably \u2014 I have not measured it formally but I could track it if you need evidence"
+    },
+    {
+      "s": 5,
+      "t": "I have data: I tracked baseline metrics before adoption and have been comparing against them since \u2014 here is what I can show"
+    }
+  ],
+  "I1_Q3": [
+    {
+      "s": 1,
+      "t": "Accept the trade-off \u2014 speed is the scarce resource and total output is still positive"
+    },
+    {
+      "s": 2,
+      "t": "Adjust the prompts to see if the downstream quality issue can be reduced"
+    },
+    {
+      "s": 3,
+      "t": "Identify which task types create the most rework and change the AI/human split for those specific types"
+    },
+    {
+      "s": 5,
+      "t": "Measure whether total time \u2014 production plus review plus correction \u2014 is actually lower than your pre-AI baseline, and separately evaluate quality. Only then decide whether to continue, adjust, or abandon the workflow."
+    }
+  ],
+  "R1_Q1": [
+    {
+      "s": 1,
+      "t": "Keep using the existing approach \u2014 the outputs are still adequate even if less polished"
+    },
+    {
+      "s": 2,
+      "t": "Fix the most important workflows when they visibly break"
+    },
+    {
+      "s": 4,
+      "t": "Systematically review which workflows are affected and rebuild the critical ones"
+    },
+    {
+      "s": 5,
+      "t": "Treat the update as an opportunity to redesign workflows from scratch using the new capabilities \u2014 not patch the old approach"
+    }
+  ],
+  "R1_Q3": [
+    {
+      "s": 1,
+      "t": "Nothing \u2014 the current workflow functions well and switching carries transition risk"
+    },
+    {
+      "s": 2,
+      "t": "Note it as something to evaluate when there is a quiet period"
+    },
+    {
+      "s": 3,
+      "t": "Properly evaluate it within the week and switch if it is genuinely better"
+    },
+    {
+      "s": 5,
+      "t": "Evaluate it, switch if better, document the rationale, and use the evaluation process as a reusable template for future workflow upgrade decisions"
+    }
+  ]
+};
+
+const CHALLENGES = {};
+
+// ── PEOPLE & HR ──────────────────────────────────────────────────────────────
+CHALLENGES["HR_L"] = {
+  "title": "AI Performance Ranking — Sign-Off Review",
+  "context": "Your HRIS team has implemented an AI model that ranks all 200 employees across the business on a composite 'performance and potential' score. The output will inform promotion decisions and bonus allocation this cycle. As CHRO, you are asked to sign off on the rankings before they are shared with line managers.",
+  "primary_construct": "J2",
+  "items": [
+    {
+      "label": "Training data question",
+      "text": "The model was trained on three years of historical performance review scores, manager ratings, and promotion decisions. Your organisation's DEI audit from last year found that women and employees from minority ethnic backgrounds were systematically rated lower by managers in this period.",
+      "q": "Before signing off, you:",
+      "opts": [
+        {"s":0,"t":"Proceed — the AI is applying a consistent methodology that removes individual manager bias."},
+        {"s":1,"t":"Ask the HRIS team to add a diversity filter to adjust outcomes where demographic patterns are detected."},
+        {"s":2,"t":"Decline to sign off until an independent audit of the model's outputs by demographic group is completed. Training on historically biased data does not produce an unbiased model — it encodes the bias."}
+      ]
+    },
+    {
+      "label": "Accountability gap",
+      "text": "A line manager challenges the ranking of one of their reports, arguing it contradicts their direct observation of that person's performance. The HRIS team responds: 'The model is objective — it uses all available data.' The manager asks who is accountable if the ranking is wrong.",
+      "q": "The correct answer is:",
+      "opts": [
+        {"s":0,"t":"The HRIS team, who built and deployed the model."},
+        {"s":1,"t":"The model has no accountability — it is a tool, not a decision-maker."},
+        {"s":2,"t":"You, as the executive who signed off on its use. Deploying AI for a consequential people decision does not transfer accountability to the system — it concentrates it in whoever authorised deployment."}
+      ]
+    },
+    {
+      "label": "Governance design",
+      "text": "You decide to implement a human review process before rankings are used in decisions. What is the minimum credible standard?",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Line managers can flag disagreements with rankings and HRIS will review flagged cases."},
+        {"s":1,"t":"All rankings in the bottom and top decile are reviewed by a senior HR Business Partner before use."},
+        {"s":2,"t":"Every ranking that will materially affect a compensation or promotion decision is reviewed by a person with direct knowledge of that employee, using the AI output as one input — not the decision."}
+      ]
+    }
+  ]
+};
+
+CHALLENGES["HR_M"] = {
+  "title": "Recruitment Screening — Workflow Design",
+  "context": "Your team receives an average of 340 applications per role. You have been asked to redesign the screening workflow using AI to reduce the time-to-shortlist from 12 days to 4. You are the Talent Acquisition Manager responsible for the new process.",
+  "primary_construct": "A2",
+  "items": [
+    {
+      "label": "Task allocation",
+      "text": "You are mapping which parts of the screening process AI will own, which humans will own, and which require AI-then-human handoff. The four tasks are: (1) initial CV match to job criteria, (2) assessing cultural fit signals from cover letters, (3) flagging legally protected characteristic disclosures, (4) making the shortlist decision.",
+      "q": "The correct allocation is:",
+      "opts": [
+        {"s":0,"t":"AI handles all four to achieve the speed target — recruiters review the final shortlist."},
+        {"s":1,"t":"AI handles (1) and (3), humans handle (2) and (4) — culture and decisions need human judgment."},
+        {"s":2,"t":"AI handles (1) as a filter tool with transparent criteria. (2) is deferred — 'cultural fit' from text is high-bias territory. (3) is human-only — AI flagging protected characteristics creates legal exposure. (4) is always human. Speed comes from (1), not from automating judgment."}
+      ]
+    },
+    {
+      "label": "Criteria transparency",
+      "text": "A rejected candidate contacts HR to ask why they were not shortlisted. The AI screening tool your vendor provides cannot explain why specific candidates were scored lower — it uses a proprietary algorithm.",
+      "q": "Before deploying this tool, you should have:",
+      "opts": [
+        {"s":0,"t":"Included a standard 'we receive a high volume of applications' rejection template — explanation is not legally required."},
+        {"s":1,"t":"Checked whether the vendor has GDPR-compliant documentation on the algorithm."},
+        {"s":2,"t":"Mapped every criterion the AI uses against your job description, tested outputs for demographic disparity, and established a human-reviewable audit trail for every rejection. If you cannot explain a rejection, the process is not defensible."}
+      ]
+    },
+    {
+      "label": "Quality measure",
+      "text": "After three months, time-to-shortlist has reduced to 4 days. Before declaring success, what is the most important metric to check?",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Hiring manager satisfaction with shortlist quality — if they are happy, the process is working."},
+        {"s":1,"t":"Offer acceptance rate — if candidates are accepting offers, the right people are being shortlisted."},
+        {"s":2,"t":"Demographic composition of shortlists versus the applicant pool, and 6-month performance ratings of hired candidates versus pre-AI hires. Speed is table stakes — the question is whether AI screening is systematically excluding strong candidates you would previously have seen."}
+      ]
+    }
+  ]
+};
+
+CHALLENGES["HR_P"] = {
+  "title": "CV Screening Output — Pre-Submission Review",
+  "context": "You are a recruiter. You used an AI tool to screen 85 CVs against a job description for a Senior Data Analyst role and generate a ranked shortlist of 12. Before sending the shortlist to the hiring manager, you are reviewing the AI output.",
+  "primary_construct": "J1",
+  "items": [
+    {
+      "label": "Top-ranked candidate",
+      "text": "The AI has ranked a candidate first. Their CV lists 'Advanced SQL, Python, Tableau' and '5 years experience in data roles.' The job description requires 'experience with large-scale data pipelines and cloud data warehouses (AWS Redshift or equivalent).' There is no mention of pipelines or cloud tools in the CV.",
+      "q": "You:",
+      "opts": [
+        {"s":0,"t":"Keep the candidate ranked first — the AI has access to the full CV and its scoring is more systematic than mine."},
+        {"s":1,"t":"Move the candidate down the list but keep them on the shortlist — the skills may be implied by their experience."},
+        {"s":2,"t":"Do not include the candidate until you have verified whether the core requirement is met — either by reviewing the CV more carefully or screening the candidate. A shortlist that misses the mandatory requirement on the top candidate is not a shortlist."}
+      ]
+    },
+    {
+      "label": "Missing candidate",
+      "text": "You notice that a candidate you reviewed manually yesterday — whose CV clearly met all five criteria — does not appear in the AI shortlist at all. They are not in the ranked 12 or the excluded list.",
+      "q": "What do you do?",
+      "opts": [
+        {"s":0,"t":"Trust the AI — if it excluded this candidate there must be a reason."},
+        {"s":1,"t":"Add the candidate to the shortlist and note the discrepancy for the vendor."},
+        {"s":2,"t":"Add the candidate, investigate why they were excluded, and check whether other candidates with similar profiles were also dropped. One unexplained exclusion may indicate a systematic error, not an isolated one."}
+      ]
+    },
+    {
+      "label": "Shortlist readiness",
+      "text": "You have checked the top 3 candidates and found one issue. The other 9 are unchecked. The hiring manager needs the shortlist today.",
+      "q": "You:",
+      "opts": [
+        {"s":0,"t":"Send the shortlist — you have done a reasonable check and the hiring manager is waiting."},
+        {"s":1,"t":"Send the shortlist with a note that the AI output has not been fully verified."},
+        {"s":2,"t":"Spend 15 minutes spot-checking the remaining 9 for the single most critical criterion — pipeline and cloud experience — before sending. Passing an unverified AI output to a hiring manager as your professional recommendation transfers the AI's errors to your judgment."}
+      ]
+    }
+  ]
+};
+
+// ── MARKETING & GROWTH ────────────────────────────────────────────────────────
+CHALLENGES["MK_L"] = {
+  "title": "AI Campaign ROI — Board Presentation",
+  "context": "Your board has asked you, as CMO, to present evidence of AI's contribution to last quarter's 18% improvement in campaign conversion rate before approving next year's AI tooling budget of £240,000.",
+  "primary_construct": "I1",
+  "items": [
+    {
+      "label": "Attribution problem",
+      "text": "During Q3, you introduced AI-generated ad copy, a new media agency, improved first-party data segmentation, and a revised landing page UX — all simultaneously. Conversion rate improved 18%. The AI copy vendor's platform reports AI was responsible for a '34% lift in click-through rate.'",
+      "q": "When presenting to the board, you:",
+      "opts": [
+        {"s":0,"t":"Present the vendor's 34% figure — it is the best evidence you have for AI's contribution."},
+        {"s":1,"t":"Present the overall 18% conversion improvement and note AI copy was one contributing factor."},
+        {"s":2,"t":"Explain that you cannot isolate AI's contribution because multiple variables changed simultaneously — and propose a controlled test for Q1 where AI copy is the only variable changed. Presenting a vendor's self-reported attribution metric as board-level evidence is not credible."}
+      ]
+    },
+    {
+      "label": "Budget case",
+      "text": "The board asks: 'What is the ROI on the £240,000 AI tooling spend?' You do not have a baseline measurement from before AI adoption against which to compare current performance.",
+      "q": "Your response is:",
+      "opts": [
+        {"s":0,"t":"Present revenue improvement since AI adoption and calculate an implied ROI."},
+        {"s":1,"t":"Acknowledge the gap and commit to establishing a measurement baseline before the next budget cycle."},
+        {"s":2,"t":"Acknowledge the gap, propose a specific measurement framework starting immediately (baseline metrics, isolated A/B tests, 90-day review), and ask the board to approve a provisional budget contingent on that evidence being produced. Promising future evidence is more credible than fabricating past attribution."}
+      ]
+    },
+    {
+      "label": "Strategic framing",
+      "text": "A board member asks: 'If AI is working so well, why do we still need the same size marketing team?' How do you respond?",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"AI handles execution — the team handles strategy. Headcount is unchanged because the roles are different."},
+        {"s":1,"t":"The team is smaller in some areas but we have reinvested those savings into higher-value activities."},
+        {"s":2,"t":"Explain specifically what the team now does with AI that they could not do before — the volume of campaigns tested, the speed of iteration, the depth of personalisation — and show how that translates to business outcomes. If AI is generating value, the evidence should be in output quality and volume, not just cost reduction."}
+      ]
+    }
+  ]
+};
+
+CHALLENGES["MK_M"] = {
+  "title": "Declining Email Performance — AI Brief Review",
+  "context": "Your email marketing programme's open rate has dropped from 28% to 19% over eight weeks. You have briefed an AI tool to diagnose why. Below is the brief a team member submitted. Review it and answer the questions.",
+  "primary_construct": "A1",
+  "brief": "Analyse our email marketing performance decline. Our open rate dropped from 28% to 19% over the last 8 weeks. Please identify the key reasons and provide recommendations to improve performance. We send 3 emails per week to our full list of 45,000 subscribers.",
+  "items": [
+    {
+      "label": "What is missing from this brief?",
+      "text": "The brief describes the symptom but provides no data for the AI to diagnose the cause. It does not include: segmentation data, subject line performance, send time history, list growth or churn figures, any changes made during the 8-week period, or deliverability/spam rate data.",
+      "q": "How does this affect the AI output?",
+      "opts": [
+        {"s":0,"t":"Minimally — a capable AI can identify likely causes from general email marketing knowledge."},
+        {"s":1,"t":"Significantly — the AI will produce generic best practice recommendations rather than a diagnosis."},
+        {"s":2,"t":"The AI has no data to diagnose with. It will produce a plausible-sounding list of common causes — subject line length, send frequency, list hygiene — none of which are verified against your actual situation. This is a brief that will waste everyone's time."}
+      ]
+    },
+    {
+      "label": "The AI output recommends reducing send frequency from 3x to 1x per week.",
+      "text": "This is a common best practice recommendation. You have not changed send frequency during the 8-week period of decline.",
+      "q": "How do you evaluate this recommendation?",
+      "opts": [
+        {"s":0,"t":"Implement it — reducing frequency is generally sound advice for declining engagement."},
+        {"s":1,"t":"Test it — run a frequency experiment before committing to the change."},
+        {"s":2,"t":"Reject it as a diagnosis. If frequency has not changed and open rate has declined, frequency is not the cause. The AI generated a standard recommendation because the brief gave it nothing else to work with. Diagnose the actual change before recommending any fix."}
+      ]
+    },
+    {
+      "label": "Brief rewrite — most important addition",
+      "text": "If you were rewriting this brief to get a genuinely useful diagnostic output, what is the single most important addition?",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Historical open rate data by email type — promotional, newsletter, triggered."},
+        {"s":1,"t":"A timeline of every change made to the programme in the last 12 weeks, mapped against the open rate trend."},
+        {"s":2,"t":"The exact week the decline began, every change made to the programme in the preceding 4 weeks (copy approach, list changes, technical changes, sender name), and the performance breakdown by segment and email type. Diagnosis requires a timeline of changes, not a description of current state."}
+      ]
+    }
+  ]
+};
+
+CHALLENGES["MK_P"] = {
+  "title": "AI Content Tool Update — Workflow Audit",
+  "context": "Your primary AI content generation tool — which you use daily for social copy, email drafts, and ad variants — has released a major update. The model has changed significantly: output style is different, some prompts that worked reliably no longer produce usable results, and new capabilities have been added that you have not explored.",
+  "primary_construct": "R1",
+  "items": [
+    {
+      "label": "Immediate response",
+      "text": "Your first reaction on seeing the update notification is:",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Dismiss the notification and continue — the tool still produces output and clients are not complaining."},
+        {"s":1,"t":"Read the release notes when you have time and adjust prompts that break."},
+        {"s":2,"t":"Block two hours this week to systematically test your 6 most-used prompt templates against the new model, document which still work, which need adjustment, and what new capabilities could replace manual tasks in your current workflow."}
+      ]
+    },
+    {
+      "label": "Prompt library audit",
+      "text": "You have 14 saved prompt templates built up over 8 months. Three months ago, you noticed the tool had already changed subtly — some templates were producing worse results — but you did not update them at the time.",
+      "q": "Your prompt library is:",
+      "opts": [
+        {"s":0,"t":"Reliable — you test outputs before using them so outdated prompts are caught before they cause problems."},
+        {"s":1,"t":"Probably partially stale — you should review it but it has not caused visible client issues yet."},
+        {"s":2,"t":"A liability. Prompt templates are not static assets — they degrade as models update. A library that has not been audited since the model changed is producing lower-quality outputs than you realise, and you are measuring nothing to know how much worse."}
+      ]
+    },
+    {
+      "label": "New capability assessment",
+      "text": "The release notes describe a new structured output feature that could eliminate a 45-minute manual reformatting task you currently do every week for client reporting.",
+      "q": "You:",
+      "opts": [
+        {"s":0,"t":"Note it for later — you are busy and the current process works."},
+        {"s":1,"t":"Try it this week and adopt it if it works on the first attempt."},
+        {"s":2,"t":"Test it against your actual reporting template this week, measure time saved, and adopt it if it reduces the task reliably. New capabilities that eliminate recurring manual work have a fast payback — they should be evaluated immediately, not added to a backlog."}
+      ]
+    }
+  ]
+};
+
+// ── SALES & REVENUE ──────────────────────────────────────────────────────────
+CHALLENGES["SR_L"] = {
+  "title": "Pipeline Forecast Brief — Board Preparation",
+  "context": "Your AI-powered CRM tool has auto-generated a pipeline forecast showing £4.2M of committed revenue for Q4. You are presenting to the board in 48 hours. A team member has submitted this brief to generate the board narrative. Review it.",
+  "primary_construct": "A1",
+  "brief": "Write a confident pipeline forecast narrative for the board showing £4.2M committed revenue for Q4. Explain what is driving this strong pipeline and why we are on track to hit our £3.8M target. The narrative should be 3 paragraphs and position the sales team well.",
+  "items": [
+    {
+      "label": "What is wrong with this brief?",
+      "text": "The brief asks the AI to write a confident narrative first and justify it second. It instructs the AI to reach a predetermined conclusion ('on track,' 'strong pipeline,' 'position the team well') before any analysis of whether the pipeline data supports those conclusions.",
+      "q": "The risk this creates is:",
+      "opts": [
+        {"s":0,"t":"Low — the AI output is a draft and the team will fact-check it before submission."},
+        {"s":1,"t":"Moderate — the language may be overconfident but the underlying £4.2M figure is from real CRM data."},
+        {"s":2,"t":"High. The brief will produce a narrative that sounds credible but is not grounded in pipeline quality analysis. A board forecast should start with an honest read of conversion probability, deal risk, and historical close rates — not a confidence frame. You are asking AI to dress up a number you have not verified."}
+      ]
+    },
+    {
+      "label": "Pipeline quality",
+      "text": "The CRM's £4.2M figure includes all deals marked as 'committed' or 'verbal' by sales reps. Historically, 31% of deals in these stages do not close in the forecast quarter. The AI narrative does not reference this.",
+      "q": "Before presenting this forecast, you:",
+      "opts": [
+        {"s":0,"t":"Present £4.2M as committed — the board understands that forecasts carry uncertainty."},
+        {"s":1,"t":"Present a range: £4.2M committed, with £2.9M as the risk-adjusted expected close."},
+        {"s":2,"t":"Present the £4.2M pipeline, the 31% historical slip rate, the resulting £2.9M risk-adjusted figure, and the specific deals where you have high confidence versus high uncertainty. A board deserves a forecast they can plan against, not a number that sounds good."}
+      ]
+    },
+    {
+      "label": "Brief rewrite",
+      "text": "How should this brief have been written to produce a genuinely useful board narrative?",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Ask for a neutral summary of the pipeline data without specifying the tone."},
+        {"s":1,"t":"Provide the pipeline data and ask for a narrative that explains key drivers and risks."},
+        {"s":2,"t":"Provide: the raw pipeline by stage, historical close rates by stage, the 3 largest deals and their risk factors, the gap to target, and ask for a narrative that gives the board an honest picture — not a positive one. The brief should define what useful looks like, not what the team wants to hear."}
+      ]
+    }
+  ]
+};
+
+CHALLENGES["SR_M"] = {
+  "title": "AI Lead Scoring — Pre-Deployment Review",
+  "context": "Your revenue operations team has built an AI lead scoring model trained on 3 years of historical CRM data — win/loss outcomes, deal size, industry, company size, and engagement signals. The model will automatically prioritise leads for your 12-person sales team. You are the Sales Manager reviewing it before go-live.",
+  "primary_construct": "J2",
+  "items": [
+    {
+      "label": "Historical bias risk",
+      "text": "Looking at the training data, you notice that leads from SME companies in retail and hospitality were consistently deprioritised by your previous sales team and have a low historical win rate. The AI model scores these leads low. However, your new enterprise product launched 8 months ago is specifically designed for this segment — the historical data predates this positioning.",
+      "q": "Before deploying, you:",
+      "opts": [
+        {"s":0,"t":"Deploy the model — historical win rates are the best signal available and the team should focus where they have historically succeeded."},
+        {"s":1,"t":"Add a manual override so reps can escalate leads the model scores low that they believe have potential."},
+        {"s":2,"t":"Exclude the segment from the model's scoring entirely for the first quarter and have reps work those leads manually. A model trained on pre-product-pivot data will encode the old strategy, not the new one. Deploying it will cause the team to underinvest in the segment you are trying to grow."}
+      ]
+    },
+    {
+      "label": "Accountability for missed deals",
+      "text": "Three months post-deployment, a £180,000 deal that the model scored as low-priority closes — after a rep invested time in it against the model's recommendation. A second low-scoring deal that the rep deprioritised based on the model is lost to a competitor. The rep asks: if the model is wrong, who is accountable for the lost deal?",
+      "q": "The correct answer is:",
+      "opts": [
+        {"s":0,"t":"RevOps, who built and deployed the model."},
+        {"s":1,"t":"Shared — the model provided incorrect guidance and the rep followed it."},
+        {"s":2,"t":"The lead scoring model does not carry accountability — you do, as the manager who deployed it as a priority signal without adequate monitoring. The first missed deal is a model failure. Continuing to use a model whose errors you have not analysed is a management failure."}
+      ]
+    },
+    {
+      "label": "Monitoring framework",
+      "text": "What is the minimum monitoring you should have in place from day one of deployment?",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Monthly review of win rate versus the previous quarter to see if overall performance improves."},
+        {"s":1,"t":"Weekly review of deals closed that were scored low by the model and deals lost that were scored high."},
+        {"s":2,"t":"A weekly audit of: deals closed from low-score leads (model errors), deals lost from high-score leads (model errors), rep override rate, and segment-level accuracy. If you cannot see where the model is wrong, you cannot improve it — and you cannot protect your team from following bad guidance."}
+      ]
+    }
+  ]
+};
+
+CHALLENGES["SR_P"] = {
+  "title": "Outbound Prospecting — Workflow Design",
+  "context": "You are a Senior Account Executive. You have been asked to redesign your outbound prospecting workflow to incorporate AI, with a target of doubling the number of qualified conversations per week from 4 to 8 without increasing your total working hours.",
+  "primary_construct": "A2",
+  "items": [
+    {
+      "label": "Task allocation",
+      "text": "Your current prospecting workflow has five stages: (1) identify target accounts from ICP criteria, (2) research each account for personalisation signals, (3) write personalised outreach messages, (4) determine send timing and sequencing, (5) follow up and handle replies. Map each to: AI-owned, human-owned, or AI-then-human.",
+      "q": "The most effective allocation is:",
+      "opts": [
+        {"s":0,"t":"AI handles all five — this is how you double volume without increasing hours."},
+        {"s":1,"t":"AI handles (1), (4) and first draft of (3); human handles (2) for top accounts and (5) for all replies."},
+        {"s":2,"t":"AI handles (1) fully — ICP matching is pattern recognition. (2) AI surfaces signals; human decides what is relevant and authentic. (3) AI draft + human rewrite for top-tier accounts; AI draft only for high-volume lower-tier. (4) AI fully. (5) human fully — trust and relationship cannot be delegated. The doubling comes from (1), (2) and (3) efficiency, not from automating judgment."}
+      ]
+    },
+    {
+      "label": "Personalisation quality",
+      "text": "After two weeks, your AI-assisted outreach has doubled message volume but reply rate has dropped from 11% to 6%. Total replies are roughly the same as before.",
+      "q": "The most likely cause is:",
+      "opts": [
+        {"s":0,"t":"The market is harder — reply rates are declining industry-wide."},
+        {"s":1,"t":"The AI-generated messages lack the personalisation quality of your previous manual outreach."},
+        {"s":2,"t":"You have optimised for volume instead of quality. If total replies are flat while volume doubled, AI messages are generating half the reply rate of your previous messages. The workflow is producing more activity with the same output — which means the AI personalisation layer is not substituting for the research and craft of your previous approach."}
+      ]
+    },
+    {
+      "label": "Workflow fix",
+      "text": "You decide to improve the workflow. The most important change is:",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Use a better AI model for message generation."},
+        {"s":1,"t":"Reduce AI-assisted volume back to 5 accounts per day and increase research time per account."},
+        {"s":2,"t":"Segment your account list: top 20 accounts get full human research and AI-drafted/human-rewritten messages; remaining accounts get AI-only treatment. Measure reply rate by segment. Volume gains should come from the accounts where the quality bar is lower — not at the expense of conversion on priority accounts."}
+      ]
+    }
+  ]
+};
+
+// ── FINANCE & OPERATIONS ─────────────────────────────────────────────────────
+CHALLENGES["FO_L"] = {
+  "title": "AI Platform ROI — Licence Renewal Review",
+  "context": "Your CFO has asked you, as COO, to provide evidence of ROI for the £180,000 AI tooling suite before signing the renewal. The tools have been in use across finance, operations, and procurement for 14 months.",
+  "primary_construct": "I1",
+  "items": [
+    {
+      "label": "What evidence do you have?",
+      "text": "Your team has collected: (a) user satisfaction scores averaging 4.1/5, (b) a vendor case study claiming similar companies achieved 25% efficiency gains, (c) anecdotal reports from team leads that 'things are faster,' and (d) no baseline measurement of time spent on tasks before AI adoption.",
+      "q": "When presenting to the CFO, this evidence is:",
+      "opts": [
+        {"s":0,"t":"Sufficient — satisfaction scores and qualitative feedback are standard measures for tooling ROI."},
+        {"s":1,"t":"Weak but usable — present it honestly and note the measurement gaps."},
+        {"s":2,"t":"Insufficient for a £180,000 renewal decision. User satisfaction measures adoption, not value. A vendor's case study is marketing. Anecdote is not evidence. The measurement gap is a governance failure — you should have established a baseline before deployment. Present this honestly and propose a 90-day measurement protocol before any multi-year renewal."}
+      ]
+    },
+    {
+      "label": "The CFO's question",
+      "text": "The CFO asks: 'If we had not bought this platform, what would be different?' How do you answer?",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"We would be slower and less competitive — AI tools are now table stakes in our sector."},
+        {"s":1,"t":"Honestly acknowledge that you cannot answer that question with the current data."},
+        {"s":2,"t":"Acknowledge the data gap, then propose a specific counterfactual analysis: identify 3 processes where AI is used, estimate pre-AI time using historical task records and team estimates, compare against current time, and apply a cost per hour. Imperfect retrospective data is better than no data — and designing the measurement approach shows you take the CFO's question seriously."}
+      ]
+    },
+    {
+      "label": "Renewal recommendation",
+      "text": "Based on what you have, your recommendation to the CFO is:",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Renew — the tools are embedded and disruption would be costly."},
+        {"s":1,"t":"Renew on a shorter term (6 months) with a commitment to measure ROI properly."},
+        {"s":2,"t":"Renew the subset of tools with clear usage data, pause renewal on the remainder, and implement a 90-day measurement framework before the next decision point. Renewing £180,000 of tooling because 'disruption would be costly' is not a business case — it is inertia dressed up as risk management."}
+      ]
+    }
+  ]
+};
+
+CHALLENGES["FO_M"] = {
+  "title": "Variance Analysis — Pre-CFO Review",
+  "context": "Your team used AI to generate the monthly P&L variance analysis for the CFO's review. The analysis explains a £340,000 adverse EBITDA variance versus budget. You are reviewing the output before it goes up.",
+  "primary_construct": "J1",
+  "items": [
+    {
+      "label": "Revenue explanation",
+      "text": "The analysis states: 'Revenue underperformance of £210,000 was primarily driven by lower average transaction values across the enterprise segment, down 14% versus budget.' You know the enterprise pricing model changed in month 2 of the quarter, which means the comparison is against a budget built on the old pricing structure.",
+      "q": "Before submitting, you:",
+      "opts": [
+        {"s":0,"t":"Leave it — the CFO knows about the pricing change and will factor it in."},
+        {"s":1,"t":"Add a footnote noting the pricing model change."},
+        {"s":2,"t":"Reframe the analysis entirely: separate the pricing-model variance (expected) from the volume variance (unexpected). Presenting a 14% price decline as underperformance without flagging it was a deliberate strategic change is misleading — regardless of whether the CFO knows about it."}
+      ]
+    },
+    {
+      "label": "Cost explanation",
+      "text": "The AI attributes £130,000 of cost overrun to 'higher-than-budgeted headcount costs.' Your records show headcount was actually below budget for the quarter — the overrun was driven by external consultant costs brought in for a specific project. The AI conflated the two cost lines.",
+      "q": "You respond to this error by:",
+      "opts": [
+        {"s":0,"t":"Correcting the label — change 'headcount' to 'people costs' to cover both categories."},
+        {"s":1,"t":"Correcting both the label and the explanation to reflect the actual driver."},
+        {"s":2,"t":"Correcting the label, explanation, and checking every other cost variance in the analysis with the same level of scrutiny. If the AI misattributed one £130,000 variance, there is no basis for confidence in the others. A variance analysis with one confirmed error is an analysis that needs full re-review."}
+      ]
+    },
+    {
+      "label": "Submission standard",
+      "text": "After your review, you have found and corrected two errors. The CFO's deadline is in 90 minutes. Your honest assessment of the analysis now is:",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Ready — I have found the main issues and the overall picture is accurate."},
+        {"s":1,"t":"Submit with a note that some figures may need verification."},
+        {"s":2,"t":"Run one final check: verify the three largest variances against the source data before submitting. Two errors found on a first pass means errors exist that were not found. The 90-minute deadline does not change the risk of submitting inaccurate figures to the CFO — it changes how quickly you need to work."}
+      ]
+    }
+  ]
+};
+
+CHALLENGES["FO_P"] = {
+  "title": "FP&A Tool Update — Workflow Audit",
+  "context": "Your primary AI-assisted FP&A tool has released a significant update. The forecasting model has been retrained, the scenario modelling interface has changed, and new features have been added including AI-generated commentary on variances. You use this tool daily for budget tracking, reforecasting, and management reporting.",
+  "primary_construct": "R1",
+  "items": [
+    {
+      "label": "First response to the update",
+      "text": "The update deploys automatically overnight. You notice in the morning that the Q4 reforecast you ran yesterday now shows different numbers — the model revision has changed the output. You have a weekly reporting pack to prepare today.",
+      "q": "You:",
+      "opts": [
+        {"s":0,"t":"Use the new numbers — the updated model is presumably more accurate."},
+        {"s":1,"t":"Use the old numbers for today's report and investigate the discrepancy this week."},
+        {"s":2,"t":"Do not submit either version until you understand what changed and why the numbers differ. A model update that changes your forecast overnight without explanation is a red flag — you need to understand the driver of the change before presenting either version as accurate."}
+      ]
+    },
+    {
+      "label": "New AI commentary feature",
+      "text": "The update includes an AI-generated variance commentary feature. You test it on last month's actuals. The commentary is well-written and identifies the correct variances — but it attributes a cost overrun to 'procurement timing' when you know from internal discussions it was driven by an unbudgeted headcount decision.",
+      "q": "This test tells you:",
+      "opts": [
+        {"s":0,"t":"The feature works well enough — the commentary is accurate on the quantitative drivers even if the qualitative explanation needs editing."},
+        {"s":1,"t":"The feature is useful for drafts but needs human review of the qualitative explanations before use."},
+        {"s":2,"t":"The feature cannot replace your judgment on management commentary. It correctly identifies what changed numerically but not why — and in FP&A, the 'why' is 80% of the value. Use it to structure commentary, not to write it. And document this limitation before anyone else on the team starts trusting its explanations."}
+      ]
+    },
+    {
+      "label": "Workflow update plan",
+      "text": "Following the update, the most important thing you do this week is:",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Read the release notes and flag any issues if they arise in practice."},
+        {"s":1,"t":"Re-run last quarter's actuals through the new model and compare outputs to verify accuracy."},
+        {"s":2,"t":"Re-run the last 3 months of actuals through the new model, document every output difference versus the previous model, understand the cause of each, and update your reporting commentary templates to reflect what the AI commentary tool can and cannot reliably produce. A financial tool you do not fully understand is a control risk, not just an efficiency question."}
+      ]
+    }
+  ]
+};
+
+// ── PRODUCT & TECHNOLOGY ──────────────────────────────────────────────────────
+CHALLENGES["PT_L"] = {
+  "title": "Roadmap Deprioritisation Brief — Review",
+  "context": "A product manager has used AI to generate a recommendation to deprioritise three features from your Q4 roadmap: real-time collaboration, advanced export formats, and offline mode. The recommendation will be presented to the executive team. Review the brief that generated it.",
+  "primary_construct": "A1",
+  "brief": "Analyse our Q4 product roadmap and recommend which features to deprioritise given limited engineering capacity. We have three features in scope: real-time collaboration (est. 6 weeks), advanced export formats (est. 2 weeks), offline mode (est. 4 weeks). Engineering capacity is 8 weeks total. Recommend which features to cut and why.",
+  "items": [
+    {
+      "label": "What is missing?",
+      "text": "The brief gives the AI engineering estimates and asks for a capacity-based recommendation — but provides no data on: user demand or research signals for each feature, strategic importance to acquisition vs retention, contractual commitments, technical dependencies, or competitor parity implications.",
+      "q": "The recommendation this brief produces is:",
+      "opts": [
+        {"s":0,"t":"Valid — engineering capacity is the primary constraint and the AI is optimising for it correctly."},
+        {"s":1,"t":"Incomplete — it should also consider user impact but is a reasonable starting point."},
+        {"s":2,"t":"Not a product recommendation — it is a maths problem dressed up as strategy. Cutting features based solely on effort estimates without demand or strategic data is not prioritisation. It is random selection with a credible-sounding rationale."}
+      ]
+    },
+    {
+      "label": "AI recommends cutting offline mode because it has the highest estimate-to-impact ratio.",
+      "text": "'Impact' in the AI's analysis is inferred from the brief — there is no actual impact data. The PM presenting this does not flag that offline mode was requested by 4 of your top 10 enterprise accounts in last quarter's QBR.",
+      "q": "As CPO reviewing this recommendation, you:",
+      "opts": [
+        {"s":0,"t":"Accept it — the PM reviewed it and if they did not flag enterprise demand, it is probably not material."},
+        {"s":1,"t":"Ask the PM to check with the enterprise CS team before finalising the recommendation."},
+        {"s":2,"t":"Reject the recommendation and send it back for a proper brief: user research scores, enterprise demand signals, strategic tier of each feature, and then a constrained prioritisation decision. An executive recommendation built on inferred impact data should not reach the leadership table."}
+      ]
+    },
+    {
+      "label": "Brief rewrite — critical addition",
+      "text": "If you were rewriting this brief to generate a decision-ready recommendation, the single most important addition is:",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Competitive analysis showing which features are table-stakes in the market."},
+        {"s":1,"t":"User research scores and feature request volume for each item."},
+        {"s":2,"t":"The strategic objective each feature serves (acquisition, retention, enterprise expansion, technical debt), the evidence base for each (user research, sales data, support tickets), any hard commitments, and a definition of what 'deprioritise' means (cut, defer to Q1, or descope to MVP). Decision quality requires decision context — not just capacity maths."}
+      ]
+    }
+  ]
+};
+
+CHALLENGES["PT_M"] = {
+  "title": "Sprint Velocity Analysis — Pre-Stakeholder Review",
+  "context": "Your team used AI to generate a sprint performance analysis for the quarterly business review. It is being presented to the product leadership team tomorrow. Review it before it goes out.",
+  "primary_construct": "J1",
+  "items": [
+    {
+      "label": "Velocity comparison",
+      "text": "The analysis reports 'average sprint velocity of 38 points, down 18% versus Q2.' You know that in week 7 of Q3, the team switched from a 2-week to a 3-week sprint cadence, and story points were recalibrated. The velocity figures are not comparable across the quarter boundary.",
+      "q": "Before submission, you:",
+      "opts": [
+        {"s":0,"t":"Leave it — the leadership team will understand that velocity figures are directional."},
+        {"s":1,"t":"Add a footnote about the cadence change."},
+        {"s":2,"t":"Remove the quarter-over-quarter comparison entirely and replace it with a per-sprint productivity measure that is consistent across both periods. Presenting an incomparable metric as a trend is not directional — it is misleading."}
+      ]
+    },
+    {
+      "label": "Causal attribution",
+      "text": "The analysis states: 'The velocity decline is attributable to the onboarding of two new engineers in Q3, which created knowledge transfer overhead.' Both engineers joined in the final week of Q3. The velocity trend started declining in week 3.",
+      "q": "You respond to this claim by:",
+      "opts": [
+        {"s":0,"t":"Leave it — the new engineers were a known disruption and the explanation is plausible."},
+        {"s":1,"t":"Soften the language to 'may have been partially influenced by' rather than 'attributable to.'"},
+        {"s":2,"t":"Remove the causal attribution. The engineers joined in week 12; the decline started in week 3. The AI has drawn a causal conclusion that the timeline directly contradicts. Present the trend as unexplained and note that root cause analysis is in progress."}
+      ]
+    },
+    {
+      "label": "Stakeholder readiness",
+      "text": "After your corrections, the analysis shows a velocity decline with no clear explanation. This is less satisfying than the original but more accurate. Do you proceed?",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Present the original version — the corrections make the team look worse without adding real value."},
+        {"s":1,"t":"Present the corrected version but pre-brief the product lead on the changes before the meeting."},
+        {"s":2,"t":"Present the corrected version as written, with a specific proposal for a root cause analysis before the next QBR. An honest unexplained trend is a better starting point for fixing a problem than a confidently wrong explanation. Stakeholders who trust your analysis are more valuable than stakeholders who feel good about it."}
+      ]
+    }
+  ]
+};
+
+CHALLENGES["PT_P"] = {
+  "title": "Feature Spec Handoff — Collaboration Review",
+  "context": "You are a Senior Product Manager. You used AI to generate a feature specification for a new notification system. The spec is being handed to the engineering team for estimation and scoping. Review how you structured the AI collaboration before the handoff.",
+  "primary_construct": "A2",
+  "items": [
+    {
+      "label": "Spec traceability",
+      "text": "The AI-generated spec includes 14 functional requirements. Three of them — covering edge cases in notification delivery failure — were not in your original brief. The AI inferred and added them based on common patterns in notification systems.",
+      "q": "Before handoff, you:",
+      "opts": [
+        {"s":0,"t":"Include all 14 — the AI-inferred requirements are probably valid and cover cases you may have missed."},
+        {"s":1,"t":"Flag the 3 inferred requirements as 'AI-suggested, to be confirmed' in the spec."},
+        {"s":2,"t":"Review each of the 3 inferred requirements against your actual product context: are they relevant to your architecture, do they reflect real user needs you have evidence for, and are they within scope for this release? Include confirmed requirements; exclude or explicitly defer the rest. A spec handed to engineering should reflect deliberate decisions, not AI inferences you have not validated."}
+      ]
+    },
+    {
+      "label": "Technical suggestion",
+      "text": "The AI has included a specific technical approach in the spec: 'Use WebSocket connections for real-time notification delivery.' This is presented in the functional requirements section, not the technical notes section. Your engineering team has existing infrastructure built around a different approach.",
+      "q": "The correct action is:",
+      "opts": [
+        {"s":0,"t":"Leave it — the engineering team will know to adapt the technical suggestion to their infrastructure."},
+        {"s":1,"t":"Move it to a 'technical notes' section and flag it as a suggestion, not a requirement."},
+        {"s":2,"t":"Remove it from the spec entirely and replace it with the functional requirement it was trying to satisfy: 'Notifications must be delivered within X seconds of the triggering event.' Technical implementation decisions belong to engineering. Baking an AI-suggested technical approach into a functional spec creates confusion about what is required versus what is a solution."}
+      ]
+    },
+    {
+      "label": "Handoff quality",
+      "text": "Before handing off to engineering, the most important question to answer about an AI-generated spec is:",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Is the spec comprehensive — does it cover all the cases engineering will need to handle?"},
+        {"s":1,"t":"Is the spec accurate — are all the requirements technically feasible?"},
+        {"s":2,"t":"Can I trace every requirement back to a user need or product decision? Comprehensiveness and feasibility are necessary but not sufficient. A spec with 14 requirements, 3 of which cannot be justified, will cause engineering to build things that were never needed. The product manager's job is to make deliberate decisions — not to forward AI output."}
+      ]
+    }
+  ]
+};
+
+// ── LEGAL & COMPLIANCE ────────────────────────────────────────────────────────
+CHALLENGES["LC_L"] = {
+  "title": "AI Contract Risk Scoring — Accountability Review",
+  "context": "Your legal operations team has deployed an AI contract review tool that scores all new supplier agreements on a risk scale of 1–10 across seven dimensions: liability cap, IP ownership, termination rights, data processing obligations, exclusivity, payment terms, and jurisdiction. Contracts scoring above 7 on any dimension are flagged for legal review. Others are approved automatically. You are the General Counsel reviewing the governance framework three months post-deployment.",
+  "primary_construct": "J2",
+  "items": [
+    {
+      "label": "Accountability gap",
+      "text": "A supplier contract was auto-approved by the system (all dimensions scored below 7). Six months later, a dispute arises over a data processing clause the tool had scored 6/10 — just below the review threshold. The clause is found to be non-compliant with your data processing obligations under GDPR. Legal counsel asks: who approved this contract?",
+      "q": "The correct answer is:",
+      "opts": [
+        {"s":0,"t":"The AI system approved it — it was within the defined parameters."},
+        {"s":1,"t":"The legal ops team who set the threshold at 7, not 6."},
+        {"s":2,"t":"You, as the GC who implemented a process under which contracts with material legal obligations can be auto-approved without human review. An AI tool can flag risk — it cannot carry legal accountability. Every auto-approved contract is implicitly approved by whoever designed the process."}
+      ]
+    },
+    {
+      "label": "Threshold design",
+      "text": "Your team wants to raise the auto-approval threshold from contracts scoring below 7 on all dimensions to contracts scoring below 8 — to reduce the volume of manual reviews, which have increased 40% since deployment. This would increase auto-approvals by approximately 60%.",
+      "q": "Before approving this change, you:",
+      "opts": [
+        {"s":0,"t":"Approve — the team is overloaded and 60% fewer reviews will restore sustainable capacity."},
+        {"s":1,"t":"Approve with a 90-day review period to monitor whether contract dispute rates change."},
+        {"s":2,"t":"Conduct an audit of every contract currently scoring 7–7.9 that would be auto-approved under the new threshold, categorise them by risk type, and make a deliberate decision about which categories are genuinely low-risk versus which are being deprioritised for capacity reasons. Capacity pressure is not a governance justification — it is a resource problem with a different solution."}
+      ]
+    },
+    {
+      "label": "Escalation design",
+      "text": "For contracts that are auto-approved, what is the minimum governance standard?",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Audit trail of all auto-approvals accessible to legal on request."},
+        {"s":1,"t":"Monthly sample review of 10% of auto-approved contracts by a qualified lawyer."},
+        {"s":2,"t":"A defined set of contract types that are categorically excluded from auto-approval regardless of score (e.g. any contract involving personal data, any contract above £X in value), plus a quarterly structured review of a statistically meaningful sample of auto-approved contracts for compliance errors. Auto-approval is a risk-based decision — it requires ongoing validation, not just an audit trail."}
+      ]
+    }
+  ]
+};
+
+CHALLENGES["LC_M"] = {
+  "title": "Legal AI ROI — Business Case Review",
+  "context": "You are Head of Legal Operations. The firm's leadership has asked you to build a business case for expanding the AI legal research and contract review toolset from 4 lawyers to the full 24-person legal team. Current licence cost: £18,000/year for 4 users. Expansion cost: £92,000/year. You need to demonstrate ROI.",
+  "primary_construct": "I1",
+  "items": [
+    {
+      "label": "Current evidence",
+      "text": "Your evidence base for the 4-user pilot: (a) the 4 users report saving 'around 2–3 hours per week' on research tasks, (b) no baseline time measurement was taken before the pilot, (c) billing data shows the 4 users' billable hours increased 8% during the pilot period, (d) you cannot isolate the AI tool's contribution from other factors (workload changes, team composition).",
+      "q": "This evidence base supports:",
+      "opts": [
+        {"s":0,"t":"A strong business case — 8% billable hour increase with self-reported time savings is compelling."},
+        {"s":1,"t":"A moderate business case — directionally positive but with acknowledged measurement gaps."},
+        {"s":2,"t":"A hypothesis that requires validation, not a business case. Self-reported time savings without a baseline are not measurable. An 8% billing increase during a period of many confounding variables is correlation. The business case should be honest about what you know and propose how you will measure it properly."}
+      ]
+    },
+    {
+      "label": "Building the ROI case",
+      "text": "To construct a credible ROI argument for the £92,000 investment, the most important metric to establish is:",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Lawyer satisfaction scores for the tool, benchmarked against industry adoption data."},
+        {"s":1,"t":"Time saved per lawyer per week, converted to a cost saving or billable hour equivalent."},
+        {"s":2,"t":"Time saved per task type (contract review, legal research, document drafting), multiplied by task frequency and cost per hour — with a measured baseline before expansion. Then net against the licence cost and implementation time. ROI is not a feeling — it is a calculation that requires a denominator as well as a numerator."}
+      ]
+    },
+    {
+      "label": "Recommendation to leadership",
+      "text": "Given your current evidence, your recommendation is:",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Approve the full 24-user expansion — the directional evidence is positive and the market is moving fast."},
+        {"s":1,"t":"Approve a staged expansion to 12 users with a formal ROI review before full rollout."},
+        {"s":2,"t":"Approve a 60-day structured measurement phase for the existing 4 users — with baseline time tracking established for 5 key task types — before any expansion decision. Then present the expansion business case with actual data. Spending £92,000 on directional evidence is not a measured decision; it is pressure to move fast dressed up as strategy."}
+      ]
+    }
+  ]
+};
+
+CHALLENGES["LC_P"] = {
+  "title": "Legal Research Tool Update — Workflow Audit",
+  "context": "Your primary AI legal research tool has deployed a significant model update. The most notable change: the citation behaviour has changed. The previous version cited specific cases with paragraph references. The new version sometimes produces case summaries without specific citations, or cites cases that cannot be verified in the databases you use.",
+  "primary_construct": "R1",
+  "items": [
+    {
+      "label": "Immediate risk assessment",
+      "text": "You notice the citation behaviour change on a Monday morning. You have three research tasks due this week: (1) a briefing note for a client meeting on Thursday, (2) internal guidance on a regulatory question by Friday, (3) background research for a matter that does not proceed to drafting for 3 weeks.",
+      "q": "Your approach is:",
+      "opts": [
+        {"s":0,"t":"Use the tool for all three tasks as usual — citation issues are identified during review and you always check the tool's outputs."},
+        {"s":1,"t":"Use the tool cautiously for all three, adding extra verification steps for any cited case."},
+        {"s":2,"t":"Do not use the tool for (1) or (2) until you have tested the new citation behaviour against a known set of cases and understood when it is reliable versus when it fabricates. Use (3) as the test case — low stakes, long runway. A legal research tool with unreliable citation is not a slower tool; it is a liability."}
+      ]
+    },
+    {
+      "label": "Testing approach",
+      "text": "To understand the new citation behaviour, you run 5 research queries on matters you already know the answers to — cases you have worked on directly. The tool produces accurate case summaries in 4 of 5 instances but fabricates a specific paragraph reference in 1 case (citing paragraph 47 of a judgment; the relevant point is actually at paragraph 112).",
+      "q": "This test tells you:",
+      "opts": [
+        {"s":0,"t":"The tool is 80% reliable on citation — acceptable for research purposes with review."},
+        {"s":1,"t":"Paragraph references cannot be trusted without verification — use the tool for case identification but always check citations directly."},
+        {"s":2,"t":"The tool can fabricate specific details that look authoritative. An 80% accuracy rate on paragraph references means 1 in 5 cited paragraphs is wrong — in a 20-case research note, that is 4 false citations. Document this behaviour, share it with the team, and update your review protocol: every specific citation must be verified against source before any external use."}
+      ]
+    },
+    {
+      "label": "Workflow update",
+      "text": "Following your testing, the most important thing you do before using the tool again on live matters is:",
+      "q": "Select your answer:",
+      "opts": [
+        {"s":0,"t":"Add a step in your review checklist to spot-check citations on completed research notes."},
+        {"s":1,"t":"Send a note to the team flagging the issue and recommending they verify citations on important matters."},
+        {"s":2,"t":"Document the specific failure mode with examples, update the team's shared prompt templates to request case summaries without specific paragraph references (reducing the risk of fabrication), establish a mandatory citation verification step for all external-facing work, and send a formal query to the vendor about the change with a request for guidance on the new model's citation reliability. A known tool failure is a risk that requires a systematic response, not an individual caution."}
+      ]
+    }
+  ]
+};
+
+CHALLENGES["AL"] = {
+  "title": "Investment Strategy Briefing \u2014 Critical Review",
+  "context": "A junior analyst used AI to produce the following briefing for a major client presentation tomorrow. Review the three items below and answer the questions.",
+  "primary_construct": "J1",
+  "items": [
+    {
+      "label": "Item 1 \u2014 Supporting statistic",
+      "text": "The briefing states: 'The sector has achieved 34% CAGR over the past 5 years, positioning it as one of the highest-growth asset classes globally.' This figure is not cited and does not appear in any source material the analyst mentioned.",
+      "q": "What do you do with this statistic?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "It is a strong supporting point \u2014 include it. The AI would not generate a specific figure without basis."
+        },
+        {
+          "s": 1,
+          "t": "Add a footnote indicating the source needs to be verified before the presentation."
+        },
+        {
+          "s": 2,
+          "t": "Remove it entirely and check every other cited figure in the document for the same problem."
+        }
+      ]
+    },
+    {
+      "label": "Item 2 \u2014 Recommendation logic",
+      "text": "The briefing recommends a 40% allocation, stating it is 'consistent with market consensus.' The data in the briefing shows the consensus range is 25\u201355%. The 40% recommendation sits exactly in the middle of that range but the briefing provides no argument for why 40% rather than any other point.",
+      "q": "How do you respond to this recommendation?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Accept it \u2014 40% is within the consensus range and therefore defensible."
+        },
+        {
+          "s": 1,
+          "t": "Flag that the recommendation needs a more specific rationale before the client presentation."
+        },
+        {
+          "s": 2,
+          "t": "Require a specific, evidenced reason why 40% is the right point within the consensus range \u2014 otherwise this is not a recommendation, it is a default."
+        }
+      ]
+    },
+    {
+      "label": "Item 3 \u2014 Executive summary claim",
+      "text": "The executive summary states the strategy 'positions the client ahead of regulatory changes expected in 2027.' The body of the briefing contains no reference to regulatory changes of any kind.",
+      "q": "How do you treat this discrepancy?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Trust the executive summary \u2014 it was probably written with additional context the analyst has."
+        },
+        {
+          "s": 1,
+          "t": "Ask the analyst where the regulatory reference came from and whether it should be in the body."
+        },
+        {
+          "s": 2,
+          "t": "Treat this as a significant red flag \u2014 an executive summary making claims the body does not support is a document that has not been verified. Require a full revision."
+        }
+      ]
+    }
+  ]
+};
+
+CHALLENGES["AM"] = {
+  "title": "Client Proposal Brief \u2014 Root Cause Analysis",
+  "context": "A team member used the following brief to instruct AI to write the executive summary of a client proposal. The output was generic and the client rejected it as 'not understanding our situation.' Review the brief and answer the questions.",
+  "primary_construct": "A1",
+  "brief": "Write an executive summary for a proposal to improve our client's operational efficiency. The client is a professional services firm looking to use AI to streamline their processes. Include our key capabilities and how we can help. Tone should be professional and compelling. Keep it to 3 paragraphs.",
+  "items": [
+    {
+      "label": "Brief assessment \u2014 Problem definition",
+      "text": "The brief does not define what specific operational problem the client has, what is currently happening versus what should be happening, or what the client has already tried.",
+      "q": "How significant is this omission?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Minor \u2014 the AI should be able to infer a reasonable problem from context."
+        },
+        {
+          "s": 1,
+          "t": "Significant \u2014 the AI needs more context to produce a relevant output."
+        },
+        {
+          "s": 2,
+          "t": "This is the root cause of the poor output. Without a defined problem, the AI can only produce a generic capability statement \u2014 which is exactly what happened."
+        }
+      ]
+    },
+    {
+      "label": "Brief assessment \u2014 Output specification",
+      "text": "The brief specifies tone and length but not what a successful executive summary should achieve, what objection it should address, or what decision it is trying to move the client towards.",
+      "q": "What is the impact of this?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Low impact \u2014 tone and length are the most important formatting constraints."
+        },
+        {
+          "s": 1,
+          "t": "Moderate \u2014 the AI would produce better output if it knew the desired outcome."
+        },
+        {
+          "s": 2,
+          "t": "This is why the output sounds like every other proposal \u2014 the AI optimised for format rather than persuasive function because no outcome was specified."
+        }
+      ]
+    },
+    {
+      "label": "Brief assessment \u2014 What to change first",
+      "text": "If you were coaching the team member to rewrite this brief to get a useful AI output, what is the single most important change?",
+      "q": "Select your answer:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Add more detail about the firm's capabilities and past work."
+        },
+        {
+          "s": 1,
+          "t": "Specify the tone more precisely and provide examples of writing the client would respond to."
+        },
+        {
+          "s": 2,
+          "t": "Start by defining the client's specific problem, what they have already tried, and what a successful outcome looks like \u2014 before describing any capabilities."
+        }
+      ]
+    }
+  ]
+};
+
+CHALLENGES["AP"] = {
+  "title": "Market Analysis \u2014 Self-Review Before Submission",
+  "context": "You produced the following AI-assisted market analysis for inclusion in a client deliverable. Before the partner reviews it, check it yourself and answer the questions.",
+  "primary_construct": "J1",
+  "items": [
+    {
+      "label": "Claim 1",
+      "text": "Your analysis states: 'Competitors X and Y have increased their market share by 12% and 8% respectively over the past 18 months.' You used AI to generate this from publicly available reports, but you have not verified these specific figures against the original source documents.",
+      "q": "Before submission, you:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Leave it as is \u2014 the figures came from reputable sources as AI input."
+        },
+        {
+          "s": 1,
+          "t": "Add a footnote referencing the sources and ask the partner to verify if they have concerns."
+        },
+        {
+          "s": 2,
+          "t": "Verify both figures directly before the analysis leaves your desk. Specific percentage claims in client documents must be sourced."
+        }
+      ]
+    },
+    {
+      "label": "Claim 2",
+      "text": "Your analysis concludes: 'This market is attractively positioned for entry given strong growth fundamentals and limited competitive intensity.' The data in the analysis shows 7 established competitors and 3 well-funded new entrants. The 'limited competitive intensity' conclusion does not follow from the data presented.",
+      "q": "You notice this. What do you do?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Leave it \u2014 the AI reached this conclusion from the data so it must have a basis."
+        },
+        {
+          "s": 1,
+          "t": "Soften the language to 'moderately competitive' to be safer."
+        },
+        {
+          "s": 2,
+          "t": "Rewrite the conclusion based on what the data actually shows. The AI drew an unjustified inference and it is your name on the document."
+        }
+      ]
+    },
+    {
+      "label": "Reflection",
+      "text": "Having reviewed your own analysis, your honest assessment of its readiness for partner review is:",
+      "q": "Select your answer:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Ready \u2014 the issues I found are minor and the overall argument is sound."
+        },
+        {
+          "s": 1,
+          "t": "Needs light editing \u2014 I have caught the main issues and the rest is solid."
+        },
+        {
+          "s": 2,
+          "t": "Needs another pass \u2014 finding two significant issues suggests I should check the rest of the document with the same level of scrutiny before it goes anywhere."
+        }
+      ]
+    }
+  ]
+};
+
+CHALLENGES["BL"] = {
+  "title": "Product Decision Brief \u2014 Diagnostic Review",
+  "context": "A product manager used the following brief to generate an AI decision memo for a major feature prioritisation decision. The output was described by reviewers as 'not decision-ready.' Review the brief and answer the questions.",
+  "primary_construct": "A1",
+  "brief": "Write a decision memo on whether we should prioritise Feature A or Feature B in the next quarter. Feature A improves onboarding. Feature B improves retention. We have limited engineering capacity. The memo should cover the key considerations and make a recommendation. Include an executive summary.",
+  "items": [
+    {
+      "label": "What is missing from this brief?",
+      "text": "The brief does not specify: what data exists on onboarding vs. retention impact, what the decision criteria are (revenue, retention rate, NPS?), what the current metrics are, or what the company's strategic priority is for this quarter.",
+      "q": "How does this affect the AI output?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Minimally \u2014 a capable AI can infer the relevant decision framework from context."
+        },
+        {
+          "s": 1,
+          "t": "Significantly \u2014 the AI will need to make up the evaluative criteria, which may not match your actual decision framework."
+        },
+        {
+          "s": 2,
+          "t": "This is why the memo was not decision-ready. Without decision criteria and relevant data, the AI can only produce a balanced generic analysis \u2014 not a real recommendation for your specific situation."
+        }
+      ]
+    },
+    {
+      "label": "The AI memo recommends Feature A 'due to its higher strategic alignment with company goals.' No company goals were specified in the brief.",
+      "text": "The AI has inferred a strategic priority that was not stated.",
+      "q": "How do you respond to this recommendation?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Accept it \u2014 the AI likely has relevant context from training data about product strategy best practices."
+        },
+        {
+          "s": 1,
+          "t": "Check whether the inferred priority actually matches your company's stated goals before sharing the memo."
+        },
+        {
+          "s": 2,
+          "t": "Reject the recommendation entirely until the brief is rewritten with actual strategic context. A recommendation based on inferred rather than stated goals is not decision-ready."
+        }
+      ]
+    },
+    {
+      "label": "What would you add to this brief to get a genuinely useful output?",
+      "text": "Select the most important addition.",
+      "q": "Select your answer:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Specific examples of how each feature has performed in beta or competitor products."
+        },
+        {
+          "s": 1,
+          "t": "The actual metrics data for onboarding and retention, with the current baseline for each."
+        },
+        {
+          "s": 2,
+          "t": "The decision criteria (what does success look like?), the current metric baselines, the strategic priority for this quarter, and what a useful recommendation looks like \u2014 before adding any feature data."
+        }
+      ]
+    }
+  ]
+};
+
+CHALLENGES["BM"] = {
+  "title": "Sprint Performance Analysis \u2014 Pre-Submission Review",
+  "context": "Your team used AI to generate the following sprint performance analysis for the leadership team. Review it before it goes out.",
+  "primary_construct": "J1",
+  "items": [
+    {
+      "label": "Velocity metric",
+      "text": "The analysis reports 'average sprint velocity of 42 points, down 15% from the previous quarter.' You know the team changed its story point calibration midway through the quarter \u2014 stories in the second half of the quarter were sized differently from the first half, making the velocity comparison misleading.",
+      "q": "You do not mention this in the analysis. What should you do?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Leave it \u2014 the leadership team will understand that velocity figures are approximate."
+        },
+        {
+          "s": 1,
+          "t": "Add a footnote noting the calibration change so readers can interpret appropriately."
+        },
+        {
+          "s": 2,
+          "t": "Recalculate using a consistent methodology before reporting, and explicitly note the calibration change. A metric that is not comparable quarter-over-quarter should not be presented as if it is."
+        }
+      ]
+    },
+    {
+      "label": "Causal claim",
+      "text": "The analysis states: 'The velocity decline is directly caused by the onboarding of three new team members in Q3.' The new members joined in week 10 of 12. The velocity decline began in week 4.",
+      "q": "How do you respond to this causal claim?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Accept it \u2014 new member onboarding is a well-known driver of velocity decline."
+        },
+        {
+          "s": 1,
+          "t": "Soften it to 'may have contributed to' the decline."
+        },
+        {
+          "s": 2,
+          "t": "Remove the causal claim entirely. The timeline does not support it and presenting it as a direct cause is misleading. The actual cause needs to be investigated."
+        }
+      ]
+    },
+    {
+      "label": "Recommendation",
+      "text": "The analysis recommends 'reducing sprint scope by 20% next quarter to rebuild velocity.' The current sprint delivery rate (stories completed vs. committed) is 94% \u2014 the team is nearly always delivering what it commits to. A scope reduction would reduce output, not improve it.",
+      "q": "How do you treat this recommendation?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Include it \u2014 the AI may be accounting for quality factors not visible in the delivery rate."
+        },
+        {
+          "s": 1,
+          "t": "Flag it to leadership as a suggestion that needs further discussion."
+        },
+        {
+          "s": 2,
+          "t": "Remove the recommendation. It contradicts the data in the analysis. A recommendation that does not follow from the evidence should not appear in a leadership report."
+        }
+      ]
+    }
+  ]
+};
+
+CHALLENGES["BP"] = {
+  "title": "Feature Specification \u2014 Handoff Audit",
+  "context": "You produced this AI-assisted feature specification. A senior engineer reviewing it said: 'I cannot tell what decisions you made versus what the AI generated, and I cannot reproduce your reasoning if I have questions.' Answer the questions below.",
+  "primary_construct": "A2",
+  "items": [
+    {
+      "label": "The specification contains no indication of which requirements came from user research versus AI generation.",
+      "text": "The engineer cannot distinguish between requirements grounded in real user data and requirements the AI inferred or added.",
+      "q": "Is this a problem?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "No \u2014 requirements are requirements. The source does not change their validity."
+        },
+        {
+          "s": 1,
+          "t": "Minor issue \u2014 I can explain verbally if the engineer has questions."
+        },
+        {
+          "s": 2,
+          "t": "Yes, this is a significant problem. Requirements need to be traceable to their source. An AI-inferred requirement that has not been validated against user data is a hypothesis, not a requirement."
+        }
+      ]
+    },
+    {
+      "label": "The specification includes a suggested technical implementation approach that the AI generated. You included it without indicating it was AI-generated or that it had been reviewed by engineering.",
+      "text": "An engineer reading it might assume it represents a considered technical decision.",
+      "q": "What is the appropriate action?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Leave it \u2014 if engineering has concerns they will flag them in review."
+        },
+        {
+          "s": 1,
+          "t": "Add a note indicating it is a suggested approach, not a confirmed decision."
+        },
+        {
+          "s": 2,
+          "t": "Remove it from the specification entirely until it has been reviewed by engineering. An AI-generated technical suggestion that has not been validated has no place in a feature specification as if it were a decision."
+        }
+      ]
+    },
+    {
+      "label": "How would you change your workflow to prevent this feedback on the next specification?",
+      "text": "Select the most important change.",
+      "q": "Select your answer:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Add a section at the top explaining the AI tools used to produce the document."
+        },
+        {
+          "s": 1,
+          "t": "Clearly mark which sections were AI-drafted and which were human-reviewed before finalisation."
+        },
+        {
+          "s": 2,
+          "t": "Design the workflow explicitly: define upfront which components AI handles and which require human judgment, and document the handoff and verification steps so any colleague can understand and audit the process."
+        }
+      ]
+    }
+  ]
+};
+
+CHALLENGES["CL"] = {
+  "title": "Service Redesign Proposal \u2014 Ethics and Accountability Review",
+  "context": "A policy team produced this AI-assisted service redesign proposal for your review. You are the executive who must approve it for public consultation. Review the three items below before deciding.",
+  "primary_construct": "J2",
+  "items": [
+    {
+      "label": "The proposal recommends using AI to triage mental health referrals, assigning urgency scores based on the referral text and patient history. The AI was trained on historical referral decisions from 2015-2022.",
+      "text": "The proposal states this will 'reduce waiting times and ensure consistent, bias-free assessment.'",
+      "q": "What is the most important question to ask before approving this element?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "What accuracy rate does the AI achieve on historical test cases?"
+        },
+        {
+          "s": 1,
+          "t": "What clinical oversight will be in place to review AI-assigned urgency scores before they are acted on?"
+        },
+        {
+          "s": 2,
+          "t": "Whether the historical referral decisions the AI was trained on were themselves consistent and unbiased \u2014 if they were not, the AI will have learned and perpetuated those biases, not corrected them."
+        }
+      ]
+    },
+    {
+      "label": "The proposal does not include a section on patient consent \u2014 specifically, whether patients will be informed that AI is involved in triaging their referrals.",
+      "text": "The proposal notes this is 'operationally complex to implement.'",
+      "q": "How do you respond to this omission?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Accept the operational complexity argument \u2014 consent processes add friction and delay for patients who need urgent care."
+        },
+        {
+          "s": 1,
+          "t": "Require a consent section to be added before the consultation, even if the implementation details are still being worked out."
+        },
+        {
+          "s": 2,
+          "t": "Do not approve this element without a resolved consent approach. Operational complexity is not a valid reason to bypass patient consent for AI involvement in clinical decisions. This is a legal and ethical requirement, not a nice-to-have."
+        }
+      ]
+    },
+    {
+      "label": "The proposal identifies the expected efficiency gain (20% reduction in administrative processing time) but contains no section on what happens when the AI makes an incorrect urgency assessment.",
+      "text": "There is no defined accountability pathway for AI errors.",
+      "q": "What is your response?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Add a note that clinical staff are ultimately responsible for patient care decisions. This is covered."
+        },
+        {
+          "s": 1,
+          "t": "Require the team to add an incident management section before consultation."
+        },
+        {
+          "s": 2,
+          "t": "Do not approve the proposal in its current form. A system without an explicit, documented accountability pathway for errors is not ready for consultation or deployment, regardless of the expected efficiency benefits."
+        }
+      ]
+    }
+  ]
+};
+
+CHALLENGES["CM"] = {
+  "title": "Patient Pathway Analysis \u2014 Clinical Governance Review",
+  "context": "Your team used AI to produce this analysis of patient pathway delays for presentation to the clinical governance committee. Review it before it goes out.",
+  "primary_construct": "J2",
+  "items": [
+    {
+      "label": "The analysis identifies that patients from two specific postcode areas experience wait times 40% longer than the trust average. It attributes this to 'clinical complexity in the local population.'",
+      "text": "The analysis was conducted on referral data only. No socioeconomic, transport, or access data was included in the analysis.",
+      "q": "How do you respond to this attribution?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Accept it \u2014 clinical complexity is a plausible explanation for longer wait times."
+        },
+        {
+          "s": 1,
+          "t": "Note that other factors may be contributing and recommend further investigation."
+        },
+        {
+          "s": 2,
+          "t": "Remove the attribution entirely. The analysis does not have the data to support a clinical complexity explanation, and presenting it as if it does risks the committee designing the wrong intervention."
+        }
+      ]
+    },
+    {
+      "label": "The analysis recommends 'AI-assisted prioritisation of referrals from high-complexity areas to reduce inequality.' It does not specify who would be accountable for cases where the AI prioritisation is incorrect.",
+      "text": "The recommendation would affect real patients in underserved areas.",
+      "q": "Before this goes to the governance committee, you:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Include the recommendation \u2014 the committee can determine accountability structures."
+        },
+        {
+          "s": 1,
+          "t": "Add a note that clinical accountability needs to be assigned before implementation."
+        },
+        {
+          "s": 2,
+          "t": "Require the recommendation to be rewritten to include a specific, named accountability pathway before it goes to governance. Governance committees should not be asked to approve a system with an unresolved accountability gap."
+        }
+      ]
+    },
+    {
+      "label": "Your overall assessment of this analysis for clinical governance use:",
+      "text": "Based on the issues you have identified, this analysis is:",
+      "q": "Select your answer:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Ready \u2014 the issues are minor and the committee can handle nuance."
+        },
+        {
+          "s": 1,
+          "t": "Usable with verbal caveats \u2014 I will flag the limitations when presenting."
+        },
+        {
+          "s": 2,
+          "t": "Not ready. Presenting analysis with an unsupported causal attribution and an accountability gap to a clinical governance committee is a governance risk in itself. It needs revision first."
+        }
+      ]
+    }
+  ]
+};
+
+CHALLENGES["CP"] = {
+  "title": "Case Assessment Draft \u2014 Quality Check Before Sign-Off",
+  "context": "You used AI to help draft the following initial case assessment based on a referral. Before your supervisor signs it off, review it yourself and answer the questions.",
+  "primary_construct": "J1",
+  "items": [
+    {
+      "label": "Risk score",
+      "text": "The draft assigns the case a risk score of 7/10, described as 'elevated risk based on presenting factors.' The draft does not cite which risk assessment framework was used to arrive at this score. You used AI to generate the risk section from the referral text.",
+      "q": "Before submitting for sign-off, you:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Leave the risk score \u2014 it reflects a reasonable reading of the presenting factors."
+        },
+        {
+          "s": 1,
+          "t": "Add a note indicating the score is based on the AI's interpretation of the presenting factors."
+        },
+        {
+          "s": 2,
+          "t": "Remove the specific risk score and replace it with your own risk assessment using a named, validated framework. An AI-generated risk score for a person is not appropriate for a formal case document."
+        }
+      ]
+    },
+    {
+      "label": "Family history detail",
+      "text": "The draft includes the line: 'Family history of mental health difficulties is noted.' The original referral does not mention family history at all.",
+      "q": "This detail:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Probably came from a reasonable inference based on the presenting profile. It should stay."
+        },
+        {
+          "s": 1,
+          "t": "Should be flagged for clarification with the referrer before the assessment is submitted."
+        },
+        {
+          "s": 2,
+          "t": "Is a fabrication \u2014 the AI invented a clinical detail that does not exist in the source material. It must be removed immediately. A case document that contains fabricated clinical information is a patient safety issue."
+        }
+      ]
+    },
+    {
+      "label": "Recommended intervention",
+      "text": "The draft recommends 'a structured therapeutic intervention in line with NICE guidelines.' It does not specify which NICE guideline, which therapeutic intervention, or on what basis this person meets the criteria.",
+      "q": "For a formal case document, this recommendation is:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Appropriate \u2014 it sets a direction of travel that the clinical team can specify."
+        },
+        {
+          "s": 1,
+          "t": "Needs to be more specific \u2014 the clinical team should add the guideline reference before sign-off."
+        },
+        {
+          "s": 2,
+          "t": "Not acceptable as written. A recommendation that cites guidelines without specifying them, or an intervention without clinical justification, is not a recommendation \u2014 it is a placeholder. You must either specify it properly or remove it."
+        }
+      ]
+    }
+  ]
+};
+
+CHALLENGES["DL"] = {
+  "title": "AI Implementation ROI Review \u2014 Board Preparation",
+  "context": "Your head of operations submitted this ROI report on AI tools deployed over the past 12 months. You are presenting to the board next week. Review it before it goes in the board pack.",
+  "primary_construct": "I1",
+  "items": [
+    {
+      "label": "The report states: 'AI implementation has saved the operations team 340 hours per month, representing an annual cost saving of \u00a3680,000.'",
+      "text": "The 340 hours figure is based on team self-reporting. No baseline was measured before AI implementation. There is no comparison to what those hours were worth pre-AI.",
+      "q": "How do you present this to the board?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Present it as stated \u2014 self-reported data from your own team is reliable."
+        },
+        {
+          "s": 1,
+          "t": "Present it with a caveat that the figure is based on team estimates and should be validated."
+        },
+        {
+          "s": 2,
+          "t": "Do not present a specific cost saving figure without a measured baseline. Presenting self-reported estimates as a \u00a3680,000 saving to a board is materially misleading. Reframe as estimated time reduction pending formal measurement."
+        }
+      ]
+    },
+    {
+      "label": "The report shows AI-assisted forecasting accuracy at 94%, compared to 'industry benchmark of 78%.'",
+      "text": "The 78% benchmark comes from a 2019 industry report. Your own pre-AI forecasting accuracy was not measured.",
+      "q": "What is the problem with this comparison?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "No problem \u2014 the benchmark is independent and credible."
+        },
+        {
+          "s": 1,
+          "t": "The benchmark is slightly outdated \u2014 I should find a more recent figure."
+        },
+        {
+          "s": 2,
+          "t": "The comparison is meaningless as stated. Without measuring your own pre-AI accuracy, you cannot claim AI improved your forecasting. A comparison to an industry benchmark tells you nothing about your own improvement. Remove this claim."
+        }
+      ]
+    },
+    {
+      "label": "The report concludes: 'AI deployment has delivered a positive ROI and the investment should be expanded.'",
+      "text": "The evidence base for this conclusion consists of self-reported time savings and an uncompared benchmark. The report contains no quality measurement, no error rate data, and no customer impact data.",
+      "q": "You should:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Accept the conclusion \u2014 the directional evidence is positive enough for a board recommendation."
+        },
+        {
+          "s": 1,
+          "t": "Recommend continued investment while flagging that more rigorous measurement is needed."
+        },
+        {
+          "s": 2,
+          "t": "Rewrite the conclusion to accurately reflect the evidence: directionally positive signals, but no robust ROI measurement in place yet. Commit to establishing proper measurement before the next board review."
+        }
+      ]
+    }
+  ]
+};
+
+CHALLENGES["DM"] = {
+  "title": "AI Workflow Audit \u2014 Fitness for Purpose Review",
+  "context": "Your team's AI workflows were last reviewed 11 months ago. Your director has asked you to assess whether they are still appropriate. Review the workflow documentation below and answer the questions.",
+  "primary_construct": "R1",
+  "brief": "Workflow: Demand forecasting. Tool: [Forecasting AI tool, version as of 14 months ago]. Method: Upload 12 weeks of sales data, use standard prompt template [FORECAST_TEMPLATE_V1]. Review output for anomalies, adjust for known seasonality manually. Output reviewed by analyst before submission. Last review: 11 months ago.",
+  "items": [
+    {
+      "label": "The workflow uses a prompt template created 14 months ago for an older version of the forecasting tool. The tool has had two major updates since then.",
+      "text": "No one has reviewed whether the prompt template is still optimal for the current model.",
+      "q": "This is:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Fine \u2014 if the workflow is producing acceptable forecasts, the template does not need updating."
+        },
+        {
+          "s": 1,
+          "t": "Worth reviewing \u2014 the template should be tested against the current model to check for degradation."
+        },
+        {
+          "s": 2,
+          "t": "A significant gap. Using a prompt template designed for an older model without testing it on the current model means you have no idea whether you are getting the quality of output the current model can produce. This should have been reviewed after each major update."
+        }
+      ]
+    },
+    {
+      "label": "The workflow has no measurement framework \u2014 no record of forecast accuracy before AI adoption, no ongoing tracking of accuracy since, and no defined threshold for when performance is unacceptable.",
+      "text": "You cannot currently tell whether the AI is forecasting better or worse than your pre-AI approach.",
+      "q": "What should you do?",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Continue as is \u2014 if there were significant accuracy problems the business would have noticed."
+        },
+        {
+          "s": 1,
+          "t": "Start tracking accuracy going forward so you have data for the next review."
+        },
+        {
+          "s": 2,
+          "t": "Establish a measurement framework immediately AND retrospectively reconstruct your pre-AI accuracy if possible. Without measurement, this workflow audit cannot be completed honestly."
+        }
+      ]
+    },
+    {
+      "label": "Given what you have found in this review, your recommendation to the director is:",
+      "text": "Select the most appropriate response.",
+      "q": "Select your answer:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "The workflow is functioning adequately and no changes are needed at this time."
+        },
+        {
+          "s": 1,
+          "t": "Some improvements are recommended but the workflow can continue while they are implemented."
+        },
+        {
+          "s": 2,
+          "t": "The workflow needs a proper reset: test the prompt template against the current model, establish a measurement framework, and set a review schedule tied to major tool updates \u2014 not a fixed annual calendar."
+        }
+      ]
+    }
+  ]
+};
+
+CHALLENGES["DP"] = {
+  "title": "Demand Forecast \u2014 Pre-Submission Quality Check",
+  "context": "You used AI to generate this demand forecast for the next quarter's buying plan. Before submitting to the buyer, check it yourself and answer the questions.",
+  "primary_construct": "J1",
+  "items": [
+    {
+      "label": "Projection basis",
+      "text": "The forecast projects 34% growth in Category A next quarter. The growth trend in the underlying data covers 3 weeks. The previous 4 quarters showed Category A declining 8% year-on-year.",
+      "q": "The projection is:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Reasonable \u2014 recent trends are more predictive than older data."
+        },
+        {
+          "s": 1,
+          "t": "Optimistic \u2014 I should add a note that it is based on a short trend."
+        },
+        {
+          "s": 2,
+          "t": "Unreliable. A 3-week trend that contradicts 4 quarters of consistent decline is not a sound basis for a 34% growth projection. The AI has over-indexed on recent data. This needs to be revised."
+        }
+      ]
+    },
+    {
+      "label": "Seasonal adjustment",
+      "text": "The forecast applies a +12% seasonal uplift to all categories for the next quarter. Looking at the data, the +12% seasonal effect applies to your summer ranges, not your autumn/winter ranges which are in the buying plan being prepared.",
+      "q": "You notice this. You:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Leave it \u2014 a seasonal uplift is better than no seasonal adjustment."
+        },
+        {
+          "s": 1,
+          "t": "Flag it to your manager and ask whether to proceed."
+        },
+        {
+          "s": 2,
+          "t": "Remove the incorrect seasonal adjustment and apply the correct one before submission. Applying a summer uplift to an autumn/winter buying plan will result in overstocking the wrong ranges."
+        }
+      ]
+    },
+    {
+      "label": "Internal contradiction",
+      "text": "The forecast recommends increasing the Category B range from 45 to 60 SKUs. The forecast data for Category B shows it declining 18% in units and 23% in margin over the past two quarters.",
+      "q": "The recommendation to expand Category B:",
+      "opts": [
+        {
+          "s": 0,
+          "t": "Might be based on supplier or market factors not visible in the sales data. Worth exploring."
+        },
+        {
+          "s": 1,
+          "t": "Contradicts the sales data and should be flagged to the buyer as a potential error."
+        },
+        {
+          "s": 2,
+          "t": "Is a significant internal contradiction that disqualifies the recommendation as written. A forecast that recommends expansion for a declining, margin-negative category \u2014 without explanation \u2014 should not be submitted to a buyer."
+        }
+      ]
+    }
+  ]
+};
+
+
+
+// ════ FRAMEWORK ════
+const SUBDIMS = [
+  {id:"A1",ajir:"A",name:"Directional Intelligence",short:"Direction",wt:0.20,sbClass:"sb-navy",color:"#0E2240",
+   tagline:"How precisely you frame problems so AI can produce useful work.",
+   why:"Direction quality determines output quality more than tool sophistication. A precise problem frame gets a precise answer."},
+  {id:"A2",ajir:"A",name:"Collaboration Architecture",short:"Architecture",wt:0.15,sbClass:"sb-sage",color:"#1F5C40",
+   tagline:"How deliberately you design the boundary between AI and human work.",
+   why:"The people who get disproportionate value from AI have a system. Architecture is the meta-skill that multiplies everything else."},
+  {id:"J1",ajir:"J",name:"Critical Discernment",short:"Discernment",wt:0.20,sbClass:"sb-red",color:"#B83232",
+   tagline:"How rigorously you evaluate AI outputs before acting on them.",
+   why:"AI is confident about things that are wrong. Most errors are plausible and authoritative-sounding. Not trusting by default is the key trait."},
+  {id:"J2",ajir:"J",name:"Ethical Calibration",short:"Ethics",wt:0.15,sbClass:"sb-amb",color:"#8B4513",
+   tagline:"How principled your decisions about when to use AI are.",
+   why:"High capability without ethical judgment creates high-risk outputs. Knowing when not to use AI is the most undervalued capability."},
+  {id:"I1",ajir:"I",name:"Value Attribution",short:"Attribution",wt:0.15,sbClass:"sb-gold",color:"#C8860A",
+   tagline:"Whether you can actually demonstrate AI improved your work.",
+   why:"Most people feel AI helps. Almost no one can show it. Value Attribution is the rarest and most honest signal of sophisticated practice."},
+  {id:"R1",ajir:"R",name:"Adaptive Velocity",short:"Velocity",wt:0.15,sbClass:"sb-vio",color:"#5B4FBF",
+   tagline:"How deliberately you evolve your AI practice as tools change.",
+   why:"The AI landscape changes monthly. Static practitioners lose compounding advantage every quarter."}
+];
+
+const AJIR_MAP = {
+  A:{label:"Agency",sub:["A1","A2"],wt:0.35,color:"#0E2240"},
+  J:{label:"Judgment",sub:["J1","J2"],wt:0.35,color:"#B83232"},
+  I:{label:"Impact",sub:["I1"],wt:0.15,color:"#0A7463"},
+  R:{label:"Resilience",sub:["R1"],wt:0.15,color:"#5B4FBF"}
+};
+
+const ANCHORS = {
+  A1:[{s:1,l:"Ad hoc",t:"Open the tool and start typing — will know good output when I see it"},{s:2,l:"Instinctive",t:"Rough sense of what I want before I start"},{s:3,l:"Output-defined",t:"Define format and structure before prompting"},{s:4,l:"Problem-first",t:"Frame the problem, define context, specify good output before writing anything"},{s:5,l:"Designed",t:"Design the full workflow — inputs, process, output, verification — before opening the tool"}],
+  A2:[{s:1,l:"Intuitive",t:"Give AI tasks that feel like AI tasks — writing, summarising, searching"},{s:2,l:"Efficiency",t:"Give AI the tedious tasks regardless of the risk or accuracy requirements"},{s:3,l:"Rule-of-thumb",t:"Rough personal view of what AI is and is not reliable for"},{s:4,l:"Principled",t:"Clear framework: task type, risk level, and accuracy requirement determine the split"},{s:5,l:"Documented",t:"Written personal AI policy — task categories, risk thresholds, review requirements — revisited regularly"}],
+  J1:[{s:1,l:"Trust",t:"Read it, use it — AI is generally accurate"},{s:2,l:"Skim",t:"Skim for obviously wrong language or strange formatting"},{s:3,l:"Selective",t:"Check the parts that matter most for accuracy"},{s:4,l:"Systematic",t:"Verify key claims, look for bias, consider what AI might plausibly have got wrong"},{s:5,l:"Evidence-first",t:"Treat every AI output as a draft requiring expert validation before it goes near a decision"}],
+  J2:[{s:1,l:"Try it",t:"If it seems useful I try it — I will know if there is a problem when it comes up"},{s:2,l:"Output check",t:"Think about whether output quality will be good enough for the task"},{s:3,l:"Risk aware",t:"Consider obvious risks: data privacy, accuracy, and whether anyone could be harmed by errors"},{s:4,l:"Principled",t:"Mental checklist: data sensitivity, accuracy requirements, accountability implications, downstream impact on people"},{s:5,l:"Systematic",t:"Documented framework: what data is involved, who is affected, whether they gave informed consent, and who carries accountability if the output is wrong"}],
+  I1:[{s:1,l:"Feel",t:"I can just tell — it feels more efficient"},{s:2,l:"Assumption",t:"I assume it is helping because I keep using it"},{s:3,l:"Comparison",t:"Sometimes compare AI-assisted to non-AI work on similar tasks informally"},{s:4,l:"Tracked",t:"Track specific metrics — time, quality ratings, revision cycles — for key AI workflows"},{s:5,l:"Framework",t:"Baselines set before adoption, periodic reviews, clear criteria for keeping or abandoning each workflow"}],
+  R1:[{s:1,l:"Inertia",t:"Rarely change — once something works I stay with it until it stops"},{s:2,l:"Failure",t:"When something breaks or produces clearly worse output"},{s:3,l:"Intuition",t:"When I sense a workflow is getting stale, even without measuring"},{s:4,l:"Evaluation",t:"After assessing current workflow against clear performance criteria"},{s:5,l:"Documented",t:"After evaluating, documenting the rationale, and creating a template for future changes"}]
+};
+
+const EV_HINTS = {
+  A:{"A1":"What specifically did you do before typing your first prompt?","A2":"Did you design it deliberately or did it emerge? Has it changed in the last 6 months?"},
+  B:{"A1":"What specifically did you do before typing your first prompt?","A2":"Did you design it deliberately or did it emerge? Has it changed in the last 6 months?"},
+  C:{"A1":"What specifically did you do before typing your first prompt?","A2":"Did you design it deliberately or did it emerge? Has it changed in the last 6 months?"},
+  D:{"A1":"What specifically did you do before typing your first prompt?","A2":"Did you design it deliberately or did it emerge? Has it changed in the last 6 months?"}
+};
+
+const EV_QS = {
+  A1:"Describe the last time you got a genuinely useful AI output on a complex task.",
+  A2:"Describe your primary AI workflow — the one you use most regularly in your work.",
+  J1:"Describe one AI output you chose not to use — not because you disliked it, but because you had reason to doubt its accuracy.",
+  J2:"Describe a situation where you chose not to use AI — or added explicit safeguards before using it.",
+  I1:"What specific improvement has AI made to your work that you could demonstrate — not feel, but show?",
+  R1:"Name one AI tool or approach you started using in the last 3 months. What triggered the change — and what did you stop doing?"
+};
+
+const FC_Q = {
+  A1:"Compared to colleagues in your role, how would you rate your ability to frame problems clearly for AI before prompting?",
+  A2:"Compared to colleagues in your role, how deliberately do you design the boundary between AI and human in your work?",
+  J1:"Compared to colleagues in your role, how often do you verify AI-generated claims before acting on them?",
+  J2:"Compared to colleagues in your role, how systematically do you evaluate ethical implications before using AI for a new task?",
+  I1:"Compared to colleagues in your role, how consistently do you measure AI's actual impact on your work?",
+  R1:"Compared to colleagues in your role, how systematically do you review and update your AI workflows?"
+};
+
+const STAGES = [
+  {min:0,max:20,l:"Passive",hl:"AI is peripheral to your practice",d:"You are aware of AI tools but they are not yet integrated deliberately into your work. The gap between where you are and where this is heading is widening.",u3:8,u6:16,u12:26},
+  {min:21,max:40,l:"Exploring",hl:"Using AI, but without a system",d:"You use AI tools regularly but your approach is ad hoc. Getting some value and carrying risks you have not yet quantified.",u3:6,u6:13,u12:22},
+  {min:41,max:60,l:"Practising",hl:"Good instincts, inconsistent practice",d:"You have developed real judgment about AI but it is not yet systematic. Your strongest constructs are carrying your weaker ones.",u3:5,u6:10,u12:18},
+  {min:61,max:80,l:"Proficient",hl:"Clear frameworks, measurable impact",d:"You work with AI deliberately and your output quality shows it. You are in the top quarter of the workforce on human-AI collaboration.",u3:4,u6:8,u12:14},
+  {min:81,max:100,l:"Multiplier",hl:"Systematic, measured, extending to others",d:"You are genuinely exceptional. Your practice is systematic, measured, and improving — and you multiply this capability in others.",u3:2,u6:4,u12:7}
+];
+
+const BENCH = {
+  "A":{mu:45,p25:33,p50:45,p75:57},
+  "B":{mu:56,p25:44,p50:56,p75:68},
+  "C":{mu:39,p25:28,p50:39,p75:50},
+  "D":{mu:41,p25:30,p50:41,p75:52}
+};
+
+const AINTS = {
+  A1:{title:"The Problem-First Protocol",body:"Before your next AI prompt on any non-trivial task, write three sentences: (1) the exact problem, (2) what a genuinely useful answer looks like, (3) how you will know if the output missed the point. Only then open the tool.",week:"Apply to every AI task this week. Review on Friday: how many prompts improved as a result?"},
+  A2:{title:"The Task Allocation Map",body:"Take three significant recurring tasks. For each: draw a simple grid — AI handles / Human handles / AI then Human review. Write down WHY each is in its column.",week:"Complete this map by end of week. Share with one colleague and ask if they agree."},
+  J1:{title:"The Three-Check Rule",body:"For any AI-assisted work going to a client, manager, or into a decision — identify the three most consequential claims and verify each against a primary source before it leaves your hands.",week:"Log what you find this week: correct, incorrect, or unverifiable."},
+  J2:{title:"The Before-I-Use-It Question",body:"Before using AI for any task involving real people — hiring, performance, clinical, customer, or financial decisions — answer one question: who carries accountability if this output is wrong? If the answer is unclear, that is the signal to add a human step.",week:"Apply this to every people-related AI task this week. Note any cases where the answer changed your approach."},
+  I1:{title:"The Baseline-First Rule",body:"The next time you adopt a new AI workflow, measure your current performance BEFORE you change anything. Time yourself. Rate the output quality. Note the error rate. Compare in 30 days.",week:"Pick one existing AI workflow you adopted without a baseline. Reconstruct your pre-AI performance estimate. That is your starting point."},
+  R1:{title:"The Monthly Workflow Review",body:"Set a recurring 30-minute calendar appointment on the first Monday of each month. Agenda: which AI workflows feel stale? What new capabilities have you not explored? One workflow to retire. One to upgrade.",week:"Schedule the first one now, for next Monday. Bring your five most-used AI workflows listed."}
+};
+
+// ════ STATE ════
+const ST={level:1,cur:null,profile:{},sg:null,rt:null,ans:{},ev:{},ch_ans:{},ch_score:null};
+
+// ════ HELPERS ════
+function erf(x){const t=1/(1+.3275911*Math.abs(x));const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-.284496736)*t+.254829592)*t*Math.exp(-x*x);return x>=0?y:-y;}
+function normalCDF(x,mu,sig=14){return Math.min(99,Math.max(1,Math.round(.5*(1+erf((x-mu)/(sig*Math.sqrt(2))))*100)));}
+function scColor(p){return p<35?"var(--red)":p<60?"var(--gold)":"var(--teal)";}
+function scVerdict(p){return p<20?"Critical gap":p<40?"Significant weakness":p<60?"Developing":p<80?"Good":"Strong";}
+function matOf(s){return STAGES.find(m=>s>=m.min&&s<=m.max)||STAGES[0];}
+function getScenario(sdId,qpos,sg,rt){
+  const s=SCENARIOS[sdId];
+  if(!s||!s[qpos])return "This scenario.";
+  const v=s[qpos][sg];
+  if(!v)return "This scenario.";
+  if(typeof v==="string")return v;
+  return v[rt]||v["M"]||"This scenario.";
+}
+function getOptions(sdId,qpos){return Q_OPTIONS[sdId+"_"+qpos]||[];}
+
+// ════ LEVEL SELECT ════
+function selLevel(n){
+  ST.level=n;
+  document.getElementById("lcard-l1").classList.toggle("sel",n===1);
+  document.getElementById("lcard-l2").classList.toggle("sel",n===2);
+}
+
+// ════ RENDER CONSTRUCT SCREENS ════
+function renderConstructs(){
+  const ORDER=["A1","A2","J1","J2","I1","R1"];
+  const PREV={A1:"profile",A2:"A1",J1:"A2",J2:"J1",I1:"J2",R1:"I1"};
+  ORDER.forEach((sdId,idx)=>{
+    const sd=SUBDIMS.find(s=>s.id===sdId);
+    const isLast=idx===ORDER.length-1;
+    const nextScreen=isLast?(ST.level===2?"challenge":"results"):ORDER[idx+1];
+    const screen=document.getElementById("screen-"+sdId);
+
+    const opts1=getOptions(sdId,"Q1");
+    const opts3=getOptions(sdId,"Q3");
+    const anchors=ANCHORS[sdId]||[];
+    const fcQ=FC_Q[sdId]||"";
+    const evQ=EV_QS[sdId]||"";
+    const evHint=EV_HINTS[ST.sg]?.[sdId]||"What specifically happened?";
+
+    const mcHTML=(qId,opts,sbC)=>`<div class="mc-opts">${opts.map((o,i)=>`<div class="mc-opt" id="${qId}-mc-${i}" onclick="selMC('${qId}',${o.s},'${qId}-mc-${i}')"><div class="mc-ring"></div><div class="mc-txt">${o.t}</div></div>`).join("")}</div>`;
+    const baHTML=`<div class="ba-cards">${anchors.map((a,i)=>`<div class="ba-card" id="${sdId}-ba-${i}" onclick="selBA('${sdId}',${a.s},'${sdId}-ba-${i}')"><div class="ba-lvl">${a.s}</div><div><div class="ba-lbl">${a.l}</div><div class="ba-txt">${a.t}</div></div></div>`).join("")}</div>`;
+    const fcHTML=`<div class="fc-wrap"><div class="fc-hdr"><div class="fc-badge">Calibration</div><div class="fc-q">${fcQ}</div></div><div class="fc-opts">${[{s:1,t:"Bottom 25%"},{s:2,t:"Below average"},{s:3,t:"About average"},{s:4,t:"Above average"},{s:5,t:"Top 10%"}].map((o,i)=>`<div class="fc-opt" id="${sdId}-fc-${i}" onclick="selFC('${sdId}',${o.s},'${sdId}-fc-${i}')">${o.t}</div>`).join("")}</div></div>`;
+    const evHTML=`<div class="ev-wrap"><div class="ev-top"><div class="ev-badge">✎ Evidence · Debrief reference</div><button class="ev-skip" onclick="skipEv('${sdId}')">Skip →</button></div><div class="ev-body"><div class="ev-q">${evQ}</div><div class="ev-hint">${evHint}</div><textarea class="ev-ta" id="ev-${sdId}" rows="3" placeholder="Write honestly — this informs your debrief..." onchange="saveEv('${sdId}',this.value)"></textarea><div class="ev-foot">Optional · Not scored · Debrief reference only</div></div></div>`;
+
+    screen.innerHTML=`<div class="sec-hdr">
+      <div class="sec-construct" style="color:${sd.color}"><span style="background:${sd.color};width:14px;height:1px;display:inline-block"></span>&nbsp;${sd.ajir} — ${String(idx+1).padStart(2,"0")} of 06</div>
+      <h2 class="sec-h2">${sd.name}</h2>
+      <div class="sec-tagline">${sd.tagline}</div>
+      <div class="sec-why">${sd.why}</div>
+    </div>
+    <div class="qblock" id="qb-${sdId}Q1">
+      <div class="qblock-meta"><div class="q-id">${sdId}.Q1</div><div class="q-badge qb-sj">Scenario</div><div class="q-wt">×1.2</div></div>
+      <div class="scenario-box ${sd.sbClass}"><div class="sb-label">Situation</div><div class="sb-text" id="sc-${sdId}Q1">Loading...</div></div>
+      <div class="q-text">${opts1[0]?("Which approach will produce the most useful output?"):"Select your answer:"}</div>
+      ${mcHTML(sdId+"Q1",opts1,sd.sbClass)}
+    </div>
+    <div class="div"></div>
+    <div class="qblock" id="qb-${sdId}BA">
+      <div class="qblock-meta"><div class="q-id">${sdId}.BA</div><div class="q-badge qb-ba">Behavioral Anchor</div><div class="q-wt">×0.9</div></div>
+      <div class="q-text">${sdId==="A1"?"When you bring AI into a complex task, which most describes your starting point?":sdId==="A2"?"How do you decide which tasks to give AI versus keep human?":sdId==="J1"?"When you receive AI-generated output, your default approach is:":sdId==="J2"?"When you encounter a new AI use case, how do you assess whether it is appropriate?":sdId==="I1"?"How do you actually know whether AI is improving your work?":"When you change an AI workflow, the change is typically driven by:"}</div>
+      ${baHTML}
+    </div>
+    <div class="div"></div>
+    <div class="qblock" id="qb-${sdId}Q3">
+      <div class="qblock-meta"><div class="q-id">${sdId}.Q3</div><div class="q-badge qb-sj">Scenario</div><div class="q-wt">×1.2</div></div>
+      <div class="scenario-box ${sd.sbClass}"><div class="sb-label">Situation</div><div class="sb-text" id="sc-${sdId}Q3">Loading...</div></div>
+      <div class="q-text">${sdId==="A1"?"What is the most likely root cause?":sdId==="A2"?"What is the single most important human contribution at this point?":sdId==="J1"?"What do you do?":sdId==="J2"?"What do you do?":sdId==="I1"?"What do you do?":"What happens next?"}</div>
+      ${mcHTML(sdId+"Q3",opts3,sd.sbClass)}
+    </div>
+    <div class="div"></div>
+    <div class="qblock" id="qb-${sdId}FC">
+      <div class="qblock-meta"><div class="q-id">${sdId}.FC</div><div class="q-badge qb-fc">Calibration</div><div class="q-wt">×0.75</div></div>
+      ${fcHTML}
+    </div>
+    <div class="div"></div>
+    ${evHTML}
+    <div class="btn-row">
+      <button class="btn" onclick="validateSD('${sdId}','${nextScreen}')">${isLast?(ST.level===2?"Proceed to Challenge <span class=\'arr\'>→</span>":"Generate My AIQ Report <span class=\'arr\'>→</span>"):"Next <span class=\'arr\'>→</span>"}</button>
+      <button class="bgh" onclick="goTo('${PREV[sdId]}')">← Back</button>
+    </div>`;
+
+    // Fill scenario texts after render
+    setTimeout(()=>{
+      const s1=document.getElementById("sc-"+sdId+"Q1");
+      const s3=document.getElementById("sc-"+sdId+"Q3");
+      if(s1)s1.textContent=getScenario(sdId,"Q1",ST.sg,ST.rt);
+      if(s3)s3.textContent=getScenario(sdId,"Q3",ST.sg,ST.rt);
+    },50);
+  });
+}
+
+// ════ CHALLENGE SCREEN ════
+function renderChallenge(){
+  const key=ST.fn+"_"+ST.rt;
+  const ch=CHALLENGES[key];
+  if(!ch){document.getElementById("screen-challenge").innerHTML=`<div style="padding:40px 0;text-align:center"><p style="color:var(--mut)">Challenge not available for this profile — proceeding to results.</p><div class="btn-row" style="justify-content:center"><button class="btn" onclick="buildResults();goTo('results')">Generate Report <span class="arr">→</span></button></div></div>`;return;}
+
+  const itemsHTML=ch.items.map((item,ii)=>`
+    <div class="ch-item">
+      <div class="ch-item-label">${item.label}</div>
+      <div class="ch-item-text">${item.text}</div>
+      <div class="ch-item-q">${item.q}</div>
+      ${item.opts.map((o,oi)=>`<div class="ch-opt" id="chi-${ii}-${oi}" onclick="selCH(${ii},${o.s},'chi-${ii}-${oi}')">${o.t}</div>`).join("")}
+    </div>`).join("");
+
+  const briefHTML=ch.brief?`<div class="ch-brief-box"><div class="ch-brief-label">Brief to review</div><div class="ch-brief-text">${ch.brief}</div></div>`:"";
+
+  document.getElementById("screen-challenge").innerHTML=`
+    <div style="padding-top:32px">
+      <div class="ch-timer">
+        <div class="ch-timer-icon">⏱</div>
+        <div><div class="ch-timer-text">10-minute challenge — L2 validation</div><div class="ch-timer-sub">Your answers blend with your L1 score (60/40) for a stronger, verified AIQ credential</div></div>
+      </div>
+      <div class="challenge-hdr">
+        <div class="ch-badge">L2 Micro-Challenge · ${ch.primary_construct}</div>
+        <div class="ch-title">${ch.title}</div>
+        <div class="ch-context">${ch.context}</div>
+      </div>
+      <div class="ch-body">
+        ${briefHTML}
+        <div class="ch-items">${itemsHTML}</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="submitChallenge()">Submit Challenge &amp; Generate Report <span class="arr">→</span></button>
+        <button class="bgh" onclick="goTo('R1')">← Back to assessment</button>
+      </div>
+    </div>`;
+}
+
+// ════ INTERACTIONS ════
+function selMC(qid,s,lid){document.querySelectorAll(`[id^='${qid}-mc-']`).forEach(e=>e.classList.remove("sel"));document.getElementById(lid).classList.add("sel");ST.ans[qid]=s;}
+function selBA(qid,s,lid){document.querySelectorAll(`[id^='${qid}-ba-']`).forEach(e=>e.classList.remove("sel"));document.getElementById(lid).classList.add("sel");ST.ans[qid]=s;}
+function selFC(qid,s,lid){document.querySelectorAll(`[id^='${qid}-fc-']`).forEach(e=>e.classList.remove("sel"));document.getElementById(lid).classList.add("sel");ST.ans[qid]=s;}
+function selCH(ii,s,lid){document.querySelectorAll(`[id^='chi-${ii}-']`).forEach(e=>e.classList.remove("sel"));document.getElementById(lid).classList.add("sel");ST.ch_ans[ii]=s;}
+function saveEv(k,v){ST.ev[k]=v;}
+function skipEv(k){const ta=document.getElementById("ev-"+k);if(ta){ta.value="";ta.placeholder="Skipped";ta.disabled=true;}ST.ev[k]="";}
+
+// ════ NAV ════
+function goTo(s){
+  document.querySelectorAll(".screen").forEach(e=>e.classList.remove("active"));
+  const el=document.getElementById("screen-"+s);
+  if(el){el.classList.add("active");ST.cur=s;}
+  updateUI();window.scrollTo({top:0,behavior:"smooth"});
+}
+function updateUI(){
+  const bar=document.getElementById("ajir-bar");
+  const ORDER=["A1","A2","J1","J2","I1","R1"];
+  const isQ=ORDER.includes(ST.cur)||ST.cur==="challenge";
+  bar.style.display=isQ?"flex":"none";
+  if(isQ){
+    const idx=ORDER.indexOf(ST.cur);
+    const AJIR_LABELS={A:"A — Agency",J:"J — Judgment",I:"I — Impact",R:"R — Resilience"};
+    let html="";
+    ["A","J","I","R"].forEach((letter,li)=>{
+      if(li>0)html+=`<div class="ajir-sep">›</div>`;
+      const subs=AJIR_MAP[letter].sub;
+      const isActive=subs.some(s=>s===ST.cur)||(ST.cur==="challenge"&&subs.some(s=>ORDER.indexOf(s)===ORDER.length-1));
+      const isDone=subs.every(s=>ORDER.indexOf(s)<idx);
+      html+=`<div class="ajir-pill ${isActive?"active":isDone?"done":""}">${AJIR_LABELS[letter]}</div>`;
+    });
+    bar.innerHTML=html;
+    const pct=Math.round(Math.max(0,idx/ORDER.length)*100);
+    document.getElementById("pfill").style.width=pct+"%";
+    const sd=SUBDIMS.find(s=>s.id===ST.cur);
+    document.getElementById("tb-sec").textContent=sd?sd.name:(ST.cur==="challenge"?"L2 Challenge":"");
+  } else {
+    document.getElementById("pfill").style.width=ST.cur==="results"?"100%":"0%";
+    document.getElementById("tb-sec").textContent=ST.cur==="results"?"Complete":"";
+  }
+}
+
+// ════ VALIDATION ════
+function validateProfile(){
+  const req=[{fg:"fg-name",el:"f-name",ck:v=>v.trim()},{fg:"fg-role",el:"f-role",ck:v=>v!==""},{fg:"fg-sector",el:"f-sector",ck:v=>v!==""},{fg:"fg-dept",el:"f-dept",ck:v=>v!==""}];
+  let ok=true;req.forEach(r=>{const fg=document.getElementById(r.fg),v=document.getElementById(r.el).value;if(!r.ck(v)){fg.classList.add("err");ok=false;}else fg.classList.remove("err");});
+  if(!ok)return;
+  const roleEl=document.getElementById("f-role");
+  const sectorEl=document.getElementById("f-sector");
+  const fnEl=document.getElementById("f-dept");
+  ST.profile={name:document.getElementById("f-name").value.trim(),role:roleEl.options[roleEl.selectedIndex].text,roleValue:roleEl.value,sector:sectorEl.options[sectorEl.selectedIndex].text,sectorValue:sectorEl.value,dept:fnEl.options[fnEl.selectedIndex].text,fnValue:fnEl.value,team:document.getElementById("f-team").value.trim()||new URLSearchParams(window.location.search).get("team")||"",email:document.getElementById("f-email").value.trim()};
+  ST.sg=sectorEl.value||"A";
+  ST.rt=roleEl.value||"M";
+  ST.fn=fnEl.value||"PT";
+  renderConstructs();
+  if(ST.level===2)renderChallenge();
+  goTo("A1");
+}
+
+function validateSD(sdId,next){
+  const scored=[sdId+"Q1",sdId+"BA",sdId+"Q3",sdId+"FC"];
+  const missing=scored.filter(id=>!ST.ans[id]);
+  if(missing.length){
+    const b=document.getElementById("qb-"+missing[0]);
+    if(b){b.style.outline="2px solid var(--red)";b.style.borderRadius="7px";b.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>{b.style.outline="";b.style.borderRadius="";},2200);}
+    return;
+  }
+  // collect ev
+  const ta=document.getElementById("ev-"+sdId);
+  if(ta&&!ta.disabled)ST.ev[sdId]=ta.value;
+  if(next==="results"){buildResults();goTo("results");}
+  else if(next==="challenge"){renderChallenge();goTo("challenge");}
+  else goTo(next);
+}
+
+function submitChallenge(){
+  const key=ST.fn+"_"+ST.rt;const ch=CHALLENGES[key];
+  if(!ch){buildResults();goTo("results");return;}
+  const nItems=ch.items.length;
+  let total=0,maxTotal=nItems*2;
+  for(let i=0;i<nItems;i++)total+=(ST.ch_ans[i]||0);
+  ST.ch_score=Math.round((total/maxTotal)*100);
+  buildResults();goTo("results");
+}
+
+// ════ SCORING ════
+function calcScores(){
+  const sub={};
+  SUBDIMS.forEach(sd=>{
+    const q1=ST.ans[sd.id+"Q1"]||1,ba=ST.ans[sd.id+"BA"]||1,q3=ST.ans[sd.id+"Q3"]||1,fc=ST.ans[sd.id+"FC"]||1;
+    const wsum=q1*1.2+ba*0.9+q3*1.2+fc*0.75;const wt=1.2+0.9+1.2+0.75;
+    const avg=wsum/wt;
+    let pct=Math.max(0,Math.min(100,Math.round(((avg-1)/4)*100)));
+    sub[sd.id]={avg,pct};
+  });
+  // AJIR scores
+  const ajir={};
+  Object.entries(AJIR_MAP).forEach(([letter,def])=>{
+    const subScores=def.sub.map(s=>sub[s]?.pct||0);
+    ajir[letter]=Math.round(subScores.reduce((a,b)=>a+b,0)/subScores.length);
+  });
+  let overall=Math.round(Object.entries(AJIR_MAP).reduce((sum,[l,def])=>sum+ajir[l]*def.wt,0));
+  // Blend with challenge if L2
+  if(ST.level===2&&ST.ch_score!==null){
+    overall=Math.round(overall*0.6+ST.ch_score*0.4);
+  }
+  return{sub,ajir,overall};
+}
+
+// ════ BUILD RESULTS ════
+function buildResults(){
+  const scores=calcScores();
+  const mat=matOf(scores.overall);
+  const bench=BENCH[ST.sg]||BENCH["A"];
+  const bPct=normalCDF(scores.overall,bench.mu);
+  const sorted=SUBDIMS.slice().sort((a,b)=>scores.sub[b.id].pct-scores.sub[a.id].pct);
+  const best=sorted[0],worst=sorted[sorted.length-1];
+  const ai=AINTS[worst.id];
+  const expDays=ST.level===2?180:90;
+  const expDate=new Date(Date.now()+expDays*24*60*60*1000).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+
+  // Store result
+  storeResult({...scores,name:ST.profile.name,role:ST.profile.role,dept:ST.profile.dept,sector:ST.profile.sector,sg:ST.sg,level:ST.level,tier:mat.l,team:ST.profile.team,expires:Date.now()+expDays*24*60*60*1000,ts:Date.now()});
+
+  const ajirCells=Object.entries(AJIR_MAP).map(([l,def])=>`
+    <div class="ajir-cell">
+      <div class="ajir-cell-letter" style="color:${def.color}">${l}</div>
+      <div class="ajir-cell-name">${def.label}</div>
+      <div class="ajir-cell-score" style="color:${scColor(scores.ajir[l])}">${scores.ajir[l]}</div>
+      <div class="ajir-cell-bar"><div class="ajir-cell-bar-f" style="background:${scColor(scores.ajir[l])}" data-w="${scores.ajir[l]}"></div></div>
+    </div>`).join("");
+
+  const subCards=SUBDIMS.map(sd=>{
+    const d=scores.sub[sd.id];const col=scColor(d.pct);
+    return`<div class="sub-card">
+      <div class="sub-top"><div class="sub-info"><div class="sub-code">${sd.id}</div><div class="sub-name">${sd.name}</div></div><div class="sub-score" style="color:${col}">${d.pct}</div></div>
+      <div class="sub-bar-o"><div class="sub-bar-f" style="background:${col}" data-w="${d.pct}"></div></div>
+      <div class="sub-verdict">${scVerdict(d.pct)}</div>
+    </div>`;}).join("");
+
+  const evHtml=SUBDIMS.map(sd=>`
+    <div style="padding:8px 0;border-bottom:1px solid var(--brd2)">
+      <div style="font-size:11px;font-weight:600;color:var(--mut);margin-bottom:3px">${sd.name}</div>
+      <div style="font-size:12px;color:var(--ink);font-style:italic;line-height:1.55">${ST.ev[sd.id]||"<span style='color:var(--m2)'>Not provided</span>"}</div>
+    </div>`).join("");
+
+  const shareCode=generateShareCode(scores,mat);
+
+  document.getElementById("screen-results").innerHTML=`
+    <div class="cert">
+      <div class="cert-body">
+        <div class="cert-top">
+          <div>
+            <div class="cert-brand">AIQ Lite · AJIR Framework</div>
+            <div class="cert-level">L${ST.level} ${ST.level===2?"· Challenge Validated":""}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="cert-valid">Valid until ${expDate}</div>
+            <div class="cert-valid" style="margin-top:2px">${ST.profile.sector} · ${ST.profile.dept}</div>
+          </div>
+        </div>
+        <div class="cert-main">
+          <div class="cert-score-wrap">
+            <div class="cert-num" id="cert-num">0</div>
+            <div class="cert-of">AJIR INDEX</div>
+          </div>
+          <div>
+            <div class="cert-stage">${mat.l}</div>
+            <div class="cert-hl">${mat.hl}</div>
+            <div class="cert-desc">${mat.d}</div>
+          </div>
+        </div>
+        <div class="cert-person">Issued to <strong>${ST.profile.name}</strong> · ${ST.profile.role}</div>
+      </div>
+    </div>
+
+    <div class="ajir-result-row">${ajirCells}</div>
+    <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin:12px 0 8px">Six sub-dimension breakdown</div>
+    <div class="sub-grid">${subCards}</div>
+
+    ${ST.level===2&&ST.ch_score!==null?`<div style="background:var(--gl);border:1px solid rgba(200,134,10,.22);border-radius:6px;padding:10px 14px;margin:10px 0;font-size:13px;color:var(--ink)">L2 challenge score: <strong style="color:var(--gold)">${ST.ch_score}/100</strong> · Blended 60/40 with L1 self-report</div>`:""}
+
+    <div class="bench-card">
+      <div class="bc-top"><div class="bc-lbl">Benchmark · ${ST.profile.sector}</div><div class="bc-pct" id="b-pct">—</div></div>
+      <div class="bc-blbls"><span>P25 · ${bench.p25}</span><span>Median · ${bench.p50}</span><span>P75 · ${bench.p75}</span></div>
+      <div class="bc-track"><div class="bc-fill" id="b-fill"></div></div>
+      <div style="font-size:13px;color:var(--ink);margin-top:6px"><strong style="color:var(--teal)">${ST.profile.name}</strong> scores higher than <strong id="b-pct2">—</strong>% of ${ST.profile.sector} professionals.</div>
+      <div class="bc-note">Benchmarks calibrated against sector AI adoption research. Directionally informative — updated as AIQ Lite scales. Valid for L${ST.level} — ${expDays}-day expiry. Reassess to renew.</div>
+    </div>
+
+    <div class="gpa-row">
+      <div class="gpa-card"><div class="gpa-pill gpp-g">g<u>A</u>In</div><div class="gpa-title">${best.name} is your lever</div><div class="gpa-desc">${best.name} (${scores.sub[best.id].pct}/100) is your strongest sub-dimension. Build everything else from this foundation.</div></div>
+      <div class="gpa-card"><div class="gpa-pill gpp-p">p<u>A</u>In</div><div class="gpa-title">${worst.name} is the brake</div><div class="gpa-desc">${worst.name} (${scores.sub[worst.id].pct}/100) limits the value you get from your other capabilities until it improves.</div></div>
+    </div>
+
+    <div class="aint">
+      <div class="aint-k">Your AJIR AIntervention</div>
+      <div class="aint-title"><span style="color:var(--gm)">A</span>Intervention — ${ai.title}</div>
+      <div class="aint-body">${ai.body}</div>
+      <div class="aint-week"><div class="aw-l">◈ This week</div><div class="aw-t">${ai.week}</div></div>
+    </div>
+
+    <div class="expiry-card">
+      <div class="exp-icon">⏱</div>
+      <div class="exp-text">Score valid until <strong>${expDate}</strong> (${expDays} days · L${ST.level}). Reassess to renew — your practice evolves faster than any static score.</div>
+    </div>
+
+    <div style="background:var(--off);border:1px solid var(--brd2);border-radius:7px;padding:14px 16px;margin:10px 0">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:10px">✎ Evidence — debrief reference</div>
+      ${evHtml}
+    </div>
+
+    <div class="share-card">
+      <h4>AJIR Index: ${scores.overall} · ${mat.l}</h4>
+      <p>Share your credential or add your score to your team dashboard.</p>
+      <div class="share-btns">
+        <button class="sbtn sb-li" onclick="shareLinkedIn(${scores.overall})">Share on LinkedIn</button>
+        <button class="sbtn sb-team" onclick="toggleTeamShare()">Add to team dashboard</button>
+        <button class="sbtn sb-pr" onclick="window.print()">Download</button>
+      </div>
+      <div class="team-share-panel" id="team-share-panel" style="display:none">
+        <div class="ts-label">Your team share code</div>
+        <div class="ts-code" id="ts-code">${shareCode}</div>
+        <button class="ts-copy" onclick="copyCode('${shareCode}')">Copy share code →</button>
+        <div class="ts-note">Paste this code in the team dashboard (aiq-team-dashboard.html) to add your score to your organisation's view. Or share the full URL below.</div>
+        <div style="margin-top:8px">
+          <a href="aiq-team-dashboard.html?add=${encodeURIComponent(shareCode)}" style="font-size:12px;color:var(--teal);font-family:'Figtree',sans-serif;font-weight:500">Open team dashboard with this score pre-loaded →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="rub-tog" id="rt" onclick="toggleRubric()">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      View full AJIR scoring rubric
+    </div>
+    <div class="rub-panel" id="rp">
+      <div style="background:#fff;border:1px solid var(--brd);border-radius:7px;padding:16px;margin-top:8px">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-bottom:12px">AJIR Framework · Sub-dimension Scoring Guide</div>
+        ${SUBDIMS.map(sd=>`<div style="margin-bottom:14px"><div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:${sd.color};margin-bottom:6px">${sd.id} · ${sd.name} · ${Math.round(sd.wt*100)}%</div>${(ANCHORS[sd.id]||[]).map(a=>`<div style="display:grid;grid-template-columns:26px 72px 1fr;gap:8px;align-items:start;padding:6px 0;border-bottom:1px solid var(--brd2)"><div style="font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:${a.s<=2?"var(--red)":a.s===3?"var(--gold)":a.s===4?"var(--sage)":"var(--teal)"};text-align:center">${a.s}</div><div style="font-size:11px;font-weight:600;color:${a.s<=2?"var(--red)":a.s===3?"var(--gold)":a.s===4?"var(--sage)":"var(--teal)"};padding-top:1px">${a.l}</div><div style="font-size:11px;color:var(--mut);line-height:1.45">${a.t}</div></div>`).join("")}</div>`).join("")}
+      </div>
+    </div>
+    <div class="res-foot">AIQ Lite · AJIR Framework · L${ST.level} · ${new Date().getFullYear()}</div>
+  `;
+
+  setTimeout(()=>{
+    let c=0;const iv=setInterval(()=>{c=Math.min(c+2,scores.overall);document.getElementById("cert-num").textContent=c;if(c>=scores.overall)clearInterval(iv);},28);
+    document.getElementById("b-fill").style.width=bPct+"%";
+    document.getElementById("b-pct").textContent=bPct+"th %ile";
+    document.getElementById("b-pct2").textContent=bPct;
+    document.querySelectorAll(".ajir-cell-bar-f,.sub-bar-f").forEach(b=>b.style.width=(b.getAttribute("data-w")||0)+"%");
+  },200);
+}
+
+// ════ STORAGE ════
+function storeResult(data){
+  const key="aiq_"+data.team;
+  let arr=[];try{arr=JSON.parse(localStorage.getItem(key)||"[]");}catch(e){}
+  arr=arr.filter(r=>r.name!==data.name);
+  arr.push(data);
+  try{localStorage.setItem(key,JSON.stringify(arr));}catch(e){}
+  // Also store in universal pool
+  let all=[];try{all=JSON.parse(localStorage.getItem("aiq_all")||"[]");}catch(e){}
+  all=all.filter(r=>!(r.name===data.name&&r.team===data.team));
+  all.push(data);try{localStorage.setItem("aiq_all",JSON.stringify(all));}catch(e){}
+}
+
+function generateShareCode(scores,mat){
+  const d={n:ST.profile.name,r:ST.profile.role,dp:ST.profile.dept,s:ST.profile.sector,sg:ST.sg,lv:ST.level,sc:scores.overall,aj:scores.ajir,sub:Object.fromEntries(Object.entries(scores.sub).map(([k,v])=>[k,v.pct])),t:ST.profile.team||"",ts:Date.now(),exp:Date.now()+(ST.level===2?180:90)*86400000,tier:mat.l};
+  return btoa(JSON.stringify(d));
+}
+
+function toggleTeamShare(){
+  const p=document.getElementById("team-share-panel");
+  if(p)p.style.display=p.style.display==="none"?"block":"none";
+}
+
+function copyCode(code){
+  navigator.clipboard.writeText(code).then(()=>{const b=document.querySelector(".ts-copy");if(b){b.textContent="Copied! ✓";setTimeout(()=>b.textContent="Copy share code →",2000);}});
+}
+
+function toggleRubric(){document.getElementById("rp").classList.toggle("op");document.getElementById("rt").classList.toggle("op");}
+
+function shareLinkedIn(s){
+  const t=encodeURIComponent(`I scored ${s}/100 on AIQ Lite — measuring Agency, Judgment, Impact, and Resilience in human-AI collaboration. Questions were personalised to my sector and function. Not a skills test — a judgment test. #AIQLite #AIQ`);
+  window.open("https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Faiq.io%2Flite&summary="+t,"_blank");
+}
+
+// Init
+const urlParams=new URLSearchParams(window.location.search);
+if(urlParams.get("team"))document.getElementById("f-team").value=urlParams.get("team");
+if(urlParams.get("level"))selLevel(parseInt(urlParams.get("level")));
+</script>
+</body>
+</html>

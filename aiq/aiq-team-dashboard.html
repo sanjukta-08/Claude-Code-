@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIQ Team Dashboard — AJIR Framework</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Figtree:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--w:#FFF;--off:#F9F7F2;--off2:#F1EFE9;--ink:#0D0D12;--navy:#0E2240;--navy2:#162E52;
+--gold:#C8860A;--gl:#FBF0D9;--gm:#E8A020;--teal:#0A7463;--tl:#E6F4F1;--red:#B83232;--rl:#FDEAEA;
+--vio:#5B4FBF;--sage:#1F5C40;--amb:#8B4513;--mut:#888896;--m2:#B8B5AE;
+--brd:#E4E1DA;--brd2:#EDE9E2;--shd:0 1px 3px rgba(14,34,64,.06),0 4px 14px rgba(14,34,64,.04);
+--shd2:0 2px 8px rgba(14,34,64,.09),0 8px 28px rgba(14,34,64,.07)}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{background:var(--off);color:var(--ink);font-family:"Figtree",sans-serif;font-size:15px;line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+/* TOPBAR */
+.topbar{background:var(--navy);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:60;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.tb-logo{font-family:"Cormorant Garant",serif;font-size:18px;font-weight:700;color:#fff;letter-spacing:.01em}
+.tb-logo span{font-size:10px;color:var(--gm);letter-spacing:.1em;text-transform:uppercase;margin-left:6px;font-family:"DM Mono",monospace}
+.tb-right{display:flex;align-items:center;gap:16px}
+.tb-link{font-size:13px;color:rgba(255,255,255,.55);transition:color .2s}.tb-link:hover{color:#fff}
+.tb-badge{font-family:"DM Mono",monospace;font-size:10px;color:var(--gm);background:rgba(200,134,10,.15);border:1px solid rgba(200,134,10,.3);padding:3px 9px;border-radius:2px;letter-spacing:.06em}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px 80px}
+/* HEADER */
+.dash-hdr{padding:36px 0 18px}
+.kicker{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.kicker::before{content:"";width:16px;height:1px;background:var(--gold)}
+.dash-h1{font-family:"Cormorant Garant",serif;font-size:clamp(30px,4.4vw,46px);font-weight:600;line-height:1.08;letter-spacing:-.02em;color:var(--ink);margin-bottom:6px}
+.dash-h1 em{font-style:italic;color:var(--navy)}
+.dash-sub{font-size:15px;color:var(--mut);line-height:1.7;max-width:600px}
+/* CONTROLS */
+.controls{background:#fff;border:1px solid var(--brd);border-radius:8px;padding:18px 20px;margin:18px 0;box-shadow:var(--shd)}
+.ctl-title{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--brd2)}
+.ctl-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end}
+@media(max-width:620px){.ctl-row{grid-template-columns:1fr}}
+.fl{display:block;font-size:12px;font-weight:600;color:var(--ink);margin-bottom:5px;letter-spacing:.02em}
+.fi{width:100%;background:#fff;border:1px solid var(--brd);border-radius:4px;color:var(--ink);font-family:"Figtree",sans-serif;font-size:14px;padding:10px 13px;outline:none;transition:border-color .2s}
+.fi:focus{border-color:var(--navy);box-shadow:0 0 0 2px rgba(14,34,64,.05)}
+.ta{width:100%;background:#fff;border:1px solid var(--brd);border-radius:4px;color:var(--ink);font-family:"DM Mono",monospace;font-size:12px;padding:10px 13px;outline:none;resize:vertical;min-height:64px;line-height:1.5}
+.ta:focus{border-color:var(--navy);box-shadow:0 0 0 2px rgba(14,34,64,.05)}
+.btn{background:var(--navy);color:#fff;font-family:"Figtree",sans-serif;font-size:14px;font-weight:600;padding:11px 22px;border:none;border-radius:3px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn:hover{background:var(--navy2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(14,34,64,.15)}
+.btn2{background:#fff;color:var(--mut);font-family:"Figtree",sans-serif;font-size:13px;font-weight:500;padding:10px 16px;border:1px solid var(--brd);border-radius:3px;cursor:pointer;transition:all .2s}
+.btn2:hover{border-color:var(--navy);color:var(--navy)}
+.ctl-msg{font-size:12px;margin-top:10px;min-height:16px}
+.ctl-msg.ok{color:var(--teal)}.ctl-msg.err{color:var(--red)}
+.ctl-foot{display:flex;gap:16px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.ctl-foot a,.ctl-foot button{font-size:12px;color:var(--mut);background:none;border:none;cursor:pointer;font-family:"Figtree",sans-serif;transition:color .2s}
+.ctl-foot a:hover,.ctl-foot button:hover{color:var(--navy)}
+/* EMPTY */
+.empty{background:#fff;border:1px dashed var(--brd);border-radius:8px;padding:48px 28px;text-align:center;margin-top:18px}
+.empty-icon{font-size:30px;color:var(--gold);margin-bottom:12px}
+.empty h3{font-family:"Cormorant Garant",serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:8px}
+.empty p{font-size:14px;color:var(--mut);max-width:440px;margin:0 auto 18px;line-height:1.7}
+/* SECTION */
+.sec{margin-top:28px}
+.sec-eyebrow{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.sec-eyebrow .num{background:var(--navy);color:#fff;width:18px;height:18px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:10px}
+.sec-h2{font-family:"Cormorant Garant",serif;font-size:24px;font-weight:600;color:var(--ink);letter-spacing:-.01em;margin-bottom:4px}
+.sec-p{font-size:13px;color:var(--mut);line-height:1.6;max-width:600px;margin-bottom:14px}
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:560px){.stat-row{grid-template-columns:1fr 1fr}}
+.stat{background:#fff;border:1px solid var(--brd);border-radius:7px;padding:16px;text-align:center;box-shadow:var(--shd)}
+.stat-num{font-family:"Cormorant Garant",serif;font-size:34px;font-weight:700;color:var(--navy);line-height:1}
+.stat-lbl{font-family:"DM Mono",monospace;font-size:9px;color:var(--m2);text-transform:uppercase;letter-spacing:.08em;margin-top:6px}
+/* CARD */
+.card{background:#fff;border:1px solid var(--brd);border-radius:8px;padding:20px 22px;box-shadow:var(--shd)}
+/* BENCH */
+.bench-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.bench-score{font-family:"Cormorant Garant",serif;font-size:60px;font-weight:700;color:var(--navy);line-height:1;letter-spacing:-.03em}
+.bench-of{font-size:13px;color:var(--m2);margin-left:6px}
+.bench-tier{display:inline-block;font-family:"DM Mono",monospace;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--gm);background:var(--gl);border:1px solid rgba(200,134,10,.3);padding:3px 9px;border-radius:2px;margin-bottom:6px}
+.bench-tier-hl{font-size:13px;color:var(--mut);max-width:280px;text-align:right}
+.bc-blbls{display:flex;justify-content:space-between;font-family:"DM Mono",monospace;font-size:10px;color:var(--m2);margin-bottom:4px}
+.bc-track{height:8px;background:var(--off2);border-radius:4px;position:relative;margin-bottom:8px}
+.bc-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--navy),#2A6ECC);transition:width 1.4s cubic-bezier(.4,0,.2,1);width:0}
+.bc-marker{position:absolute;top:-4px;width:2px;height:16px;background:var(--gold)}
+.bc-note{font-size:12px;color:var(--mut);font-style:italic;border-top:1px solid var(--brd2);padding-top:8px;margin-top:6px;line-height:1.5}
+/* TIER DIST */
+.tier-row{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+.tier-name{width:96px;flex-shrink:0;font-size:12px;font-weight:600;color:var(--ink)}
+.tier-bar-o{flex:1;height:22px;background:var(--off2);border-radius:4px;overflow:hidden;position:relative}
+.tier-bar-f{height:100%;border-radius:4px;transition:width 1.2s cubic-bezier(.4,0,.2,1);width:0;display:flex;align-items:center;justify-content:flex-end;padding-right:8px}
+.tier-count{font-family:"DM Mono",monospace;font-size:11px;font-weight:600;color:#fff}
+.tier-pct{width:42px;text-align:right;font-family:"DM Mono",monospace;font-size:11px;color:var(--mut)}
+/* HEATMAP */
+.hm{border:1px solid var(--brd2);border-radius:6px;overflow:hidden;font-size:12px;overflow-x:auto}
+.hm-hdr{display:grid;grid-template-columns:150px repeat(6,1fr);background:var(--off);min-width:520px}
+.hm-hdr>div{padding:9px 8px;font-family:"DM Mono",monospace;font-size:9px;color:var(--m2);text-transform:uppercase;letter-spacing:.06em;text-align:center}
+.hm-hdr>div:first-child{text-align:left}
+.hm-row{display:grid;grid-template-columns:150px repeat(6,1fr);border-top:1px solid var(--brd2);min-width:520px}
+.hm-row>div{padding:9px 8px;text-align:center}
+.hm-dept{font-size:12px;font-weight:600;color:var(--ink);text-align:left!important;display:flex;align-items:center}
+.hm-cell span{font-family:"DM Mono",monospace;font-size:11px;font-weight:600;border-radius:3px;padding:2px 6px;display:inline-block;min-width:30px}
+.hmc-red{color:#B83232;background:rgba(184,50,50,.1)}
+.hmc-amber{color:#C8860A;background:rgba(200,134,10,.12)}
+.hmc-green{color:#0A7463;background:rgba(10,116,99,.1)}
+.hmc-dk{color:#0A7463;background:var(--tl)}
+.hmc-na{color:var(--m2)}
+.hm-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-family:"DM Mono",monospace;font-size:10px;color:var(--mut)}
+.hm-legend span{display:inline-flex;align-items:center;gap:5px}
+.hm-legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+/* GAIN/PAIN */
+.gp-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:620px){.gp-grid{grid-template-columns:1fr}}
+.gp-pill{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:3px;display:inline-flex;align-items:center;gap:5px;margin-bottom:10px}
+.gpp-g{color:var(--teal);border:1px solid rgba(10,116,99,.2);background:var(--tl)}
+.gpp-p{color:var(--red);border:1px solid rgba(184,50,50,.2);background:var(--rl)}
+.gp-sub{font-family:"Cormorant Garant",serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.gp-score{font-family:"DM Mono",monospace;font-size:13px;margin-bottom:8px}
+.gp-desc{font-size:13px;color:var(--mut);line-height:1.6}
+.gp-desc strong{color:var(--ink);font-weight:600}
+/* AINT */
+.aint{background:var(--navy);border-radius:7px;padding:16px 18px;margin-bottom:10px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.aint-rank{font-family:"Cormorant Garant",serif;font-size:30px;font-weight:700;color:rgba(255,255,255,.25);line-height:1;width:30px;text-align:center}
+.aint-k{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--gm);margin-bottom:4px}
+.aint-title{font-family:"Cormorant Garant",serif;font-size:17px;font-weight:600;color:#fff;margin-bottom:4px}
+.aint-body{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:8px}
+.aint-target{display:inline-flex;align-items:center;gap:6px;font-family:"DM Mono",monospace;font-size:10px;color:var(--gm);background:rgba(200,134,10,.12);border:1px solid rgba(200,134,10,.25);border-radius:4px;padding:4px 10px;letter-spacing:.04em}
+/* ROSTER */
+.roster{width:100%;border-collapse:collapse;font-size:13px}
+.roster th{font-family:"DM Mono",monospace;font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--m2);text-align:left;padding:8px 10px;border-bottom:1px solid var(--brd)}
+.roster td{padding:9px 10px;border-bottom:1px solid var(--brd2);color:var(--ink)}
+.roster tr:last-child td{border-bottom:none}
+.r-score{font-family:"DM Mono",monospace;font-weight:600}
+.r-tier{font-family:"DM Mono",monospace;font-size:10px;padding:2px 7px;border-radius:2px;background:var(--off2);color:var(--mut)}
+.r-lvl{font-family:"DM Mono",monospace;font-size:10px;color:var(--teal)}
+.r-exp{font-family:"DM Mono",monospace;font-size:11px}
+.r-del{color:var(--m2);cursor:pointer;font-size:14px;background:none;border:none;transition:color .2s}.r-del:hover{color:var(--red)}
+/* PRICING */
+.pricing{background:var(--navy);border-radius:8px;padding:24px 26px;margin-top:28px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
+@media(max-width:620px){.pricing{grid-template-columns:1fr}}
+.pr-lbl{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gm);margin-bottom:6px}
+.pr-h{font-family:"Cormorant Garant",serif;font-size:22px;font-weight:600;color:#fff;margin-bottom:6px}
+.pr-p{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;max-width:440px}
+.pr-price{text-align:right}
+.pr-std{font-size:12px;color:rgba(255,255,255,.3);text-decoration:line-through}
+.pr-num{font-family:"Cormorant Garant",serif;font-size:38px;font-weight:700;color:#fff;line-height:1}
+.pr-num sub{font-size:12px;font-weight:400;color:rgba(255,255,255,.5)}
+.foot{font-size:11px;color:var(--m2);text-align:center;margin-top:28px}
+@media print{.topbar,.controls,.ctl-foot,.btn,.btn2,.r-del,.pricing{display:none!important}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-logo">AIQ <span>Team Dashboard</span></div>
+  <div class="tb-right">
+    <a href="index.html" class="tb-link">← Landing</a>
+    <a href="aiq-lite.html" class="tb-link">Take assessment</a>
+    <div class="tb-badge" id="tb-badge">No team loaded</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="dash-hdr">
+    <div class="kicker">AJIR Framework · Aggregate Team Intelligence</div>
+    <h1 class="dash-h1">Individual scores.<br><em>Team intelligence.</em></h1>
+    <p class="dash-sub">Every individual who completes AIQ Lite generates a credential. Add those scores here to see your aggregate AIQ, tier distribution, the construct gap by function, and a targeted AIntervention roadmap.</p>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="ctl-title">Add scores to this dashboard</div>
+    <div class="fg" style="margin-bottom:12px">
+      <label class="fl">Paste one or more AIQ share codes <span style="font-weight:400;color:var(--m2)">(one per line — generated on each person's results page)</span></label>
+      <textarea class="ta" id="codeInput" placeholder="eyJuIjoiQWxleCBQZW1iZXJ0b24i..."></textarea>
+    </div>
+    <div class="ctl-row">
+      <div class="fg">
+        <label class="fl">Team code filter <span style="font-weight:400;color:var(--m2)">(optional — show only one team)</span></label>
+        <input class="fi" id="teamFilter" type="text" placeholder="e.g. SONDER-Q1-2026">
+      </div>
+      <button class="btn" onclick="onAddCodes()">Add scores →</button>
+    </div>
+    <div class="ctl-msg" id="ctlMsg"></div>
+    <div class="ctl-foot">
+      <button onclick="loadDemo()">Load sample team data</button>
+      <button onclick="applyFilter()">Apply team filter</button>
+      <button onclick="clearAll()">Clear all stored scores</button>
+      <a href="javascript:window.print()">Export / print report</a>
+    </div>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div class="empty" id="emptyState">
+    <div class="empty-icon">◈</div>
+    <h3>No scores yet</h3>
+    <p>Scores added from this browser appear automatically. To build a team view, ask colleagues to complete AIQ Lite and paste their share codes above — or load sample data to preview the five outputs.</p>
+    <button class="btn" onclick="loadDemo()">Load sample team data</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" style="display:none">
+
+    <div class="stat-row" id="statRow"></div>
+
+    <!-- 1 — AVG BENCHMARKED -->
+    <div class="sec">
+      <div class="sec-eyebrow"><span class="num">1</span> Average AIQ — benchmarked</div>
+      <h2 class="sec-h2">Your team against its sector</h2>
+      <p class="sec-p">The team's mean AIQ Index against the dominant sector's P25 / median / P75, with the maturity tier the average falls into.</p>
+      <div class="card" id="benchCard"></div>
+    </div>
+
+    <!-- 2 — TIER DISTRIBUTION -->
+    <div class="sec">
+      <div class="sec-eyebrow"><span class="num">2</span> Tier distribution</div>
+      <h2 class="sec-h2">The shape, not just the average</h2>
+      <p class="sec-p">How many people sit at each maturity tier. The distribution is more actionable than the mean — a bimodal team needs a different intervention from a clustered one.</p>
+      <div class="card" id="tierCard"></div>
+    </div>
+
+    <!-- HEATMAP -->
+    <div class="sec">
+      <div class="sec-eyebrow"><span class="num">+</span> Construct gap analysis</div>
+      <h2 class="sec-h2">Six sub-dimensions × function</h2>
+      <p class="sec-p">Mean sub-dimension score for each function. Red cells are where capability is thinnest — and where the cost of an AI error is being underwritten by no one.</p>
+      <div class="card">
+        <div class="hm" id="heatmap"></div>
+        <div class="hm-legend">
+          <span><i style="background:rgba(184,50,50,.5)"></i> &lt;40 critical</span>
+          <span><i style="background:rgba(200,134,10,.6)"></i> 40–64 developing</span>
+          <span><i style="background:rgba(10,116,99,.55)"></i> 65–79 good</span>
+          <span><i style="background:#0A7463"></i> 80+ strong</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 & 4 — PAIN / GAIN -->
+    <div class="sec">
+      <div class="sec-eyebrow"><span class="num">3·4</span> pAIn &amp; gAIn</div>
+      <h2 class="sec-h2">The brake and the lever</h2>
+      <p class="sec-p">The team's lowest sub-dimension (pAIn) limits the value drawn from every other capability. The highest (gAIn) is the foundation to build the weakest from.</p>
+      <div class="gp-grid" id="gpGrid"></div>
+    </div>
+
+    <!-- 5 — AINTERVENTIONS -->
+    <div class="sec">
+      <div class="sec-eyebrow"><span class="num">5</span> AInterventions — ranked &amp; scoped</div>
+      <h2 class="sec-h2">The roadmap</h2>
+      <p class="sec-p">Named actions drawn from your actual results, ranked by the size of the gap, each targeted at the function where it hits hardest.</p>
+      <div id="aintList"></div>
+    </div>
+
+    <!-- ROSTER -->
+    <div class="sec">
+      <div class="sec-eyebrow"><span class="num">·</span> Member roster</div>
+      <h2 class="sec-h2">Who is in this view</h2>
+      <div class="card" style="overflow-x:auto">
+        <table class="roster" id="roster"></table>
+      </div>
+    </div>
+
+    <!-- PRICING -->
+    <div class="pricing">
+      <div>
+        <div class="pr-lbl">Organisation engagement</div>
+        <div class="pr-h">Want this as a facilitated report?</div>
+        <div class="pr-p">Team aggregate report, function heatmap, AIntervention roadmap, and a 60-minute debrief with your leadership team. Individual assessments are always free.</div>
+      </div>
+      <div class="pr-price">
+        <div class="pr-std">$50,000 standard</div>
+        <div class="pr-num">$2,000 <sub>USD · up to 15 employees</sub></div>
+      </div>
+    </div>
+
+    <div class="foot">AIQ Lite · AJIR Framework · Team Dashboard · Scores stored locally in your browser · <span id="genDate"></span></div>
+  </div>
+
+</div>
+
+<script>
+// ════ FRAMEWORK CONSTANTS (mirrors aiq-lite.html) ════
+const SUBDIMS=[
+  {id:"A1",ajir:"A",name:"Directional Intelligence",short:"Direction",wt:0.20,color:"#0E2240"},
+  {id:"A2",ajir:"A",name:"Collaboration Architecture",short:"Architecture",wt:0.15,color:"#1F5C40"},
+  {id:"J1",ajir:"J",name:"Critical Discernment",short:"Discernment",wt:0.20,color:"#B83232"},
+  {id:"J2",ajir:"J",name:"Ethical Calibration",short:"Ethics",wt:0.15,color:"#8B4513"},
+  {id:"I1",ajir:"I",name:"Value Attribution",short:"Attribution",wt:0.15,color:"#C8860A"},
+  {id:"R1",ajir:"R",name:"Adaptive Velocity",short:"Velocity",wt:0.15,color:"#5B4FBF"}
+];
+const SUBORDER=["A1","A2","J1","J2","I1","R1"];
+const AJIR_MAP={A:{label:"Agency",sub:["A1","A2"],wt:0.35,color:"#0E2240"},J:{label:"Judgment",sub:["J1","J2"],wt:0.35,color:"#B83232"},I:{label:"Impact",sub:["I1"],wt:0.15,color:"#0A7463"},R:{label:"Resilience",sub:["R1"],wt:0.15,color:"#5B4FBF"}};
+const STAGES=[
+  {min:0,max:20,l:"Passive",hl:"AI is peripheral to your practice"},
+  {min:21,max:40,l:"Exploring",hl:"Using AI, but without a system"},
+  {min:41,max:60,l:"Practising",hl:"Good instincts, inconsistent practice"},
+  {min:61,max:80,l:"Proficient",hl:"Clear frameworks, measurable impact"},
+  {min:81,max:100,l:"Multiplier",hl:"Systematic, measured, extending to others"}
+];
+const BENCH={A:{mu:45,p25:33,p50:45,p75:57,label:"Financial / Professional Services"},B:{mu:56,p25:44,p50:56,p75:68,label:"Technology / Media"},C:{mu:39,p25:28,p50:39,p75:50,label:"Healthcare / Education / Public"},D:{mu:41,p25:30,p50:41,p75:52,label:"Manufacturing / Retail / Property"}};
+const AINTS={
+  A1:{title:"The Problem-First Protocol",body:"Before any non-trivial AI prompt, the team writes three sentences: the exact problem, what a useful answer looks like, and how they'll know if the output missed the point — then opens the tool."},
+  A2:{title:"The Task Allocation Map",body:"For three recurring tasks per person, a simple grid: AI handles / Human handles / AI then human review — with the reason each sits in its column. Standardise the strongest version across the team."},
+  J1:{title:"The Three-Check Rule",body:"For any AI-assisted work going to a client, board, or decision, the three most consequential claims are verified against a primary source before it leaves the building. Log correct / incorrect / unverifiable."},
+  J2:{title:"The Before-I-Use-It Question",body:"Before AI touches any people, clinical, customer, or financial decision: who carries accountability if this output is wrong? If unclear, that is the signal to add a human owner — not a reviewer."},
+  I1:{title:"The Baseline-First Rule",body:"No new AI workflow is adopted without a recorded pre-AI baseline: time, output quality, error rate. Review at 30 days against that baseline before scaling."},
+  R1:{title:"The Monthly Workflow Review",body:"A standing 30-minute monthly review per team: which workflows feel stale, what new capability is unexplored, one workflow to retire, one to upgrade."}
+};
+
+// ════ HELPERS ════
+function erf(x){const t=1/(1+.3275911*Math.abs(x));const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-.284496736)*t+.254829592)*t*Math.exp(-x*x);return x>=0?y:-y;}
+function normalCDF(x,mu,sig=14){return Math.min(99,Math.max(1,Math.round(.5*(1+erf((x-mu)/(sig*Math.sqrt(2))))*100)));}
+function matOf(s){return STAGES.find(m=>s>=m.min&&s<=m.max)||STAGES[0];}
+function cellClass(p){if(p==null||isNaN(p))return"hmc-na";return p<40?"hmc-red":p<65?"hmc-amber":p<80?"hmc-green":"hmc-dk";}
+function avg(arr){return arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0;}
+function fmtDate(ms){return new Date(ms).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});}
+
+const DASH_KEY="aiq_dash";
+
+// ════ STORE: merge dashboard-added codes + locally completed assessments ════
+function loadStore(){
+  let dash=[];try{dash=JSON.parse(localStorage.getItem(DASH_KEY)||"[]");}catch(e){}
+  let all=[];try{all=JSON.parse(localStorage.getItem("aiq_all")||"[]");}catch(e){}
+  // Normalise locally-completed records (storeResult shape) into share-code shape
+  const norm=all.map(r=>({n:r.name,r:r.role,dp:r.dept,s:r.sector,sg:r.sg,lv:r.level,sc:r.overall,aj:r.ajir,sub:r.sub?Object.fromEntries(Object.entries(r.sub).map(([k,v])=>[k,typeof v==="object"?v.pct:v])):{},t:r.team||"",ts:r.ts,exp:r.expires,tier:r.tier}));
+  const merged=[...dash];
+  norm.forEach(r=>{if(!merged.some(m=>m.n===r.n&&m.t===r.t))merged.push(r);});
+  return merged;
+}
+function saveDash(arr){try{localStorage.setItem(DASH_KEY,JSON.stringify(arr));}catch(e){}}
+
+function decodeCode(code){
+  const d=JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
+  if(typeof d.sc!=="number"||!d.sub||!d.aj)throw new Error("not an AIQ code");
+  return d;
+}
+function addCode(code){
+  const d=decodeCode(code);
+  let dash=[];try{dash=JSON.parse(localStorage.getItem(DASH_KEY)||"[]");}catch(e){}
+  dash=dash.filter(r=>!(r.n===d.n&&r.t===d.t));
+  dash.push(d);saveDash(dash);
+  return d;
+}
+
+function onAddCodes(){
+  const raw=document.getElementById("codeInput").value.trim();
+  const msg=document.getElementById("ctlMsg");
+  if(!raw){msg.className="ctl-msg err";msg.textContent="Paste at least one share code.";return;}
+  const codes=raw.split(/[\s,]+/).filter(Boolean);
+  let ok=0,fail=0,names=[];
+  codes.forEach(c=>{try{const d=addCode(c);ok++;names.push(d.n);}catch(e){fail++;}});
+  document.getElementById("codeInput").value="";
+  msg.className="ctl-msg "+(ok?"ok":"err");
+  msg.textContent=ok?`Added ${ok} score${ok>1?"s":""}${names.length?" — "+names.join(", "):""}.${fail?" "+fail+" code(s) could not be read.":""}`:"No valid AIQ share codes found in that input.";
+  render();
+}
+
+let TEAM_FILTER="";
+function applyFilter(){TEAM_FILTER=document.getElementById("teamFilter").value.trim();render();}
+function clearAll(){
+  if(!confirm("Remove all scores stored in this browser (dashboard codes and locally completed assessments)?"))return;
+  localStorage.removeItem(DASH_KEY);localStorage.removeItem("aiq_all");
+  document.getElementById("ctlMsg").className="ctl-msg ok";
+  document.getElementById("ctlMsg").textContent="Cleared.";
+  render();
+}
+function removeMember(n,t){
+  let dash=[];try{dash=JSON.parse(localStorage.getItem(DASH_KEY)||"[]");}catch(e){}
+  dash=dash.filter(r=>!(r.n===n&&r.t===t));saveDash(dash);
+  let all=[];try{all=JSON.parse(localStorage.getItem("aiq_all")||"[]");}catch(e){}
+  all=all.filter(r=>!(r.name===n&&(r.team||"")===t));try{localStorage.setItem("aiq_all",JSON.stringify(all));}catch(e){}
+  render();
+}
+
+// ════ COMPUTE ════
+function getMembers(){
+  let m=loadStore();
+  if(TEAM_FILTER)m=m.filter(r=>(r.t||"")===TEAM_FILTER);
+  return m;
+}
+function subAvg(members,sid){const vals=members.map(m=>m.sub&&m.sub[sid]).filter(v=>typeof v==="number");return vals.length?Math.round(avg(vals)):null;}
+function deptList(members){return [...new Set(members.map(m=>m.dp||"Unassigned"))];}
+function deptSubAvg(members,dept,sid){const vals=members.filter(m=>(m.dp||"Unassigned")===dept).map(m=>m.sub&&m.sub[sid]).filter(v=>typeof v==="number");return vals.length?Math.round(avg(vals)):null;}
+function dominantSg(members){const c={};members.forEach(m=>{c[m.sg]=(c[m.sg]||0)+1;});return Object.entries(c).sort((a,b)=>b[1]-a[1])[0]?.[0]||"A";}
+function lowestDeptFor(members,sid){
+  let best=null;
+  deptList(members).forEach(d=>{const v=deptSubAvg(members,d,sid);if(v!=null&&(best===null||v<best.v))best={d,v};});
+  return best;
+}
+
+// ════ RENDER ════
+function render(){
+  const members=getMembers();
+  const empty=document.getElementById("emptyState");
+  const dash=document.getElementById("dashboard");
+  const badge=document.getElementById("tb-badge");
+  if(!members.length){empty.style.display="block";dash.style.display="none";badge.textContent=TEAM_FILTER?TEAM_FILTER+" · 0 members":"No team loaded";return;}
+  empty.style.display="none";dash.style.display="block";
+
+  const depts=deptList(members);
+  badge.textContent=(TEAM_FILTER||"All teams")+" · "+members.length+" member"+(members.length>1?"s":"")+" · "+depts.length+" function"+(depts.length>1?"s":"");
+  document.getElementById("genDate").textContent="Generated "+fmtDate(Date.now());
+
+  const teamAIQ=Math.round(avg(members.map(m=>m.sc)));
+  const now=Date.now();
+  const expiring=members.filter(m=>m.exp&&m.exp-now<30*86400000).length;
+  const l2=members.filter(m=>m.lv===2).length;
+
+  // STATS
+  document.getElementById("statRow").innerHTML=`
+    <div class="stat"><div class="stat-num" style="color:${teamAIQ<41?'#B83232':teamAIQ<61?'#C8860A':'#0A7463'}">${teamAIQ}</div><div class="stat-lbl">Team AIQ</div></div>
+    <div class="stat"><div class="stat-num">${members.length}</div><div class="stat-lbl">Members</div></div>
+    <div class="stat"><div class="stat-num" style="color:${expiring?'#C8860A':'#0A7463'}">${expiring}</div><div class="stat-lbl">Expiring &lt;30d</div></div>
+    <div class="stat"><div class="stat-num" style="color:#0A7463">${l2}</div><div class="stat-lbl">L2 Validated</div></div>`;
+
+  // 1 — BENCH
+  const sg=dominantSg(members);const b=BENCH[sg]||BENCH.A;const mat=matOf(teamAIQ);
+  const pctile=normalCDF(teamAIQ,b.mu);
+  const fillW=Math.min(100,Math.max(2,teamAIQ));
+  document.getElementById("benchCard").innerHTML=`
+    <div class="bench-top">
+      <div><span class="bench-score">${teamAIQ}</span><span class="bench-of">/ 100 mean AIQ Index</span></div>
+      <div><div class="bench-tier">${mat.l}</div><div class="bench-tier-hl">${mat.hl}</div></div>
+    </div>
+    <div class="bc-blbls"><span>P25 · ${b.p25}</span><span>Median · ${b.p50}</span><span>P75 · ${b.p75}</span></div>
+    <div class="bc-track"><div class="bc-fill" id="benchFill"></div>
+      <div class="bc-marker" style="left:${b.p25}%"></div><div class="bc-marker" style="left:${b.p50}%;background:var(--navy)"></div><div class="bc-marker" style="left:${b.p75}%"></div></div>
+    <div class="bc-note">Benchmarked against <strong>${b.label}</strong> (dominant sector in this view). Team scores higher than <strong style="color:var(--teal)">${pctile}%</strong> of sector professionals. Directional — calibrated against sector AI-adoption research.</div>`;
+  setTimeout(()=>{const f=document.getElementById("benchFill");if(f)f.style.width=fillW+"%";},120);
+
+  // 2 — TIER DIST
+  const buckets=STAGES.map(s=>({...s,n:members.filter(m=>m.sc>=s.min&&m.sc<=s.max).length}));
+  const tierColors={Passive:"#B8B5AE",Exploring:"#B83232",Practising:"#C8860A",Proficient:"#0A7463",Multiplier:"#0E2240"};
+  document.getElementById("tierCard").innerHTML=buckets.map(s=>{
+    const pct=Math.round(s.n/members.length*100);
+    return `<div class="tier-row">
+      <div class="tier-name">${s.l}</div>
+      <div class="tier-bar-o"><div class="tier-bar-f" data-w="${pct}" style="background:${tierColors[s.l]}">${s.n?`<span class="tier-count">${s.n}</span>`:""}</div></div>
+      <div class="tier-pct">${pct}%</div>
+    </div>`;}).join("");
+  setTimeout(()=>{document.querySelectorAll("#tierCard .tier-bar-f").forEach(f=>f.style.width=Math.max(2,+f.dataset.w)+"%");},150);
+
+  // HEATMAP
+  let hm=`<div class="hm-hdr"><div>Function</div>${SUBORDER.map(s=>`<div>${s}</div>`).join("")}</div>`;
+  depts.forEach(d=>{
+    hm+=`<div class="hm-row"><div class="hm-dept">${d}</div>${SUBORDER.map(s=>{const v=deptSubAvg(members,d,s);return `<div class="hm-cell"><span class="${cellClass(v)}">${v==null?"—":v}</span></div>`;}).join("")}</div>`;
+  });
+  hm+=`<div class="hm-row" style="background:var(--off)"><div class="hm-dept" style="font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)">Team avg</div>${SUBORDER.map(s=>{const v=subAvg(members,s);return `<div class="hm-cell"><span class="${cellClass(v)}">${v==null?"—":v}</span></div>`;}).join("")}</div>`;
+  document.getElementById("heatmap").innerHTML=hm;
+
+  // 3 & 4 — PAIN / GAIN
+  const subScores=SUBDIMS.map(sd=>({sd,v:subAvg(members,sd.id)})).filter(x=>x.v!=null).sort((a,b)=>a.v-b.v);
+  const pain=subScores[0],gain=subScores[subScores.length-1];
+  const painDept=lowestDeptFor(members,pain.sd.id);
+  document.getElementById("gpGrid").innerHTML=`
+    <div class="card">
+      <div class="gp-pill gpp-p">p<u>A</u>In · lowest construct</div>
+      <div class="gp-sub">${pain.sd.name}</div>
+      <div class="gp-score" style="color:#B83232">${pain.v}/100 team average · ${pain.sd.id}</div>
+      <div class="gp-desc">This is the capability limiting the value your team draws from everything else. Hits hardest in <strong>${painDept?painDept.d:"—"}</strong>${painDept?` (avg ${painDept.v})`:""}. Until it improves, stronger constructs are carrying the risk.</div>
+    </div>
+    <div class="card">
+      <div class="gp-pill gpp-g">g<u>A</u>In · highest construct</div>
+      <div class="gp-sub">${gain.sd.name}</div>
+      <div class="gp-score" style="color:#0A7463">${gain.v}/100 team average · ${gain.sd.id}</div>
+      <div class="gp-desc">Your team's strongest sub-dimension and the natural foundation to build the weakest from. Use the people scoring highest here to model practice for the rest of the team.</div>
+    </div>`;
+
+  // 5 — AINTERVENTIONS (bottom 3 sub-dims, ranked by gap)
+  const targets=subScores.slice(0,3);
+  document.getElementById("aintList").innerHTML=targets.map((t,i)=>{
+    const a=AINTS[t.sd.id];const dep=lowestDeptFor(members,t.sd.id);
+    return `<div class="aint">
+      <div class="aint-rank">${i+1}</div>
+      <div>
+        <div class="aint-k">${t.sd.id} · ${t.sd.name} · team avg ${t.v}</div>
+        <div class="aint-title">${a.title}</div>
+        <div class="aint-body">${a.body}</div>
+        <div class="aint-target">🎯 Target first: ${dep?dep.d+" (avg "+dep.v+")":"whole team"}</div>
+      </div>
+    </div>`;}).join("");
+
+  // ROSTER
+  const rs=members.slice().sort((a,b)=>b.sc-a.sc);
+  document.getElementById("roster").innerHTML=`
+    <thead><tr><th>Name</th><th>Function</th><th>Role</th><th>AIQ</th><th>Tier</th><th>Level</th><th>Expires</th><th></th></tr></thead>
+    <tbody>${rs.map(m=>{const mt=matOf(m.sc);const exp=m.exp?fmtDate(m.exp):"—";const expSoon=m.exp&&m.exp-now<30*86400000;
+      return `<tr>
+        <td><strong>${m.n||"—"}</strong></td>
+        <td>${m.dp||"—"}</td>
+        <td style="color:var(--mut)">${m.r||"—"}</td>
+        <td class="r-score" style="color:${m.sc<41?'#B83232':m.sc<61?'#C8860A':'#0A7463'}">${m.sc}</td>
+        <td><span class="r-tier">${m.tier||mt.l}</span></td>
+        <td class="r-lvl">L${m.lv||1}</td>
+        <td class="r-exp" style="color:${expSoon?'#C8860A':'var(--mut)'}">${exp}</td>
+        <td><button class="r-del" title="Remove" onclick="removeMember(${JSON.stringify(m.n)},${JSON.stringify(m.t||"")})">✕</button></td>
+      </tr>`;}).join("")}</tbody>`;
+}
+
+// ════ SAMPLE DATA ════
+function loadDemo(){
+  const mk=(n,r,dp,sg,lv,sub)=>{
+    const aj={A:Math.round((sub.A1+sub.A2)/2),J:Math.round((sub.J1+sub.J2)/2),I:sub.I1,R:sub.R1};
+    const sc=Math.round(aj.A*0.35+aj.J*0.35+aj.I*0.15+aj.R*0.15);
+    return{n,r,dp,s:({A:"Professional Services",B:"Technology & SaaS",C:"Healthcare",D:"Retail & E-commerce"})[sg],sg,lv,sc,aj,sub,t:"SONDER-Q1-2026",ts:Date.now(),exp:Date.now()+(lv===2?180:90)*86400000+(Math.random()<.3?-75*86400000:0),tier:matOf(sc).l};
+  };
+  const demo=[
+    mk("Priya Raman","Head of Engineering","Product & Technology","B",2,{A1:86,A2:78,J1:80,J2:72,I1:72,R1:74}),
+    mk("Marcus Bell","Senior Engineer","Product & Technology","B",1,{A1:74,A2:70,J1:76,J2:64,I1:60,R1:70}),
+    mk("Elena Sokolova","Head of Strategy","Finance & Operations","A",2,{A1:78,A2:70,J1:72,J2:66,I1:65,R1:68}),
+    mk("Tom Whitfield","Strategy Analyst","Finance & Operations","A",1,{A1:62,A2:55,J1:60,J2:52,I1:48,R1:58}),
+    mk("Dana Osei","Operations Lead","Finance & Operations","A",1,{A1:44,A2:36,J1:42,J2:34,I1:35,R1:46}),
+    mk("Raj Patel","People Partner","People & HR","C",1,{A1:34,A2:30,J1:28,J2:24,I1:24,R1:30}),
+    mk("Sophie Lin","Recruiter","People & HR","C",1,{A1:38,A2:32,J1:30,J2:26,I1:28,R1:34}),
+    mk("Greg Mason","Sales Director","Sales & Revenue","A",2,{A1:58,A2:50,J1:54,J2:44,I1:46,R1:52})
+  ];
+  saveDash(demo);
+  TEAM_FILTER="";document.getElementById("teamFilter").value="";
+  document.getElementById("ctlMsg").className="ctl-msg ok";
+  document.getElementById("ctlMsg").textContent="Loaded 8-member sample team (SONDER-Q1-2026).";
+  render();
+}
+
+// ════ INIT ════
+(function(){
+  const params=new URLSearchParams(window.location.search);
+  const add=params.get("add");
+  if(add){try{const d=addCode(add);document.getElementById("ctlMsg").className="ctl-msg ok";document.getElementById("ctlMsg").textContent="Added score for "+d.n+" from share link.";}catch(e){}}
+  const t=params.get("team");
+  if(t){TEAM_FILTER=t;document.getElementById("teamFilter").value=t;}
+  render();
+})();
+</script>
+</body>
+</html>
